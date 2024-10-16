@@ -12,6 +12,5 @@ public record CreatinaRequestDTO(
     @NotBlank(message = "O tipo não pode ser nulo.")
     String tipo,
     @NotBlank(message = "O preço não pode ser nulo.")
-    double preco,
-    Integer idSexo
+    double preco
 ) {}
