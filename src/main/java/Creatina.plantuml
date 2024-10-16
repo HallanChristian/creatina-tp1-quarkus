@@ -1,0 +1,148 @@
+@startuml
+
+abstract class Usuario {
+  - id: Integer
+  - nome: String
+  - email: String
+  - senha: String
+}
+
+class Cliente {
+  - visualizarDados(): void
+}
+
+class Funcionario {
+  - alterarDados(): void
+  - visualizarDados(): void
+}
+
+Usuario <|-- Cliente
+Usuario <|-- Funcionario
+
+class TelefoneCliente {
+  - ddd: String
+  - numero: String
+}
+
+class Endereco {
+  - logradouro: String
+  - numero: String
+  - cidade: String
+  - estado: String
+  - cep: String
+}
+
+class Pedido {
+  - data: LocalDateTime
+  - valorTotal: Double
+}
+
+class EnderecoEntrega {
+  - logradouro: String
+  - numero: String
+  - cidade: String
+  - estado: String
+  - cep: String
+}
+
+class ItemPedido {
+  - quantidade: Integer
+  - preco: Double
+}
+
+Enum EstadoPedido {
+  + PENDENTE
+  + PAGO
+  + ENVIADO
+  + ENTREGUE
+}
+
+abstract class Pagamento {
+  - valor: Double
+}
+
+class Cartao {
+  - numero: String
+  - nomeTitular: String
+  - validade: LocalDate
+  - cvc: Integer
+}
+
+Enum TipoCartao {
+  + CREDITO
+  + DEBITO
+}
+
+class Pix {
+  - chave: String
+  - dataPagamento: LocalDateTime
+}
+
+class Boleto {
+  - codigoBarras: String
+  - dataValidade: LocalDate
+}
+
+Pagamento <|-- Pix
+Pagamento <|-- Boleto
+Pagamento <|-- Cartao
+
+class Fornecedor {
+  - nome: String
+  - cnpj: String
+}
+
+class TelefoneFornecedor {
+  - ddd: String
+  - numero: String
+}
+
+class Creatina {
+  - nome: String
+  - marca: String
+  - quantidadeEmGramas: Double
+  - tipo: String
+  - preco: Double
+}
+
+class Categoria {
+  - nome: String
+  - descricao: String
+}
+
+class Lote {
+  - codigo: String
+  - quantidade: Integer
+  - dataFabricacao: LocalDate
+}
+
+class Avaliacao {
+  - estrelas: Integer
+  - comentario: String
+  - dataAvaliacao: LocalDateTime
+}
+
+' Relacionamentos
+
+Cliente "1" --> "*" TelefoneCliente
+Cliente "1" --> "*" Endereco
+
+Pedido "*" --> "1" Cliente
+Pedido "1" --> "" ItemPedido
+Pedido "1" --> "1" Pagamento
+Pedido --> EstadoPedido
+Pedido "1" *--> "1" EnderecoEntrega
+
+ItemPedido "1" --> "1" Creatina
+
+Cartao --> TipoCartao
+
+Creatina "1" --> "1" Categoria
+Creatina "1" --> "*" Avaliacao
+Creatina "*" --> "1" Fornecedor
+
+Lote "1" --> "1" Creatina
+
+Fornecedor "1" --> "*" TelefoneFornecedor
+
+@enduml
