@@ -128,7 +128,7 @@ Cliente "1" --> "*" TelefoneCliente
 Cliente "1" --> "*" Endereco
 
 Pedido "*" --> "1" Cliente
-Pedido "1" --> "" ItemPedido
+Pedido "1" *--> "*" ItemPedido
 Pedido "1" --> "1" Pagamento
 Pedido --> EstadoPedido
 Pedido "1" *--> "1" EnderecoEntrega
