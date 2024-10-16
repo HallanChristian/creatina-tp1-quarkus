@@ -1,4 +1,4 @@
-@startuml
+@startuml Creatina
 
 abstract class Usuario {
   - id: Integer
