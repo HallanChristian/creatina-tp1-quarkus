@@ -1,23 +1,11 @@
 @startuml Creatina
 
-abstract class Usuario {
-  - id: Integer
+class Cliente {
   - nome: String
   - email: String
-  - senha: String
+  - dataNascimento: LocalDate
+  - cpf: String
 }
-
-class Cliente {
-  - visualizarDados(): void
-}
-
-class Funcionario {
-  - alterarDados(): void
-  - visualizarDados(): void
-}
-
-Usuario <|-- Cliente
-Usuario <|-- Funcionario
 
 class TelefoneCliente {
   - ddd: String
@@ -126,14 +114,15 @@ class Avaliacao {
 
 Cliente "1" --> "*" TelefoneCliente
 Cliente "1" --> "*" Endereco
+Cliente "1" --> "*" Creatina : listaDesejos
+
+ItemPedido "*" --> "1" Lote
 
 Pedido "*" --> "1" Cliente
 Pedido "1" *--> "*" ItemPedido
 Pedido "1" --> "1" Pagamento
 Pedido --> EstadoPedido
 Pedido "1" *--> "1" EnderecoEntrega
-
-ItemPedido "1" --> "1" Creatina
 
 Cartao --> TipoCartao
 
