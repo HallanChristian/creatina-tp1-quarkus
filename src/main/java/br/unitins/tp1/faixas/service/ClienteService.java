@@ -13,6 +13,8 @@ public interface ClienteService {
 
     List<Cliente> findByNome(String nome);
 
+     List<Cliente> findByCpf(String cpf);
+
     List<Cliente> findAll();
 
     Cliente create(ClienteRequestDTO dto);

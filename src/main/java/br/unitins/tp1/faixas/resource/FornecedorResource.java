@@ -2,9 +2,9 @@ package br.unitins.tp1.faixas.resource;
 
 //import java.util.List;
 
-import br.unitins.tp1.faixas.dto.ClienteRequestDTO;
-import br.unitins.tp1.faixas.dto.ClienteResponseDTO;
-import br.unitins.tp1.faixas.service.ClienteService;
+import br.unitins.tp1.faixas.dto.FornecedorRequestDTO;
+import br.unitins.tp1.faixas.dto.FornecedorResponseDTO;
+import br.unitins.tp1.faixas.service.FornecedorService;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
@@ -22,62 +22,62 @@ import jakarta.ws.rs.core.Response.Status;
 @Path("/pessoasfisicas")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class ClienteResource {
+public class FornecedorResource {
 
     @Inject
-    public ClienteService clienteService;
+    public FornecedorService fornecedorService;
 
     @GET
     @Path("/{id}")
     public Response findById(@PathParam("id") Long id) {
-        return Response.ok(ClienteResponseDTO.valueOf(clienteService.findById(id))).build();
+        return Response.ok(FornecedorResponseDTO.valueOf(fornecedorService.findById(id))).build();
     }
 
     @GET
     @Path("/search/{nome}")
     public Response findByNome(@PathParam("nome") String nome) {
-        return Response.ok(clienteService.findByNome(nome).
+        return Response.ok(fornecedorService.findByNome(nome).
                     stream().
-                    map(o -> ClienteResponseDTO.valueOf(o)).
+                    map(o -> FornecedorResponseDTO.valueOf(o)).
                     toList()).build();
     }
 
     @GET
-    @Path("/search/cpf/{cpf}")
-    public Response findByCpf(@PathParam("cpf") String cpf) {
-        return Response.ok(clienteService.findByCpf(cpf)
+    @Path("/search/cnpj/{cnpj}")
+    public Response findByCnpj(@PathParam("cnpj") String cnpj) {
+        return Response.ok(fornecedorService.findByCnpj(cnpj)
             .stream()
-            .map(ClienteResponseDTO::valueOf)
+            .map(FornecedorResponseDTO::valueOf)
             .toList()).build();
     }
 
     @GET
     public Response findAll() {
-        return Response.ok(clienteService.findAll().
+        return Response.ok(fornecedorService.findAll().
                     stream().
-                    map(o -> ClienteResponseDTO.valueOf(o)).
+                    map(o -> FornecedorResponseDTO.valueOf(o)).
                     toList()).build();
     }
 
     @POST
-    public Response create(@Valid ClienteRequestDTO dto) {
+    public Response create(@Valid FornecedorRequestDTO dto) {
         return Response.status(Status.CREATED).entity(
-            ClienteResponseDTO.valueOf(clienteService.create(dto))
+            FornecedorResponseDTO.valueOf(fornecedorService.create(dto))
         ).build();
     
     }
 
     @PUT
     @Path("/{id}")
-    public Response update(@PathParam("id") Long id, @Valid ClienteRequestDTO dto) {
-        clienteService.update(id, dto);
+    public Response update(@PathParam("id") Long id, @Valid FornecedorRequestDTO dto) {
+        fornecedorService.update(id, dto);
         return Response.noContent().build();
     }
 
     @DELETE
     @Path("/{id}")
     public Response delete(@PathParam("id") Long id) {
-        clienteService.delete(id);
+        fornecedorService.delete(id);
         return Response.noContent().build();
     }
     

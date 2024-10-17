@@ -3,85 +3,81 @@ package br.unitins.tp1.faixas.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.unitins.tp1.faixas.dto.ClienteRequestDTO;
 import br.unitins.tp1.faixas.dto.EnderecoRequestDTO;
+import br.unitins.tp1.faixas.dto.FornecedorRequestDTO;
 import br.unitins.tp1.faixas.dto.TelefoneRequestDTO;
-import br.unitins.tp1.faixas.model.Cliente;
 import br.unitins.tp1.faixas.model.Endereco;
+import br.unitins.tp1.faixas.model.Fornecedor;
 import br.unitins.tp1.faixas.model.Telefone;
-import br.unitins.tp1.faixas.repository.ClienteRepository;
+import br.unitins.tp1.faixas.repository.FornecedorRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 
 @ApplicationScoped
-public class ClienteServiceImpl implements ClienteService {
+public class FornecedorServiceImpl implements FornecedorService {
 
     @Inject
-    public ClienteRepository clienteRepository;
+    public FornecedorRepository fornecedorRepository;
 
     @Inject
     public MunicipioService municipioService;
 
     @Override
-    public Cliente findById(Long id) {
-        return clienteRepository.findById(id);
+    public Fornecedor findById(Long id) {
+        return fornecedorRepository.findById(id);
     }
 
     @Override
-    public List<Cliente> findByNome(String nome) {
-        return clienteRepository.findByNome(nome);
+    public List<Fornecedor> findByNome(String nome) {
+        return fornecedorRepository.findByNome(nome);
     }
 
     @Override
-    public List<Cliente> findByCpf(String cpf) {
-        return clienteRepository.findByCpf(cpf);
+    public List<Fornecedor> findByCnpj(String cnpj) {
+        return fornecedorRepository.findByCnpj(cnpj);
     }
 
     @Override
-    public List<Cliente> findAll() {
-        return clienteRepository.findAll().list();
-    }
-
-    @Override
-    @Transactional
-    public Cliente create(ClienteRequestDTO dto) {
-        Cliente cliente = new Cliente();
-
-        cliente.setNome(dto.nome());
-        cliente.setCpf(dto.cpf());
-        cliente.setDataNascimento(dto.dataNascimento());
-        cliente.setEmail(dto.email());
-        cliente.setTelefones(getTelefones(dto));
-        cliente.setEnderecos(getEnderecos(dto));
-
-        clienteRepository.persist(cliente);
-
-        return cliente;
+    public List<Fornecedor> findAll() {
+        return fornecedorRepository.findAll().list();
     }
 
     @Override
     @Transactional
-    public Cliente update(Long id, ClienteRequestDTO dto) {
-        Cliente cliente = clienteRepository.findById(id);
+    public Fornecedor create(FornecedorRequestDTO dto) {
+        Fornecedor fornecedor = new Fornecedor();
 
-        cliente.setNome(dto.nome());
-        cliente.setCpf(dto.cpf());
-        cliente.setDataNascimento(dto.dataNascimento());
-        cliente.setEmail(dto.email());
-        updateTelefones(cliente, dto.telefones());
-        updateEnderecos(cliente, dto.enderecos());
+        fornecedor.setNome(dto.nome());
+        fornecedor.setCnpj(dto.cnpj());
+        fornecedor.setTelefones(getTelefones(dto));
+        fornecedor.setEnderecos(getEnderecos(dto));
 
-        return cliente;
+        fornecedorRepository.persist(fornecedor);
+
+        return fornecedor;
+    }
+
+    @Override
+    @Transactional
+    public Fornecedor update(Long id, FornecedorRequestDTO dto) {
+        Fornecedor fornecedor = fornecedorRepository.findById(id);
+
+        fornecedor.setNome(dto.nome());
+        fornecedor.setCnpj(dto.cnpj());
+        updateTelefones(fornecedor, dto.telefones());
+        updateEnderecos(fornecedor, dto.enderecos());
+
+        return fornecedor;
     }
 
     @Override
     @Transactional
     public void delete(Long id) {
-        clienteRepository.deleteById(id);
+        fornecedorRepository.deleteById(id);
     }
 
-    private List<Telefone> getTelefones(ClienteRequestDTO dto) {
+        private List<Telefone> getTelefones(FornecedorRequestDTO dto) {
         List<Telefone> telefones = new ArrayList<>();
 
         for (int i = 0; i < dto.telefones().size(); i++) {
@@ -95,7 +91,7 @@ public class ClienteServiceImpl implements ClienteService {
         return telefones;
     }
 
-    private List<Endereco> getEnderecos(ClienteRequestDTO dto) {
+    private List<Endereco> getEnderecos(FornecedorRequestDTO dto) {
         List<Endereco> enderecos = new ArrayList<>();
 
         for (int i = 0; i < dto.enderecos().size(); i++) {
@@ -111,8 +107,8 @@ public class ClienteServiceImpl implements ClienteService {
         return enderecos;
     }
 
-    private void updateTelefones(Cliente cliente, List<TelefoneRequestDTO> novosTelefonesDTO) {
-        List<Telefone> telefonesExistentes = cliente.getTelefones();
+    private void updateTelefones(Fornecedor fornecedor, List<TelefoneRequestDTO> novosTelefonesDTO) {
+        List<Telefone> telefonesExistentes = fornecedor.getTelefones();
     
         telefonesExistentes.removeIf(telefone -> 
             novosTelefonesDTO.stream().noneMatch(dto -> 
@@ -138,8 +134,8 @@ public class ClienteServiceImpl implements ClienteService {
         }
     }
     
-    private void updateEnderecos(Cliente cliente, List<EnderecoRequestDTO> novosEnderecosDTO) {
-        List<Endereco> enderecosExistentes = cliente.getEnderecos();
+    private void updateEnderecos(Fornecedor fornecedor, List<EnderecoRequestDTO> novosEnderecosDTO) {
+        List<Endereco> enderecosExistentes = fornecedor.getEnderecos();
     
         enderecosExistentes.removeIf(endereco -> 
             novosEnderecosDTO.stream().noneMatch(dto -> 
@@ -169,4 +165,3 @@ public class ClienteServiceImpl implements ClienteService {
     
 }
 }
-

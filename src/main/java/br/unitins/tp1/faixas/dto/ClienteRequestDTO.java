@@ -14,5 +14,6 @@ public record ClienteRequestDTO(
     LocalDate dataNascimento,
     @NotBlank(message = "O email não pode ser nulo.")
     String email,
+    List<TelefoneRequestDTO> telefones,
     List<EnderecoRequestDTO> enderecos
 ) {}

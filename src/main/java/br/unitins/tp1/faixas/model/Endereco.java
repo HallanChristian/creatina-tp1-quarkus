@@ -1,19 +1,18 @@
 package br.unitins.tp1.faixas.model;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Endereco extends DefaultEntity{
     private String cep;
-    private String cidade;
-    private String estado;
     private String logradouro;
     private String numero;
-    private Long idCliente;
 
     @ManyToOne
-    private Cliente cliente;
+    @JoinColumn(name = "id_municipio")
+    private Municipio municipio;
 
     public String getCep() {
         return cep;
@@ -21,22 +20,6 @@ public class Endereco extends DefaultEntity{
 
     public void setCep(String cep) {
         this.cep = cep;
-    }
-
-    public String getCidade() {
-        return cidade;
-    }
-
-    public void setCidade(String cidade) {
-        this.cidade = cidade;
-    }
-
-    public String getEstado() {
-        return estado;
-    }
-
-    public void setEstado(String estado) {
-        this.estado = estado;
     }
 
     public String getLogradouro() {
@@ -55,19 +38,11 @@ public class Endereco extends DefaultEntity{
         this.numero = numero;
     }
 
-    public Long getIdCliente() {
-        return idCliente;
+    public Municipio getMunicipio() {
+        return municipio;
     }
 
-    public void setIdCliente(Long idCliente) {
-        this.idCliente = idCliente;
-    }
-
-    public Cliente getCliente() {
-        return cliente;
-    }
-
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
+    public void setMunicipio(Municipio municipio) {
+        this.municipio = municipio;
     }
 }

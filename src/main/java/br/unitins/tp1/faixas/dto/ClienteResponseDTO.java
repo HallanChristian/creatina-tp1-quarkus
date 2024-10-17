@@ -2,7 +2,6 @@ package br.unitins.tp1.faixas.dto;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import br.unitins.tp1.faixas.model.Cliente;
 
@@ -12,6 +11,7 @@ public record ClienteResponseDTO(
     String  cpf,
     LocalDate dataNascimento,
     String email, 
+    List<TelefoneResponseDTO> telefones,
     List<EnderecoResponseDTO> enderecos) {
 
     public static ClienteResponseDTO valueOf(Cliente cliente) {
@@ -21,9 +21,8 @@ public record ClienteResponseDTO(
             cliente.getCpf(),
             cliente.getDataNascimento(),
             cliente.getEmail(),
-            cliente.getEnderecos().stream()
-            .map(EnderecoResponseDTO::valueOf)
-            .collect(Collectors.toList())
+            cliente.getTelefones().stream().map(TelefoneResponseDTO::valueOf).toList(),
+            cliente.getEnderecos().stream().map(EnderecoResponseDTO::valueOf).toList()
             );
     }
     
