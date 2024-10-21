@@ -27,11 +27,4 @@ public class TelefoneFornecedor extends DefaultEntity {
         this.ddd = ddd;
     }
 
-    public Fornecedor getFornecedor() {
-        return fornecedor;
-    }
-
-    public void setFornecedor(Fornecedor fornecedor) {
-        this.fornecedor = fornecedor;
-    }
 }

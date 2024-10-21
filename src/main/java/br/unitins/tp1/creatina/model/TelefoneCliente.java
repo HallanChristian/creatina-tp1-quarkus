@@ -12,7 +12,7 @@ public class TelefoneCliente extends DefaultEntity {
 
     @ManyToOne
     @JoinColumn(name = "cliente_id")
-    private  Cliente cliente;
+    private Cliente cliente;
 
     public String getNumero() {
         return numero;
@@ -27,11 +27,4 @@ public class TelefoneCliente extends DefaultEntity {
         this.ddd = ddd;
     }
 
-    public Cliente getCliente() {
-        return cliente;
-    }
-
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
-    }
 }
