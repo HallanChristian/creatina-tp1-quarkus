@@ -27,4 +27,12 @@ public class TelefoneCliente extends DefaultEntity {
         this.ddd = ddd;
     }
 
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
 }

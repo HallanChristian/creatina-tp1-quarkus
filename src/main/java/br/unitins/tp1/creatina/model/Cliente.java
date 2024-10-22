@@ -21,10 +21,10 @@ public class Cliente extends DefaultEntity {
     @Column(length = 60, nullable = false )
     private String cpf;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente")
     private List<Endereco> enderecos;
     
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente")
     private List<TelefoneCliente> telefones;
 
     public String getNome() {
