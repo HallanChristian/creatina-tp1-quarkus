@@ -20,6 +20,8 @@ public class Fornecedor extends DefaultEntity {
     @JoinColumn(name = "id_fornecedor")
     private List<TelefoneFornecedor> telefones;
 
+    // Métodos getters e setters
+
     public String getNome() {
         return nome;
     }

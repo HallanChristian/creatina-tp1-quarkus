@@ -16,6 +16,8 @@ public class Endereco extends DefaultEntity{
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;
 
+    // Métodos getters e setters
+
     public String getCep() {
         return cep;
     }

@@ -14,6 +14,8 @@ public class TelefoneCliente extends DefaultEntity {
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;
 
+    // Métodos getters e setters
+
     public String getNumero() {
         return numero;
     }

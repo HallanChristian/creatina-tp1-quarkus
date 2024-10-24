@@ -8,6 +8,7 @@ import br.unitins.tp1.creatina.dto.TelefoneFornecedorRequestDTO;
 import br.unitins.tp1.creatina.model.Fornecedor;
 import br.unitins.tp1.creatina.model.TelefoneFornecedor;
 import br.unitins.tp1.creatina.repository.fornecedor.FornecedorRepository;
+import br.unitins.tp1.creatina.repository.telefone.TelefoneFornecedorRepository;
 import br.unitins.tp1.creatina.service.telefone.TelefoneFornecedorServiceImpl;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -21,7 +22,10 @@ public class FornecedorServiceImpl implements FornecedorService {
     public FornecedorRepository fornecedorRepository;
 
     @Inject
-    public TelefoneFornecedorServiceImpl telefoneServiceImpl;
+    public TelefoneFornecedorServiceImpl telefoneFornecedorServiceImpl;
+
+    @Inject
+    public TelefoneFornecedorRepository telefoneFornecedorRepository;
 
     @Override
     public Fornecedor findById(Long id) {
@@ -47,25 +51,34 @@ public class FornecedorServiceImpl implements FornecedorService {
     @Transactional
     public Fornecedor create(FornecedorRequestDTO dto) {
         Fornecedor fornecedor = new Fornecedor();
-
         fornecedor.setNome(dto.nome());
         fornecedor.setCnpj(dto.cnpj());
-        // cria o fornecedor primeiro
+  
         fornecedorRepository.persist(fornecedor);
 
         fornecedor.setTelefones(new ArrayList<>());
 
-        // telefone associado a ele
         for (TelefoneFornecedorRequestDTO telefoneDTO : dto.telefones()) {
-            TelefoneFornecedor telefone = telefoneServiceImpl.create(telefoneDTO, fornecedor.getId());
+            TelefoneFornecedor telefone = telefoneFornecedorServiceImpl.create(telefoneDTO);
             fornecedor.getTelefones().add(telefone);
         }
         
-        
-        //Atualiza o fornecedor no banco
         fornecedorRepository.persist(fornecedor);
 
         return fornecedor;
+    }
+
+    @Override
+    @Transactional
+    public void addTelefone(Long fornecedorId, TelefoneFornecedorRequestDTO dto) {
+        Fornecedor fornecedor = fornecedorRepository.findById(fornecedorId);
+        if (fornecedor == null) {
+            throw new IllegalArgumentException("Fornecedor com ID " + fornecedorId + " não encontrado.");
+        }
+        TelefoneFornecedor telefone = telefoneFornecedorServiceImpl.create(dto);
+        telefone.setFornecedor(fornecedor);
+        telefoneFornecedorRepository.persist(telefone);
+        fornecedor.getTelefones().add(telefone);
     }
 
     @Override
@@ -79,13 +92,11 @@ public class FornecedorServiceImpl implements FornecedorService {
         fornecedor.setNome(dto.nome());
         fornecedor.setCnpj(dto.cnpj());
 
-        // Atualiza os dados do fornecedor
         fornecedor.setNome(dto.nome());
         fornecedor.setCnpj(dto.cnpj());
-        // Remove os antigos
+
         fornecedor.getTelefones().clear();
 
-        // Persistindo as alterações do fornecedor
         fornecedorRepository.persist(fornecedor);
         return fornecedor;
     }

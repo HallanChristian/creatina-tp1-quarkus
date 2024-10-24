@@ -36,7 +36,7 @@ public class TelefoneFornecedorServiceImpl implements TelefoneFornecedorService 
 
     @Override
     @Transactional
-    public TelefoneFornecedor create(TelefoneFornecedorRequestDTO dto, Long id) {
+    public TelefoneFornecedor create(TelefoneFornecedorRequestDTO dto) {
         TelefoneFornecedor telefone = new TelefoneFornecedor();
 
         telefone.setDdd(dto.ddd());

@@ -1,6 +1,5 @@
 package br.unitins.tp1.creatina.service.cliente;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import br.unitins.tp1.creatina.dto.ClienteRequestDTO;
@@ -61,45 +60,38 @@ public class ClienteServiceImpl implements ClienteService {
     @Transactional
     public Cliente create(ClienteRequestDTO dto) {
         Cliente cliente = new Cliente();
+        populateCliente(cliente, dto);
 
-        cliente.setNome(dto.nome());
-        cliente.setCpf(dto.cpf());
-        cliente.setDataNascimento(dto.dataNascimento());
-        cliente.setEmail(dto.email());
+        // Adiciona endereços e telefones
+        addEnderecosToCliente(cliente, dto.enderecos());
+        addTelefonesToCliente(cliente, dto.telefones());
         
-        // cria o cliente primeiro
-        clienteRepository.persist(cliente);
-
-        cliente.setEnderecos(new ArrayList<>());
-        cliente.setTelefones(new ArrayList<>());
-
-        // endereco e telefone associado a ele
-        for (EnderecoRequestDTO enderecoDTO : dto.enderecos()) {
-            Endereco endereco = enderecoServiceImpl.create(enderecoDTO, cliente.getId());
-            cliente.getEnderecos().add(endereco);
-        }
-
-        for (TelefoneClienteRequestDTO telefoneDTO : dto.telefones()) {
-            TelefoneCliente telefone = telefoneClienteServiceImpl.create(telefoneDTO, cliente.getId());
-            cliente.getTelefones().add(telefone);
-        }
-        
-        //Atualiza o cliente no banco
         clienteRepository.persist(cliente);
         return cliente;
     }
 
-    @Transactional
-    public void addEndereco(Long clienteId, EnderecoRequestDTO dto) {
-        Cliente cliente = clienteRepository.findById(clienteId);
-        if (cliente != null) {
-            Endereco endereco = new Endereco();
-            endereco.setCep(dto.cep());
-            endereco.setLogradouro(dto.logradouro());
-            endereco.setNumero(dto.numero());
+    private void populateCliente(Cliente cliente, ClienteRequestDTO dto) {
+        cliente.setNome(dto.nome());
+        cliente.setCpf(dto.cpf());
+        cliente.setDataNascimento(dto.dataNascimento());
+        cliente.setEmail(dto.email());
+    }
 
-            enderecoRepository.persist(endereco);
-            cliente.getEnderecos().add(endereco);
+    private void addEnderecosToCliente(Cliente cliente, List<EnderecoRequestDTO> enderecos) {
+        if (enderecos != null) {
+            for (EnderecoRequestDTO enderecoDTO : enderecos) {
+                Endereco endereco = enderecoServiceImpl.create(enderecoDTO);
+                cliente.getEnderecos().add(endereco);
+            }
+        }
+    }
+
+    private void addTelefonesToCliente(Cliente cliente, List<TelefoneClienteRequestDTO> telefones) {
+        if (telefones != null) {
+            for (TelefoneClienteRequestDTO telefoneDTO : telefones) {
+                TelefoneCliente telefone = telefoneClienteServiceImpl.create(telefoneDTO);
+                cliente.getTelefones().add(telefone);
+            }
         }
     }
 
@@ -111,35 +103,45 @@ public class ClienteServiceImpl implements ClienteService {
             throw new EntityNotFoundException("Cliente não encontrado");
         }
 
-        cliente.setNome(dto.nome());
-        cliente.setCpf(dto.cpf());
-        cliente.setDataNascimento(dto.dataNascimento());
-        cliente.setEmail(dto.email());
+        populateCliente(cliente, dto);
+        cliente.getEnderecos().clear(); // Limpa e atualiza endereços
+        addEnderecosToCliente(cliente, dto.enderecos());
 
-        // Atualiza os endereços do cliente
-        // Limpa os endereços existentes
-        cliente.getEnderecos().clear();
-
-        cliente.setEnderecos(new ArrayList<>());
-
-        // endereco associado a ele
-        for (EnderecoRequestDTO enderecoDTO : dto.enderecos()) {
-            Endereco endereco = enderecoServiceImpl.create(enderecoDTO, cliente.getId());
-            cliente.getEnderecos().add(endereco);
-        }
-
-        // Persistindo as alterações do cliente
         clienteRepository.persist(cliente);
-
         return cliente;
     }
 
     @Override
     @Transactional
     public void delete(Long id) {
-        enderecoRepository.deleteClienteEndereco(id);
-        enderecoRepository.deleteByCliente(id);
         clienteRepository.deleteById(id);
     }
 
+    @Override
+    @Transactional
+    public void addEndereco(Long clienteId, EnderecoRequestDTO dto) {
+        Cliente cliente = findClienteOrThrow(clienteId);
+        Endereco endereco = enderecoServiceImpl.create(dto);
+        endereco.setCliente(cliente);
+        enderecoRepository.persist(endereco);
+        cliente.getEnderecos().add(endereco);
+    }
+
+    @Override
+    @Transactional
+    public void addTelefone(Long clienteId, TelefoneClienteRequestDTO dto) {
+        Cliente cliente = findClienteOrThrow(clienteId);
+        TelefoneCliente telefone = telefoneClienteServiceImpl.create(dto);
+        telefone.setCliente(cliente);
+        telefoneClienteRepository.persist(telefone);
+        cliente.getTelefones().add(telefone);
+    }
+
+    private Cliente findClienteOrThrow(Long clienteId) {
+        Cliente cliente = clienteRepository.findById(clienteId);
+        if (cliente == null) {
+            throw new IllegalArgumentException("Cliente_ID " + clienteId + " não encontrado.");
+        }
+        return cliente;
+    }
 }

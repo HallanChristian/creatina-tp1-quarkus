@@ -11,6 +11,8 @@ public class Creatina extends DefaultEntity {
     private String tipo;
     private double preco;
 
+    // Métodos getters e setters
+
     public String getNome() {
         return nome;
     }

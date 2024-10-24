@@ -4,10 +4,15 @@ import java.util.List;
 
 import jakarta.validation.constraints.NotBlank;
 
+// DTO Fornecedor
 public record FornecedorRequestDTO(
-    @NotBlank(message = "O nome não pode ser nulo.")
+    // Nome do fornecedor (obrigatório)
+    @NotBlank(message = "Informe o nome do fornecedor.")
     String nome, 
-    @NotBlank(message = "O cnpj não pode ser nulo.")
+
+    // CNPJ do fornecedor (obrigatório)
+    @NotBlank(message = "Informe o CNPJ do fornecedor.")
     String cnpj,
+    
     List<TelefoneFornecedorRequestDTO> telefones
 ) {}

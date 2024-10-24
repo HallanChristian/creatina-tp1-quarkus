@@ -1,9 +1,8 @@
 package br.unitins.tp1.creatina.resource.fornecedor;
 
-//import java.util.List;
-
 import br.unitins.tp1.creatina.dto.FornecedorRequestDTO;
 import br.unitins.tp1.creatina.dto.FornecedorResponseDTO;
+import br.unitins.tp1.creatina.dto.TelefoneFornecedorRequestDTO;
 import br.unitins.tp1.creatina.service.fornecedor.FornecedorService;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
@@ -65,6 +64,13 @@ public class FornecedorResource {
             FornecedorResponseDTO.valueOf(fornecedorService.create(dto))
         ).build();
     
+    }
+
+    @POST
+    @Path("/{id}/telefones")
+    public Response addEndereco(@PathParam("id") Long fornecedorId, @Valid TelefoneFornecedorRequestDTO telefoneDTO) {
+        fornecedorService.addTelefone(fornecedorId, telefoneDTO);
+        return Response.status(Status.CREATED).build();
     }
 
     @PUT

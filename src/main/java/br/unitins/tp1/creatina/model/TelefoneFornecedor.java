@@ -14,6 +14,8 @@ public class TelefoneFornecedor extends DefaultEntity {
     @JoinColumn(name = "fornecedor_id")
     private  Fornecedor fornecedor;
 
+    // Métodos getters e setters
+
     public String getNumero() {
         return numero;
     }

@@ -13,7 +13,7 @@ public interface EnderecoService {
 
     List<Endereco> findAll();
 
-    Endereco create(EnderecoRequestDTO dto, Long idCliente);
+    Endereco create(EnderecoRequestDTO dto);
 
     Endereco update(Long id, EnderecoRequestDTO dto);
 

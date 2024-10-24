@@ -2,15 +2,25 @@ package br.unitins.tp1.creatina.dto;
 
 import jakarta.validation.constraints.NotBlank;
 
+// DTO Endereço
 public record EnderecoRequestDTO(
-    @NotBlank(message = "O campo deve ser informado") 
-    String cep,
-    @NotBlank(message = "O campo deve ser informado") 
-    String logradouro,
-    @NotBlank(message = "O campo deve ser informado") 
-    String numero,
-    @NotBlank(message = "O campo cidade deve ser informado") 
+    // Estado (obrigatório)
+    @NotBlank(message = "Informe o estado.") 
+    String estado,
+    
+    // Cidade (obrigatório)
+    @NotBlank(message = "Informe a cidade.") 
     String cidade,
-    @NotBlank(message = "O campo estado deve ser informado") 
-    String estado
+
+    // CEP (obrigatório)
+    @NotBlank(message = "Informe o CEP.") 
+    String cep,
+
+    // Logradouro (obrigatório)
+    @NotBlank(message = "Informe o logradouro.") 
+    String logradouro,
+
+    // Número (obrigatório)
+    @NotBlank(message = "Informe o número.") 
+    String numero
 ) {}

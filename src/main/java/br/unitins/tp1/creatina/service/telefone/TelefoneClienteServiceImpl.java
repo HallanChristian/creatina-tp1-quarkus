@@ -36,7 +36,7 @@ public class TelefoneClienteServiceImpl implements TelefoneClienteService {
 
     @Override
     @Transactional
-    public TelefoneCliente create(TelefoneClienteRequestDTO dto, Long id) {
+    public TelefoneCliente create(TelefoneClienteRequestDTO dto) {
         TelefoneCliente telefone = new TelefoneCliente();
 
         telefone.setDdd(dto.ddd());

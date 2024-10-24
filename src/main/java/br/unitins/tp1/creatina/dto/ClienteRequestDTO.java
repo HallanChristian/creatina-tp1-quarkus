@@ -6,15 +6,25 @@ import java.util.List;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+// DTO Cliente
+
 public record ClienteRequestDTO(
-    @NotBlank(message = "O nome não pode ser nulo.")
+    // Nome do cliente (obrigatório)
+    @NotBlank(message = "Informe o nome do cliente.")
     String nome, 
-    @NotBlank(message = "O cpf não pode ser nulo.")
+
+    // CPF do cliente (obrigatório)
+    @NotBlank(message = "Informe o CPF do cliente.")
     String cpf,
-    @NotNull(message = "A data de nascimento não pode ser nula.")
+
+    // Data de nascimento (obrigatória)
+    @NotNull(message = "Informe a data de nascimento do cliente.")
     LocalDate dataNascimento,
-    @NotBlank(message = "O email não pode ser nulo.")
+
+    // E-mail do cliente (obrigatório)
+    @NotBlank(message = "Informe o e-mail do cliente.")
     String email,
+
     List<TelefoneClienteRequestDTO> telefones,
     List<EnderecoRequestDTO> enderecos
 ) {}

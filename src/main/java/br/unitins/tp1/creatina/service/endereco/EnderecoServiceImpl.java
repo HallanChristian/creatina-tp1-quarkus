@@ -32,7 +32,7 @@ public class EnderecoServiceImpl implements EnderecoService {
 
     @Override
     @Transactional
-    public Endereco create(EnderecoRequestDTO dto, Long id) {
+    public Endereco create(EnderecoRequestDTO dto) {
         Endereco endereco = new Endereco();
 
         endereco.setCep(dto.cep());

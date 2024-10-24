@@ -1,11 +1,13 @@
 package br.unitins.tp1.creatina.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
 
 @Entity
@@ -21,11 +23,13 @@ public class Cliente extends DefaultEntity {
     @Column(length = 60, nullable = false )
     private String cpf;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente")
-    private List<Endereco> enderecos;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente", fetch = FetchType.EAGER)
+    private List<Endereco> enderecos = new ArrayList<>();; // Lista de endereços do cliente
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente")
-    private List<TelefoneCliente> telefones;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente", fetch = FetchType.EAGER)
+    private List<TelefoneCliente> telefones = new ArrayList<>();; // Lista de telefones do cliente
+
+    // Métodos getters e setters
 
     public String getNome() {
         return nome;

@@ -2,6 +2,8 @@ package br.unitins.tp1.creatina.resource.cliente;
 
 import br.unitins.tp1.creatina.dto.ClienteRequestDTO;
 import br.unitins.tp1.creatina.dto.ClienteResponseDTO;
+import br.unitins.tp1.creatina.dto.EnderecoRequestDTO;
+import br.unitins.tp1.creatina.dto.TelefoneClienteRequestDTO;
 import br.unitins.tp1.creatina.service.cliente.ClienteService;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
@@ -65,11 +67,23 @@ public class ClienteResource {
     
     }
 
+    @POST
+    @Path("/{id}/enderecos")
+    public Response addEndereco(@PathParam("id") Long clienteId, @Valid EnderecoRequestDTO enderecoDTO) {
+        clienteService.addEndereco(clienteId, enderecoDTO);
+        return Response.status(Status.CREATED).build();
+    }
+    @POST
+    @Path("/{id}/telefones")
+    public Response addTelefone(@PathParam("id") Long clienteId, @Valid TelefoneClienteRequestDTO telefoneDTO) {
+        clienteService.addTelefone(clienteId, telefoneDTO);
+        return Response.status(Status.CREATED).build();
+    }
+
     @PUT
     @Path("/{id}")
     public Response update(@PathParam("id") Long id, @Valid ClienteRequestDTO dto) {
-        clienteService.update(id, dto);
-        return Response.noContent().build();
+        return Response.ok(ClienteResponseDTO.valueOf(clienteService.update(id, dto))).build();
     }
 
     @DELETE

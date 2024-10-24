@@ -51,7 +51,7 @@ public class EnderecoResource {
     @POST
     @Path("/{idCliente}")
     public Response create(@PathParam("id") Long id, @Valid EnderecoRequestDTO dto) {
-        return Response.status(Status.CREATED).entity(EnderecoResponseDTO.valueOf(enderecoService.create(dto, id))).build();
+        return Response.status(Status.CREATED).entity(EnderecoResponseDTO.valueOf(enderecoService.create(dto))).build();
     }
 
     @PUT

@@ -14,7 +14,7 @@ public interface TelefoneFornecedorService {
 
     List<TelefoneFornecedor> findAll();
 
-    TelefoneFornecedor create(TelefoneFornecedorRequestDTO dto, Long id);
+    TelefoneFornecedor create(TelefoneFornecedorRequestDTO dto);
 
     TelefoneFornecedor update(Long id, TelefoneFornecedorRequestDTO dto);
 

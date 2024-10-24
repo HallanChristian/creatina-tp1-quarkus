@@ -3,15 +3,25 @@ package br.unitins.tp1.creatina.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+// DTO Creatina
 public record CreatinaRequestDTO(
-    @NotBlank(message = "O nome não pode ser nulo.")
+    // Nome da creatina (obrigatório)
+    @NotBlank(message = "Informe o nome da creatina.")
     String nome, 
-    @NotBlank(message = "A marca não pode ser nula.")
+
+    // Marca da creatina (obrigatório)
+    @NotBlank(message = "Informe a marca da creatina.")
     String marca,
-    @NotNull(message = "A quantidade em gramas não pode ser nula.")
+
+    // Quantidade em gramas (obrigatório)
+    @NotNull(message = "Informe a quantidade em gramas.")
     double quantidadeEmGramas,
-    @NotBlank(message = "O tipo não pode ser nulo.")
+
+    // Tipo da creatina (obrigatório)
+    @NotBlank(message = "Informe o tipo da creatina.")
     String tipo,
-    @NotNull(message = "O preço não pode ser nulo.")
+
+    // Preço da creatina (obrigatório)
+    @NotNull(message = "Informe o preço da creatina.")
     double preco
 ) {}
