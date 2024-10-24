@@ -86,7 +86,7 @@ public class ClienteServiceImpl implements ClienteService {
         return cliente;
     }
 
-    private void populateCliente(Cliente cliente, ClienteRequestDTO dto) {
+   private void populateCliente(Cliente cliente, ClienteRequestDTO dto) {
         cliente.setNome(dto.nome());
         cliente.setCpf(dto.cpf());
         cliente.setDataNascimento(dto.dataNascimento());
@@ -104,26 +104,22 @@ public class ClienteServiceImpl implements ClienteService {
         populateCliente(cliente, dto);
 
         // Atualiza endereços
-        cliente.getEnderecos().clear();
-        List<Endereco> novosEnderecos = dto.enderecos().stream()
-            .map(enderecoDTO -> {
-                Endereco endereco = enderecoServiceImpl.create(enderecoDTO);
-                endereco.setCliente(cliente);
-                return endereco;
-            }).collect(Collectors.toList());
-        cliente.setEnderecos(novosEnderecos);
+        cliente.getEnderecos().clear(); // Limpa os endereços existentes
+        for (EnderecoRequestDTO enderecoDTO : dto.enderecos()) {
+            Endereco endereco = enderecoServiceImpl.create(enderecoDTO);
+            endereco.setCliente(cliente);
+            cliente.getEnderecos().add(endereco); // Adiciona novo endereço
+        }
 
         // Atualiza telefones
-        cliente.getTelefones().clear();
-        List<TelefoneCliente> novosTelefones = dto.telefones().stream()
-            .map(telefoneDTO -> {
-                TelefoneCliente telefone = telefoneClienteServiceImpl.create(telefoneDTO);
-                telefone.setCliente(cliente);
-                return telefone;
-            }).collect(Collectors.toList());
-        cliente.setTelefones(novosTelefones);
+        cliente.getTelefones().clear(); // Limpa os telefones existentes
+        for (TelefoneClienteRequestDTO telefoneDTO : dto.telefones()) {
+            TelefoneCliente telefone = telefoneClienteServiceImpl.create(telefoneDTO);
+            telefone.setCliente(cliente);
+            cliente.getTelefones().add(telefone); // Adiciona novo telefone
+        }
 
-        clienteRepository.persist(cliente);
+        clienteRepository.persist(cliente); // Persistir as alterações
         return cliente;
     }
 
