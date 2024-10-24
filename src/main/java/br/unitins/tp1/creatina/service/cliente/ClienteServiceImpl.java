@@ -1,6 +1,7 @@
 package br.unitins.tp1.creatina.service.cliente;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import br.unitins.tp1.creatina.dto.ClienteRequestDTO;
 import br.unitins.tp1.creatina.dto.EnderecoRequestDTO;
@@ -59,14 +60,29 @@ public class ClienteServiceImpl implements ClienteService {
     @Override
     @Transactional
     public Cliente create(ClienteRequestDTO dto) {
-        Cliente cliente = new Cliente();
+         Cliente cliente = new Cliente();
         populateCliente(cliente, dto);
 
-        // Adiciona endereços e telefones
-        addEnderecosToCliente(cliente, dto.enderecos());
-        addTelefonesToCliente(cliente, dto.telefones());
-        
-        clienteRepository.persist(cliente);
+        // Adiciona endereços ao cliente
+        List<Endereco> enderecos = dto.enderecos().stream()
+            .map(enderecoDTO -> {
+                Endereco endereco = enderecoServiceImpl.create(enderecoDTO);
+                endereco.setCliente(cliente);  // Associa o endereço ao cliente
+                return endereco;
+            }).collect(Collectors.toList());
+        cliente.setEnderecos(enderecos);
+
+        // Adiciona telefones ao cliente
+        List<TelefoneCliente> telefones = dto.telefones().stream()
+            .map(telefoneDTO -> {
+                TelefoneCliente telefone = telefoneClienteServiceImpl.create(telefoneDTO);
+                telefone.setCliente(cliente);  // Associa o telefone ao cliente
+                return telefone;
+            }).collect(Collectors.toList());
+        cliente.setTelefones(telefones);
+
+        clienteRepository.persist(cliente); // Persiste o cliente com endereços e telefones
+
         return cliente;
     }
 
@@ -75,24 +91,6 @@ public class ClienteServiceImpl implements ClienteService {
         cliente.setCpf(dto.cpf());
         cliente.setDataNascimento(dto.dataNascimento());
         cliente.setEmail(dto.email());
-    }
-
-    private void addEnderecosToCliente(Cliente cliente, List<EnderecoRequestDTO> enderecos) {
-        if (enderecos != null) {
-            for (EnderecoRequestDTO enderecoDTO : enderecos) {
-                Endereco endereco = enderecoServiceImpl.create(enderecoDTO);
-                cliente.getEnderecos().add(endereco);
-            }
-        }
-    }
-
-    private void addTelefonesToCliente(Cliente cliente, List<TelefoneClienteRequestDTO> telefones) {
-        if (telefones != null) {
-            for (TelefoneClienteRequestDTO telefoneDTO : telefones) {
-                TelefoneCliente telefone = telefoneClienteServiceImpl.create(telefoneDTO);
-                cliente.getTelefones().add(telefone);
-            }
-        }
     }
 
     @Override
@@ -104,8 +102,26 @@ public class ClienteServiceImpl implements ClienteService {
         }
 
         populateCliente(cliente, dto);
-        cliente.getEnderecos().clear(); // Limpa e atualiza endereços
-        addEnderecosToCliente(cliente, dto.enderecos());
+
+        // Atualiza endereços
+        cliente.getEnderecos().clear();
+        List<Endereco> novosEnderecos = dto.enderecos().stream()
+            .map(enderecoDTO -> {
+                Endereco endereco = enderecoServiceImpl.create(enderecoDTO);
+                endereco.setCliente(cliente);
+                return endereco;
+            }).collect(Collectors.toList());
+        cliente.setEnderecos(novosEnderecos);
+
+        // Atualiza telefones
+        cliente.getTelefones().clear();
+        List<TelefoneCliente> novosTelefones = dto.telefones().stream()
+            .map(telefoneDTO -> {
+                TelefoneCliente telefone = telefoneClienteServiceImpl.create(telefoneDTO);
+                telefone.setCliente(cliente);
+                return telefone;
+            }).collect(Collectors.toList());
+        cliente.setTelefones(novosTelefones);
 
         clienteRepository.persist(cliente);
         return cliente;
