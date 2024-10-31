@@ -67,6 +67,7 @@ public class EnderecoServiceImpl implements EnderecoService {
     }
 
     @Override
+    @Transactional
     public void deleteByCliente(Long idCliente) {
         enderecoRepository.deleteByCliente(idCliente);
     }

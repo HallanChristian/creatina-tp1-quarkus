@@ -7,9 +7,9 @@ public class Creatina extends DefaultEntity {
     
     private String nome;
     private String marca;
-    private double quantidadeEmGramas;
+    private float quantidadeEmGramas;
     private String tipo;
-    private double preco;
+    private float preco;
 
     // Métodos getters e setters
 
@@ -29,11 +29,11 @@ public class Creatina extends DefaultEntity {
         this.marca = marca;
     }
 
-    public double getQuantidadeEmGramas() {
+    public float getQuantidadeEmGramas() {
         return quantidadeEmGramas;
     }
 
-    public void setQuantidadeEmGramas(double quantidadeEmGramas) {
+    public void setQuantidadeEmGramas(float quantidadeEmGramas) {
         this.quantidadeEmGramas = quantidadeEmGramas;
     }
 
@@ -45,11 +45,11 @@ public class Creatina extends DefaultEntity {
         this.tipo = tipo;
     }
 
-    public double getPreco() {
+    public float getPreco() {
         return preco;
     }
 
-    public void setPreco(double preco) {
+    public void setPreco(float preco) {
         this.preco = preco;
     }
 }

@@ -13,6 +13,7 @@ insert into municipio (nome, id_estado) values('Palmas', 1);
 insert into municipio (nome, id_estado) values('Paraiso', 1);
 insert into municipio (nome, id_estado) values('Porto Nacional', 1);
 
+/*
 -- Inserção de dados para Cliente
 INSERT INTO Cliente (nome, email, dataNascimento, cpf) 
 VALUES 
@@ -48,3 +49,4 @@ INSERT INTO Creatina (nome, marca, quantidadeEmGramas, tipo, preco)
 VALUES 
 ('Creatina Monohidratada', 'Marca X', 300.00, 'Monohidratada', 79.90),
 ('Creatina Micronizada', 'Marca Y', 200.00, 'Micronizada', 99.90);
+*/

@@ -4,7 +4,7 @@ import java.util.List;
 
 import br.unitins.tp1.creatina.dto.CreatinaRequestDTO;
 import br.unitins.tp1.creatina.model.Creatina;
-import br.unitins.tp1.creatina.repository.estado.creatina.CreatinaRepository;
+import br.unitins.tp1.creatina.repository.creatina.CreatinaRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityNotFoundException;

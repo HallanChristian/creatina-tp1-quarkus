@@ -1,7 +1,5 @@
 package br.unitins.tp1.creatina.resource.creatina;
 
-//import java.util.List;
-
 import br.unitins.tp1.creatina.dto.CreatinaRequestDTO;
 import br.unitins.tp1.creatina.dto.CreatinaResponseDTO;
 import br.unitins.tp1.creatina.service.creatina.CreatinaService;

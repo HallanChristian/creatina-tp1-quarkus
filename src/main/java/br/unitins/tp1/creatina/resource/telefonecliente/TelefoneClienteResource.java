@@ -2,6 +2,7 @@ package br.unitins.tp1.creatina.resource.telefonecliente;
 
 import br.unitins.tp1.creatina.dto.TelefoneClienteRequestDTO;
 import br.unitins.tp1.creatina.dto.TelefoneClienteResponseDTO;
+import br.unitins.tp1.creatina.model.TelefoneCliente;
 import br.unitins.tp1.creatina.service.telefone.TelefoneClienteService;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
@@ -50,8 +51,9 @@ public class TelefoneClienteResource {
 
     @POST
     @Path("/{idCliente}")
-    public Response create(@PathParam("id") Long id, @Valid TelefoneClienteRequestDTO dto) {
-        return Response.status(Status.CREATED).entity(TelefoneClienteResponseDTO.valueOf(telefoneclienteService.create(dto))).build();
+    public Response create(@PathParam("idCliente") Long idCliente, @Valid TelefoneClienteRequestDTO dto) {
+        TelefoneCliente telefone = telefoneclienteService.create(idCliente, dto);
+        return Response.status(Status.CREATED).entity(TelefoneClienteResponseDTO.valueOf(telefone)).build();
     }
 
     @PUT

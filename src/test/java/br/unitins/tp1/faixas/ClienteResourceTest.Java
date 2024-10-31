@@ -1,22 +1,22 @@
 package br.unitins.tp1.faixas;
 
-import static io.restassured.RestAssured.given;
+import java.time.LocalDate;
+import java.util.List;
+
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
-
 import org.junit.jupiter.api.Test;
 
-
 import br.unitins.tp1.creatina.dto.ClienteRequestDTO;
+import br.unitins.tp1.creatina.dto.EnderecoRequestDTO;
+import br.unitins.tp1.creatina.dto.TelefoneClienteRequestDTO;
 import br.unitins.tp1.creatina.model.Cliente;
-import br.unitins.tp1.creatina.resource.cliente.ClienteResource;
 import br.unitins.tp1.creatina.service.cliente.ClienteService;
-import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.junit.QuarkusTest;
+import static io.restassured.RestAssured.given;
 import io.restassured.http.ContentType;
-
 import jakarta.inject.Inject;
 
 @QuarkusTest
@@ -25,37 +25,29 @@ public class ClienteResourceTest {
     public ClienteService clienteService;
 
     @Test
-    public void testCreate() {
-        ClienteRequestDTO dto = new ClienteRequestDTO("Carlos Silva", "123.456.789-10", "1990-01-01", "carlos@example.com");
+    public void testFindById() {
         given()
-            .contentType(ContentType.JSON)
-            .body(dto)
-            .when()
-                .post("/clientes")
-            .then()
-                .statusCode(201)
-                .body("nome", is("Carlos Silva"),
-                      "cpf", is("123.456.789-10"));
-        
-        // Limpar o dado inserido
-        Cliente cliente = clienteService.findByNome("Carlos Silva").get(0);
-        clienteService.delete(cliente.getId());
+            .when().get("/clientes/1")
+            .then().statusCode(200)
+            .body("id", is(1));
     }
 
     @Test
-    public void testFindById() {
-        // Primeiro, crie um cliente para garantir que há um cliente para buscar
-        ClienteRequestDTO dto = new ClienteRequestDTO("Maria Oliveira", "987.654.321-00", "1995-05-15", "maria@example.com");
-        Long id = clienteService.create(dto).getId();
-
+    public void testFindByNome() {
         given()
-            .when().get("/clientes/" + id)
+            .when().pathParam("nome", "Carlos Henrique")
+            .get("/clientes/search/{nome}")
             .then().statusCode(200)
-            .body("id", is(id.intValue()),
-                  "nome", is("Maria Oliveira"));
+            .body("nome", hasItem(is("Carlos Henrique")));
+    }
 
-        // Limpar o dado inserido
-        clienteService.delete(id);
+    @Test
+    public void testFindByCpf() {
+        given()
+            .when().pathParam("cpf", "123.456.789-00")
+            .get("/clientes/search/cpf/{cpf}")
+            .then().statusCode(200)
+            .body("cpf", hasItem(is("123.456.789-00")));
     }
 
     @Test
@@ -66,36 +58,84 @@ public class ClienteResourceTest {
     }
 
     @Test
+    public void testCreate() {
+        ClienteRequestDTO dto = new ClienteRequestDTO(
+            "Carlos Henrique",
+            "123.456.789-00",
+            LocalDate.of(1990, 5, 15),
+            "carlos@example.com",
+            List.of(new TelefoneClienteRequestDTO("63", "12345-678")),
+            List.of(new EnderecoRequestDTO("SP", "São Paulo", "12345-678", "Centro", "100"))
+        );
+
+        Long id = given()
+            .contentType(ContentType.JSON)
+            .body(dto)
+            .when()
+            .post("/clientes")
+            .then()
+            .statusCode(201)
+            .extract().path("id");
+
+        Cliente clienteCriado = clienteService.findById(id);
+        assertEquals("Carlos Henrique", clienteCriado.getNome());
+
+        clienteService.delete(id);
+    }
+
+    @Test
     public void testUpdate() {
-        // Primeiro, crie um cliente para atualizar
-        ClienteRequestDTO dto = new ClienteRequestDTO("Ana Costa", "111.222.333-44", "1992-03-10", "ana@example.com");
+        ClienteRequestDTO dto = new ClienteRequestDTO(
+            "Carlos Henrique",
+            "123.456.789-00",
+            LocalDate.of(1990, 5, 15),
+            "carlos@example.com",
+            List.of(new TelefoneClienteRequestDTO("63", "12345-678")),
+            List.of(new EnderecoRequestDTO("SP", "São Paulo", "12345-678", "Centro", "100"))
+        );
+
         Long id = clienteService.create(dto).getId();
 
-        ClienteRequestDTO novoDto = new ClienteRequestDTO("Ana Costa Atualizada", "111.222.333-44", "1992-03-10", "ana.atualizada@example.com");
+        ClienteRequestDTO novoDto = new ClienteRequestDTO(
+            "Leandra Cavina",
+            "123.456.789-00",
+            LocalDate.of(1990, 5, 15),
+            "leandra@example.com",
+            List.of(new TelefoneClienteRequestDTO("21", "222222222")),
+            List.of(new EnderecoRequestDTO("RJ", "Rio de Janeiro", "98765-432", "Copacabana", "200"))
+        );
+
         given()
             .contentType(ContentType.JSON)
             .body(novoDto)
             .when()
-                .put("/clientes/" + id)
+            .put("/clientes/" + id)
             .then()
-                .statusCode(204);
-        
-        Cliente cliente = clienteService.findById(id);
-        assertEquals("Ana Costa Atualizada", cliente.getNome());
+            .statusCode(200);
 
-        // Limpar o dado inserido
+        Cliente clienteAtualizado = clienteService.findById(id);
+        assertEquals("Leandra Cavina", clienteAtualizado.getNome());
+        assertEquals("leandra@example.com", clienteAtualizado.getEmail());
+
         clienteService.delete(id);
     }
 
     @Test
     public void testDelete() {
-        // Primeiro, crie um cliente para excluir
-        ClienteRequestDTO dto = new ClienteRequestDTO("Pedro Santos", "222.333.444-55", "1988-12-01", "pedro@example.com");
+        ClienteRequestDTO dto = new ClienteRequestDTO(
+            "Carlos Henrique",
+            "123.456.789-01",
+            LocalDate.of(1990, 5, 15),
+            "carlos@example.com",
+            List.of(new TelefoneClienteRequestDTO("63", "12345-678")),
+            List.of(new EnderecoRequestDTO("SP", "São Paulo", "12345-678", "Centro", "100"))
+        );
+
         Long id = clienteService.create(dto).getId();
 
         given()
             .when()
-                .delete("/clientes/" + id)
+            .delete("/clientes/" + id)
             .then().statusCode(204);
 
         Cliente cliente = clienteService.findById(id);

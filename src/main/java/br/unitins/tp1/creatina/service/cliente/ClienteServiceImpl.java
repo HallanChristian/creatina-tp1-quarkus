@@ -60,7 +60,7 @@ public class ClienteServiceImpl implements ClienteService {
     @Override
     @Transactional
     public Cliente create(ClienteRequestDTO dto) {
-         Cliente cliente = new Cliente();
+        Cliente cliente = new Cliente();
         populateCliente(cliente, dto);
 
         // Adiciona endereços ao cliente
@@ -75,7 +75,7 @@ public class ClienteServiceImpl implements ClienteService {
         // Adiciona telefones ao cliente
         List<TelefoneCliente> telefones = dto.telefones().stream()
             .map(telefoneDTO -> {
-                TelefoneCliente telefone = telefoneClienteServiceImpl.create(telefoneDTO);
+                TelefoneCliente telefone = telefoneClienteServiceImpl.create(cliente.getId(), telefoneDTO);
                 telefone.setCliente(cliente);  // Associa o telefone ao cliente
                 return telefone;
             }).collect(Collectors.toList());
@@ -114,7 +114,7 @@ public class ClienteServiceImpl implements ClienteService {
         // Atualiza telefones
         cliente.getTelefones().clear(); // Limpa os telefones existentes
         for (TelefoneClienteRequestDTO telefoneDTO : dto.telefones()) {
-            TelefoneCliente telefone = telefoneClienteServiceImpl.create(telefoneDTO);
+            TelefoneCliente telefone = telefoneClienteServiceImpl.create(cliente.getId(), telefoneDTO);
             telefone.setCliente(cliente);
             cliente.getTelefones().add(telefone); // Adiciona novo telefone
         }
@@ -142,11 +142,12 @@ public class ClienteServiceImpl implements ClienteService {
     @Override
     @Transactional
     public void addTelefone(Long clienteId, TelefoneClienteRequestDTO dto) {
+        // Verifica se o cliente existe
         Cliente cliente = findClienteOrThrow(clienteId);
-        TelefoneCliente telefone = telefoneClienteServiceImpl.create(dto);
-        telefone.setCliente(cliente);
-        telefoneClienteRepository.persist(telefone);
-        cliente.getTelefones().add(telefone);
+        
+        // Cria e associa o telefone ao cliente
+        TelefoneCliente telefone = telefoneClienteServiceImpl.create(clienteId, dto);
+        cliente.getTelefones().add(telefone); // Adiciona à lista de telefones
     }
 
     private Cliente findClienteOrThrow(Long clienteId) {

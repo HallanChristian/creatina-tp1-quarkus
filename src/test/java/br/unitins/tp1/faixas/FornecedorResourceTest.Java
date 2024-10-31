@@ -1,153 +1,160 @@
-package br.unitins.tp1.creatina.service.fornecedor;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+package br.unitins.tp1.faixas;
 
 import java.util.List;
 
-import org.junit.jupiter.api.BeforeEach;
+import static org.hamcrest.CoreMatchers.hasItem;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import org.junit.jupiter.api.Test;
 
 import br.unitins.tp1.creatina.dto.FornecedorRequestDTO;
 import br.unitins.tp1.creatina.dto.TelefoneFornecedorRequestDTO;
 import br.unitins.tp1.creatina.model.Fornecedor;
-import br.unitins.tp1.creatina.service.telefone.TelefoneFornecedorServiceImpl;
+import br.unitins.tp1.creatina.service.fornecedor.FornecedorService;
 import io.quarkus.test.junit.QuarkusTest;
+import static io.restassured.RestAssured.given;
+import io.restassured.http.ContentType;
 import jakarta.inject.Inject;
-import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
 
 @QuarkusTest
 public class FornecedorResourceTest {
-
+    
     @Inject
     public FornecedorService fornecedorService;
-
-    @Inject
-    public TelefoneFornecedorServiceImpl telefoneFornecedorService;
-
-    private FornecedorRequestDTO fornecedorDTO;
-
-    @BeforeEach
-    public void setup() {
-        TelefoneFornecedorRequestDTO telefoneDTO = new TelefoneFornecedorRequestDTO("(63) 99999-8888");
-
-        fornecedorDTO = new FornecedorRequestDTO("Fornecedor Exemplo", "12345678000195", List.of(telefoneDTO));
-    }
-
+    
     @Test
-    @Transactional
-    public void testCreate() {
-        Fornecedor fornecedor = fornecedorService.create(fornecedorDTO);
-        assertNotNull(fornecedor.getId());
-        assertEquals("Fornecedor Exemplo", fornecedor.getNome());
-        assertEquals("12345678000195", fornecedor.getCnpj());
-        assertEquals(1, fornecedor.getTelefones().size());
-        assertEquals("(63) 99999-8888", fornecedor.getTelefones().get(0).getNumero());
-
-        // Limpar os dados
-        fornecedorService.delete(fornecedor.getId());
-    }
-
-    @Test
-    @Transactional
-    public void testFindById() {
-        Fornecedor fornecedor = fornecedorService.create(fornecedorDTO);
-        Fornecedor fornecedorEncontrado = fornecedorService.findById(fornecedor.getId());
-        assertNotNull(fornecedorEncontrado);
-        assertEquals(fornecedor.getId(), fornecedorEncontrado.getId());
-
-        // Limpar os dados
-        fornecedorService.delete(fornecedor.getId());
-    }
-
-    @Test
-    @Transactional
     public void testFindByNome() {
-        Fornecedor fornecedor = fornecedorService.create(fornecedorDTO);
-        List<Fornecedor> fornecedores = fornecedorService.findByNome("Fornecedor Exemplo");
-
-        assertNotNull(fornecedores);
-        assertEquals(1, fornecedores.size());
-        assertEquals("Fornecedor Exemplo", fornecedores.get(0).getNome());
-
-        // Limpar os dados
-        fornecedorService.delete(fornecedor.getId());
+        given()
+            .when().pathParam("nome", "Fornecedor Exemplo")
+            .get("/fornecedores/search/{nome}")
+            .then().statusCode(200)
+            .body("nome", hasItem(is("Fornecedor Exemplo")));
     }
-
+    
     @Test
-    @Transactional
     public void testFindByCnpj() {
-        Fornecedor fornecedor = fornecedorService.create(fornecedorDTO);
-        List<Fornecedor> fornecedores = fornecedorService.findByCnpj("12345678000195");
-
-        assertNotNull(fornecedores);
-        assertEquals(1, fornecedores.size());
-        assertEquals("12345678000195", fornecedores.get(0).getCnpj());
-
-        // Limpar os dados
-        fornecedorService.delete(fornecedor.getId());
+        given()
+            .when().pathParam("cnpj", "12345678000195")
+            .get("/fornecedores/search/cnpj/{cnpj}")
+            .then().statusCode(200)
+            .body("cnpj", hasItem(is("12345678000195")));
     }
-
+    
     @Test
-    @Transactional
-    public void testAddTelefone() {
-        Fornecedor fornecedor = fornecedorService.create(fornecedorDTO);
-
-        // Adiciona um novo telefone
-        TelefoneFornecedorRequestDTO novoTelefoneDTO = new TelefoneFornecedorRequestDTO("(63) 88888-7777");
-        fornecedorService.addTelefone(fornecedor.getId(), novoTelefoneDTO);
-
-        Fornecedor fornecedorAtualizado = fornecedorService.findById(fornecedor.getId());
-
-        assertEquals(2, fornecedorAtualizado.getTelefones().size());
-        assertEquals("(63) 88888-7777", fornecedorAtualizado.getTelefones().get(1).getNumero());
-
-        // Limpar os dados
-        fornecedorService.delete(fornecedor.getId());
-    }
-
-    @Test
-    @Transactional
-    public void testUpdate() {
-        Fornecedor fornecedor = fornecedorService.create(fornecedorDTO);
-
-        // Atualiza os dados do fornecedor
-        FornecedorRequestDTO fornecedorAtualizadoDTO = new FornecedorRequestDTO("Fornecedor Atualizado", "98765432000123", fornecedorDTO.telefones());
-        Fornecedor fornecedorAtualizado = fornecedorService.update(fornecedor.getId(), fornecedorAtualizadoDTO);
-
-        assertEquals("Fornecedor Atualizado", fornecedorAtualizado.getNome());
-        assertEquals("98765432000123", fornecedorAtualizado.getCnpj());
-
-        // Limpar os dados
-        fornecedorService.delete(fornecedor.getId());
-    }
-
-    @Test
-    @Transactional
-    public void testDelete() {
-        Fornecedor fornecedor = fornecedorService.create(fornecedorDTO);
-
-        fornecedorService.delete(fornecedor.getId());
-
-        assertThrows(EntityNotFoundException.class, () -> {
-            fornecedorService.findById(fornecedor.getId());
-        });
-    }
-
-    @Test
-    @Transactional
     public void testFindAll() {
-        Fornecedor fornecedor1 = fornecedorService.create(fornecedorDTO);
-        Fornecedor fornecedor2 = fornecedorService.create(new FornecedorRequestDTO("Fornecedor 2", "98765432000123", fornecedorDTO.telefones()));
+        given()
+            .when().get("/fornecedores")
+            .then().statusCode(200);
+    }
+    
+    @Test
+    public void testCreate() {
+        TelefoneFornecedorRequestDTO telefoneDTO = new TelefoneFornecedorRequestDTO("63", "3904-1538");
+        FornecedorRequestDTO dto = new FornecedorRequestDTO(
+            "Fornecedor Exemplo",
+            "12345678000195",
+            List.of(telefoneDTO)
+        );
 
-        List<Fornecedor> fornecedores = fornecedorService.findAll();
+        Integer idInteger = given()
+            .contentType(ContentType.JSON)
+            .body(dto)
+            .when()
+            .post("/fornecedores")
+            .then()
+            .statusCode(201)
+            .extract().path("id");
 
-        assertEquals(2, fornecedores.size());
+        Long id = idInteger.longValue();
 
-        // Limpar os dados
-        fornecedorService.delete(fornecedor1.getId());
-        fornecedorService.delete(fornecedor2.getId());
+        fornecedorService.delete(id);
+    }
+
+    @Test
+    public void testAddTelefone() {
+        TelefoneFornecedorRequestDTO telefoneDTO = new TelefoneFornecedorRequestDTO("63", "3904-1538");
+        FornecedorRequestDTO dto = new FornecedorRequestDTO(
+            "Fornecedor Exemplo",
+            "12345678000195",
+            List.of()
+        );
+        
+        Long fornecedorId = fornecedorService.create(dto).getId();
+
+        given()
+            .contentType(ContentType.JSON)
+            .body(telefoneDTO)
+            .when()
+            .post("/fornecedores/" + fornecedorId + "/telefones")
+            .then()
+            .statusCode(201);
+            
+        Fornecedor fornecedor = fornecedorService.findById(fornecedorId);
+        assertEquals(1, fornecedor.getTelefones().size());
+        assertEquals("3904-1538", fornecedor.getTelefones().get(0).getNumero());
+        
+        fornecedorService.delete(fornecedorId);
+    }
+
+    @Test
+    public void testFindById() {
+        given()
+            .when().get("/fornecedores/1")
+            .then().statusCode(200)
+            .body("id", is(1));
+    }
+    
+    @Test
+    public void testUpdate() {
+        TelefoneFornecedorRequestDTO telefoneDTO = new TelefoneFornecedorRequestDTO("63", "3904-1538");
+        FornecedorRequestDTO dto = new FornecedorRequestDTO(
+            "Fornecedor Exemplo",
+            "12345678000195",
+            List.of(telefoneDTO)
+        );
+
+        Long id = fornecedorService.create(dto).getId();
+        
+        FornecedorRequestDTO novoDto = new FornecedorRequestDTO(
+            "Fornecedor Atualizado",
+            "12345678000196",
+            List.of(new TelefoneFornecedorRequestDTO("63", "3904-1234"))
+        );
+                
+        given()
+            .contentType(ContentType.JSON)
+            .body(novoDto)
+            .when()
+            .put("/fornecedores/" + id)
+            .then()
+            .statusCode(204);
+
+        Fornecedor fornecedorAtualizado = fornecedorService.findById(id);
+        assertEquals("Fornecedor Atualizado", fornecedorAtualizado.getNome());
+        assertEquals("12345678000196", fornecedorAtualizado.getCnpj());
+        
+        fornecedorService.delete(id);
+    }
+    
+    @Test
+    public void testDelete() {
+        TelefoneFornecedorRequestDTO telefoneDTO = new TelefoneFornecedorRequestDTO("63", "3904-1538");
+        FornecedorRequestDTO dto = new FornecedorRequestDTO(
+            "Fornecedor Exemplo",
+            "12345678000195",
+            List.of(telefoneDTO)
+        );
+
+        Long id = fornecedorService.create(dto).getId();
+
+        given()
+            .when()
+            .delete("/fornecedores/" + id)
+            .then().statusCode(204);
+
+        Fornecedor fornecedor = fornecedorService.findById(id);
+        assertNull(fornecedor);
     }
 }
+

@@ -1,20 +1,19 @@
-package br.unitins.tp1.creatina.service.telefone;
+package br.unitins.tp1.faixas;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
-import java.util.List;
-
-import org.junit.jupiter.api.BeforeEach;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import org.junit.jupiter.api.Test;
 
 import br.unitins.tp1.creatina.dto.TelefoneClienteRequestDTO;
 import br.unitins.tp1.creatina.model.TelefoneCliente;
+import br.unitins.tp1.creatina.service.telefone.TelefoneClienteService;
 import io.quarkus.test.junit.QuarkusTest;
+import static io.restassured.RestAssured.given;
+import io.restassured.http.ContentType;
 import jakarta.inject.Inject;
-import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
 
 @QuarkusTest
 public class TelefoneClienteResourceTest {
@@ -22,78 +21,133 @@ public class TelefoneClienteResourceTest {
     @Inject
     public TelefoneClienteService telefoneClienteService;
 
-    private TelefoneClienteRequestDTO telefoneDTO;
-
-    @BeforeEach
-    public void setup() {
-        telefoneDTO = new TelefoneClienteRequestDTO("63", "99999-8888");
-    }
-
     @Test
-    @Transactional
-    public void testCreate() {
-        TelefoneCliente telefone = telefoneClienteService.create(telefoneDTO);
-        assertNotNull(telefone.getId());
-        assertEquals("63", telefone.getDdd());
-        assertEquals("99999-8888", telefone.getNumero());
-
-        // Limpar os dados
-        telefoneClienteService.delete(telefone.getId());
-    }
-
-    @Test
-    @Transactional
-    public void testFindById() {
-        TelefoneCliente telefone = telefoneClienteService.create(telefoneDTO);
-        TelefoneCliente telefoneEncontrado = telefoneClienteService.findById(telefone.getId());
-        assertNotNull(telefoneEncontrado);
-        assertEquals(telefone.getId(), telefoneEncontrado.getId());
-
-        // Limpar os dados
-        telefoneClienteService.delete(telefone.getId());
-    }
-
-    @Test
-    @Transactional
     public void testFindAll() {
-        TelefoneCliente telefone1 = telefoneClienteService.create(telefoneDTO);
-        TelefoneCliente telefone2 = telefoneClienteService.create(new TelefoneClienteRequestDTO("64", "88888-7777"));
+        long idCliente = 1L; 
 
-        List<TelefoneCliente> telefones = telefoneClienteService.findAll();
+        TelefoneClienteRequestDTO dto = new TelefoneClienteRequestDTO(
+                "11", 
+                "987654321"
+        );
 
-        assertNotNull(telefones);
-        assertEquals(2, telefones.size());
+        TelefoneCliente telefoneClienteCriado = telefoneClienteService.create(idCliente, dto);
 
-        // Limpar os dados
-        telefoneClienteService.delete(telefone1.getId());
-        telefoneClienteService.delete(telefone2.getId());
+        given()
+                .when().get("/telefoneclientes")
+                .then().statusCode(200)
+                .body("size()", is(greaterThan(0))); 
+
+        TelefoneCliente telefoneCliente = telefoneClienteService.findById(telefoneClienteCriado.getId());
+        if (telefoneCliente != null) {
+            telefoneClienteService.delete(telefoneCliente.getId());
+        }
     }
 
     @Test
-    @Transactional
-    public void testUpdate() {
-        TelefoneCliente telefone = telefoneClienteService.create(telefoneDTO);
+    public void testCreate() {
+        long idCliente = 1L;
 
-        // Atualiza o telefone
-        TelefoneClienteRequestDTO telefoneAtualizadoDTO = new TelefoneClienteRequestDTO("65", "77777-6666");
-        TelefoneCliente telefoneAtualizado = telefoneClienteService.update(telefone.getId(), telefoneAtualizadoDTO);
+        TelefoneClienteRequestDTO dto = new TelefoneClienteRequestDTO(
+                "11", 
+                "987654321"
+        );
 
-        assertEquals("65", telefoneAtualizado.getDdd());
-        assertEquals("77777-6666", telefoneAtualizado.getNumero());
+        given()
+                .contentType(ContentType.JSON)
+                .body(dto)
+                .when()
+                .post("/telefoneclientes/" + idCliente)
+                .then()
+                .statusCode(201)
+                .body("id", notNullValue(), 
+                        "ddd", is("11"),
+                        "numero", is("987654321"));
 
-        // Limpar os dados
-        telefoneClienteService.delete(telefone.getId());
+        TelefoneCliente telefoneCliente = telefoneClienteService.findById((long) 1);
+        if (telefoneCliente != null) {
+            telefoneClienteService.delete(telefoneCliente.getId());
+        }
     }
 
     @Test
-    @Transactional
+    public void testUpdateTelefoneCliente() {
+        long idCliente = 1L;
+    
+        TelefoneClienteRequestDTO dto = new TelefoneClienteRequestDTO(
+                "11",
+                "987654321"
+        );
+    
+        TelefoneCliente telefoneCliente = telefoneClienteService.create(idCliente, dto);
+    
+        TelefoneClienteRequestDTO novoDto = new TelefoneClienteRequestDTO(
+                "21", 
+                "123456789"
+        );
+    
+        given()
+                .contentType(ContentType.JSON)
+                .body(novoDto)
+                .when()
+                .put("/telefoneclientes/" + telefoneCliente.getId())
+                .then()
+                .statusCode(204);
+    
+        TelefoneCliente telefoneAtualizado = telefoneClienteService.findById(telefoneCliente.getId());
+    
+        assertEquals("21", telefoneAtualizado.getDdd());
+        assertEquals("123456789", telefoneAtualizado.getNumero());
+    
+        telefoneClienteService.delete(telefoneAtualizado.getId());
+    }    
+
+    @Test
     public void testDelete() {
-        TelefoneCliente telefone = telefoneClienteService.create(telefoneDTO);
+        long idCliente = 1L; 
 
-        telefoneClienteService.delete(telefone.getId());
+        TelefoneClienteRequestDTO dto = new TelefoneClienteRequestDTO(
+                "11",
+                "912345678"
+        );
 
-        assertThrows(EntityNotFoundException.class, () -> {
-            telefoneClienteService.findById(telefone.getId());
-        });
+        TelefoneCliente telefoneCliente = telefoneClienteService.create(idCliente, dto);
+        long id = telefoneCliente.getId();
+
+        given()
+                .when()
+                .delete("/telefoneclientes/" + id)
+                .then()
+                .statusCode(204);
+
+        TelefoneCliente telefoneClienteAfterDelete = telefoneClienteService.findById(id);
+        assertNull(telefoneClienteAfterDelete, "O TelefoneCliente deve ser nulo após a exclusão.");
     }
+
+    @Test
+    public void testFindByCliente() {
+        long idCliente = 1L;
+
+        telefoneClienteService.deleteAllByClienteId(idCliente); 
+
+        TelefoneClienteRequestDTO dto1 = new TelefoneClienteRequestDTO("11", "912345678");
+        TelefoneClienteRequestDTO dto2 = new TelefoneClienteRequestDTO("21", "987654321");
+
+        TelefoneCliente telefoneCliente1 = telefoneClienteService.create(idCliente, dto1);
+        TelefoneCliente telefoneCliente2 = telefoneClienteService.create(idCliente, dto2);
+
+        given()
+                .when()
+                .get("/telefoneclientes/search/" + idCliente)
+                .then()
+                .statusCode(200)
+                .body("size()", is(2),
+                    "[0].ddd", is("11"),
+                    "[0].numero", is("912345678"),
+                    "[1].ddd", is("21"),
+                    "[1].numero", is("987654321"));
+
+        telefoneClienteService.delete(telefoneCliente1.getId());
+        telefoneClienteService.delete(telefoneCliente2.getId());
+    }
+
 }

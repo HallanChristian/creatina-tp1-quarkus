@@ -6,9 +6,9 @@ public record CreatinaResponseDTO(
     Long id, 
     String nome, 
     String marca, 
-    double quantidadeEmGramas,
+    float quantidadeEmGramas,
     String tipo,
-    double preco) {
+    float preco) {
 
     public static CreatinaResponseDTO valueOf(Creatina creatina) {
         return new CreatinaResponseDTO (

@@ -14,10 +14,12 @@ public interface TelefoneClienteService {
 
     List<TelefoneCliente> findAll();
 
-    TelefoneCliente create(TelefoneClienteRequestDTO dto);
+    TelefoneCliente create(Long idCliente, TelefoneClienteRequestDTO dto);
 
     TelefoneCliente update(Long id, TelefoneClienteRequestDTO dto);
 
     void delete(Long id); 
+
+    void deleteAllByClienteId(Long idCliente);
     
 }

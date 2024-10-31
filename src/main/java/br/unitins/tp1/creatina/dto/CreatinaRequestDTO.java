@@ -15,7 +15,7 @@ public record CreatinaRequestDTO(
 
     // Quantidade em gramas (obrigatório)
     @NotNull(message = "Informe a quantidade em gramas.")
-    double quantidadeEmGramas,
+    float quantidadeEmGramas,
 
     // Tipo da creatina (obrigatório)
     @NotBlank(message = "Informe o tipo da creatina.")
@@ -23,5 +23,5 @@ public record CreatinaRequestDTO(
 
     // Preço da creatina (obrigatório)
     @NotNull(message = "Informe o preço da creatina.")
-    double preco
+    float preco
 ) {}
