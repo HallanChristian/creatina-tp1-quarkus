@@ -3,6 +3,7 @@ package br.unitins.tp1.creatina.resource.creatina;
 import br.unitins.tp1.creatina.dto.CreatinaRequestDTO;
 import br.unitins.tp1.creatina.dto.CreatinaResponseDTO;
 import br.unitins.tp1.creatina.service.creatina.CreatinaService;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
@@ -27,12 +28,14 @@ public class CreatinaResource {
 
     @GET
     @Path("/{id}")
+    @RolesAllowed({"Adm", "User"})
     public Response findById(@PathParam("id") Long id) {
         return Response.ok(CreatinaResponseDTO.valueOf(creatinaService.findById(id))).build();
     }
 
     @GET
     @Path("/search/{nome}")
+    @RolesAllowed("Adm")
     public Response findByNome(@PathParam("nome") String nome) {
         return Response.ok(creatinaService.findByNome(nome).
                     stream().

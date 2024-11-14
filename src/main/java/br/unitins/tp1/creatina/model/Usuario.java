@@ -5,19 +5,27 @@ import jakarta.persistence.Entity;
 @Entity
 public class Usuario extends DefaultEntity {
     
-    private String login;
+    private String username;
     private String senha;
-    public String getLogin() {
-        return login;
+    private Perfil perfil;
+
+    public String getUsername() {
+        return username;
     }
-    public void setLogin(String login) {
-        this.login = login;
+    public void setUsername(String username) {
+        this.username = username;
     }
     public String getSenha() {
         return senha;
     }
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+    public Perfil getPerfil() {
+        return perfil;
+    }
+    public void setPerfil(Perfil perfil) {
+        this.perfil = perfil;
     }
 
 }

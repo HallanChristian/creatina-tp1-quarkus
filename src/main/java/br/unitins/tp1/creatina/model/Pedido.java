@@ -12,7 +12,6 @@ import jakarta.persistence.OneToMany;
 
 @Entity
 public class Pedido extends DefaultEntity {
-    
     private LocalDateTime data;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -28,24 +27,31 @@ public class Pedido extends DefaultEntity {
     public LocalDateTime getData() {
         return data;
     }
+
     public void setData(LocalDateTime data) {
         this.data = data;
     }
+
     public Usuario getUsuario() {
         return usuario;
     }
+
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
+
     public List<ItemPedido> getListaItemPedido() {
         return listaItemPedido;
     }
+
     public void setListaItemPedido(List<ItemPedido> listaItemPedido) {
         this.listaItemPedido = listaItemPedido;
     }
+
     public Double getValorTotal() {
         return valorTotal;
     }
+
     public void setValorTotal(Double valorTotal) {
         this.valorTotal = valorTotal;
     }

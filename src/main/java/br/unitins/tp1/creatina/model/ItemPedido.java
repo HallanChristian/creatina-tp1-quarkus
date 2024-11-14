@@ -10,10 +10,9 @@ public class ItemPedido extends DefaultEntity {
     @ManyToOne
     @JoinColumn(name = "id_lote")
     private Lote lote;
-
     private Integer quantidade;
     private Double preco;
-    
+
     public Lote getLote() {
         return lote;
     }
@@ -31,5 +30,6 @@ public class ItemPedido extends DefaultEntity {
     }
     public void setPreco(Double preco) {
         this.preco = preco;
-    }    
+    }
+
 }

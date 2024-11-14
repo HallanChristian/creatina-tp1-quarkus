@@ -14,4 +14,5 @@ public record PessoaFisicaRequestDTO(
 
     // ID do sexo (opcional)
     Integer idSexo
+
 ) {}

@@ -10,36 +10,42 @@ import jakarta.persistence.ManyToOne;
 public class Lote extends DefaultEntity {
 
     @ManyToOne
-    @JoinColumn(name = "id_faixa")
-    private Faixa faixa;
-    
+    @JoinColumn(name = "id_creatina")
+    private Creatina creatina;
     private LocalDate data;
     private String codigo;
     private Integer estoque;
 
-    public Faixa getFaixa() {
-        return faixa;
+    public Creatina getCreatina() {
+        return creatina;
     }
-    public void setFaixa(Faixa faixa) {
-        this.faixa = faixa;
+
+    public void setCreatina(Creatina creatina) {
+        this.creatina = creatina;
     }
+
     public LocalDate getData() {
         return data;
     }
+
     public void setData(LocalDate data) {
         this.data = data;
     }
+
     public String getCodigo() {
         return codigo;
     }
+
     public void setCodigo(String codigo) {
         this.codigo = codigo;
     }
+
     public Integer getEstoque() {
         return estoque;
     }
+
     public void setEstoque(Integer estoque) {
         this.estoque = estoque;
     }
-    
+
 }
