@@ -18,6 +18,8 @@ public interface PessoaFisicaService {
 
     PessoaFisica update(Long id, PessoaFisicaRequestDTO dto);
 
+    PessoaFisica updateNomeImagem(Long id, String nomeImagem);
+
     void delete(Long id); 
     
 }

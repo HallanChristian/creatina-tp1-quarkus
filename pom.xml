@@ -86,7 +86,7 @@
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-resteasy-multipart</artifactId>
         </dependency>
-        </dependencies>
+    </dependencies>
 
     <build>
         <plugins>

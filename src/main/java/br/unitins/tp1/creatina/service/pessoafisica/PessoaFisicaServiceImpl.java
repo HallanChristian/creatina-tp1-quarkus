@@ -57,6 +57,15 @@ public class PessoaFisicaServiceImpl implements PessoaFisicaService {
 
     @Override
     @Transactional
+    public PessoaFisica updateNomeImagem(Long id, String nomeImagem) {
+        PessoaFisica pessoafisica = pessoafisicaRepository.findById(id);
+        pessoafisica.setNomeImagem(nomeImagem);
+        
+        return pessoafisica;
+    }
+
+    @Override
+    @Transactional
     public void delete(Long id) {
         pessoafisicaRepository.deleteById(id);
     }

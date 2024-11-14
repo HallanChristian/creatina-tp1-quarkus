@@ -4,12 +4,9 @@ import java.io.IOException;
 
 import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 
-import br.form.PessoaFisicaImageForm;
-
-//import java.util.List;
-
 import br.unitins.tp1.creatina.dto.PessoaFisicaRequestDTO;
 import br.unitins.tp1.creatina.dto.PessoaFisicaResponseDTO;
+import br.unitins.tp1.creatina.form.PessoaFisicaImageForm;
 import br.unitins.tp1.creatina.service.fileservice.FileService;
 import br.unitins.tp1.creatina.service.pessoafisica.PessoaFisicaService;
 import jakarta.inject.Inject;
@@ -88,12 +85,12 @@ public class PessoaFisicaResource {
     @Path("/{id}/upload/imagem")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response uploadImage(@PathParam("id") Long id, @MultipartForm PessoaFisicaImageForm form) {
-
+        
         try {
-        pessoafisicaFileService.save(form.getNomeImagem(), form.getImagem());
-        }
-        catch (IOException e) {
-            Response.status(500).build();
+            String nomeImagem = pessoafisicaFileService.save(form.getNomeImagem(), form.getImagem());
+            pessoafisicaService.updateNomeImagem(id, nomeImagem);
+        } catch (IOException e) {
+           Response.status(500).build();
         }
         return Response.noContent().build();
     }
@@ -103,7 +100,7 @@ public class PessoaFisicaResource {
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     public Response downloadImage(@PathParam("nomeImagem") String nomeImagem) {
         ResponseBuilder response = Response.ok(pessoafisicaFileService.find(nomeImagem));
-        response.header("Content-Disposition", "attachment; filename" + nomeImagem);
+        response.header("Content-Disposition", "attachment; filename=" + nomeImagem);
 
         return response.build();
     }

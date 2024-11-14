@@ -1,4 +1,4 @@
-package br.form;
+package br.unitins.tp1.creatina.form;
 
 import org.jboss.resteasy.annotations.providers.multipart.PartType;
 
