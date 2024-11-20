@@ -1,13 +1,41 @@
 @startuml Creatina
 
-class Cliente {
+abstract class Pessoa {
   - nome: String
   - email: String
-  - dataNascimento: LocalDate
+}
+
+class PessoaFisica {
   - cpf: String
 }
 
-class TelefoneCliente {
+class PessoaJuridica {
+  - cnpj: String
+}
+
+class Usuario {
+  - login: String
+  - senha: String
+}
+
+class Cliente {
+}
+
+class Funcionario {
+  - cargo: String
+  - salario: BigDecimal
+  - dataContratacao: LocalDate
+}
+
+Pessoa <|-- PessoaFisica
+Pessoa <|-- PessoaJuridica
+Usuario <-- Cliente
+Usuario <-- Funcionario
+Funcionario --|> PessoaFisica
+Cliente --|> PessoaFisica
+Fornecedor --|> PessoaJuridica
+
+class Telefone {
   - ddd: String
   - numero: String
 }
@@ -15,9 +43,18 @@ class TelefoneCliente {
 class Endereco {
   - logradouro: String
   - numero: String
-  - cidade: String
-  - estado: String
+  - complemento: String
+  - bairro: String
   - cep: String
+}
+
+class Municipio {
+  - nome: String
+}
+
+class Estado {
+  - nome: String
+  - sigla: String
 }
 
 class Pedido {
@@ -25,28 +62,35 @@ class Pedido {
   - valorTotal: Double
 }
 
-class EnderecoEntrega {
-  - logradouro: String
-  - numero: String
-  - cidade: String
-  - estado: String
-  - cep: String
-}
-
 class ItemPedido {
   - quantidade: Integer
   - preco: Double
 }
 
-Enum EstadoPedido {
-  + PENDENTE
-  + PAGO
+class EstadoPedido {
+  - dataSituacao: LocalDateTime
+}
+
+Enum SituacaoPedido {
   + ENVIADO
   + ENTREGUE
+  + DEVOLVIDO
+}
+
+class EnderecoEntrega {
+}
+
+Enum EstadoPagamento {
+  + PENDENTE
+  + PAGO
+  + CANCELADO
+  + VENCIDO
 }
 
 abstract class Pagamento {
   - valor: Double
+  - dataPagamento: LocalDateTime
+  - dataVencimento: LocalDateTime
 }
 
 class Cartao {
@@ -63,7 +107,6 @@ Enum TipoCartao {
 
 class Pix {
   - chave: String
-  - dataPagamento: LocalDateTime
 }
 
 class Boleto {
@@ -74,23 +117,17 @@ class Boleto {
 Pagamento <|-- Pix
 Pagamento <|-- Boleto
 Pagamento <|-- Cartao
+Pagamento "*" --> "1" EstadoPagamento
 
 class Fornecedor {
-  - nome: String
-  - cnpj: String
-}
-
-class TelefoneFornecedor {
-  - ddd: String
-  - numero: String
 }
 
 class Creatina {
   - nome: String
   - marca: String
-  - quantidadeEmGramas: Double
+  - quantidade: Integer
   - tipo: String
-  - preco: Double
+  - preco: BigDecimal
 }
 
 class Categoria {
@@ -102,6 +139,7 @@ class Lote {
   - codigo: String
   - quantidade: Integer
   - dataFabricacao: LocalDate
+  - dataValidade: LocalDate
 }
 
 class Avaliacao {
@@ -112,26 +150,34 @@ class Avaliacao {
 
 ' Relacionamentos
 
-Cliente "1" --> "*" TelefoneCliente
-Cliente "1" --> "*" Endereco
+Pessoa "1" *--> "*" Telefone
+Pessoa "1" *--> "*" Endereco
+
+EnderecoEntrega *--> Endereco
+Endereco "*" --> "1" Municipio
+Municipio "*" *--> "1" Estado
+
 Cliente "1" --> "*" Creatina : listaDesejos
 
 ItemPedido "*" --> "1" Lote
 
 Pedido "*" --> "1" Cliente
 Pedido "1" *--> "*" ItemPedido
-Pedido "1" --> "1" Pagamento
-Pedido --> EstadoPedido
+Pedido *--> Pagamento
+Pedido "1" *--> "*" EstadoPedido
 Pedido "1" *--> "1" EnderecoEntrega
+
+EstadoPedido "*" --> "1" SituacaoPedido
 
 Cartao --> TipoCartao
 
-Creatina "1" --> "1" Categoria
+Creatina "1" *--> "1" Categoria
 Creatina "1" --> "*" Avaliacao
 Creatina "*" --> "1" Fornecedor
 
-Lote "1" --> "1" Creatina
+Lote "*" --> "1" Creatina
+Lote "1" --> "1" Endereco : origem
 
-Fornecedor "1" --> "*" TelefoneFornecedor
+note left of Creatina: Quantidade em gramas
 
 @enduml
