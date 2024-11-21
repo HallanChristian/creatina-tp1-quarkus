@@ -1,13 +1,16 @@
 package br.unitins.tp1.creatina.model;
 
+import java.time.LocalDate;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 
 @Entity
 public class PessoaFisica extends Pessoa {
     
+    @Column(unique = true)
     private String cpf;
-    private Sexo sexo;
-    private String nomeImagem;
+    private LocalDate dataNascimento;
 
     public String getCpf() {
         return cpf;
@@ -17,20 +20,12 @@ public class PessoaFisica extends Pessoa {
         this.cpf = cpf;
     }
 
-    public Sexo getSexo() {
-        return sexo;
+    public LocalDate getDataNascimento() {
+        return dataNascimento;
     }
 
-    public void setSexo(Sexo sexo) {
-        this.sexo = sexo;
-    }
-
-    public String getNomeImagem() {
-        return nomeImagem;
-    }
-
-    public void setNomeImagem(String nomeImagem) {
-        this.nomeImagem = nomeImagem;
+    public void setDataNascimento(LocalDate dataNascimento) {
+        this.dataNascimento = dataNascimento;
     }
 
 }

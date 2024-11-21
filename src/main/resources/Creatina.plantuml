@@ -7,6 +7,7 @@ abstract class Pessoa {
 
 class PessoaFisica {
   - cpf: String
+  - dataNascimento: LocalDate
 }
 
 class PessoaJuridica {
@@ -80,7 +81,7 @@ Enum SituacaoPedido {
 class EnderecoEntrega {
 }
 
-Enum EstadoPagamento {
+Enum SituacaoPagamento {
   + PENDENTE
   + PAGO
   + CANCELADO
@@ -117,7 +118,7 @@ class Boleto {
 Pagamento <|-- Pix
 Pagamento <|-- Boleto
 Pagamento <|-- Cartao
-Pagamento "*" --> "1" EstadoPagamento
+Pagamento "*" --> "1" SituacaoPagamento
 
 class Fornecedor {
 }
@@ -157,7 +158,8 @@ EnderecoEntrega *--> Endereco
 Endereco "*" --> "1" Municipio
 Municipio "*" *--> "1" Estado
 
-Cliente "1" --> "*" Creatina : listaDesejos
+Cliente "*" --> "*" Creatina : listaDesejos
+Cliente "1" --> "*" Avaliacao
 
 ItemPedido "*" --> "1" Lote
 

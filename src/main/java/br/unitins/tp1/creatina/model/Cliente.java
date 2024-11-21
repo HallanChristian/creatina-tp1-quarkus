@@ -1,81 +1,41 @@
 package br.unitins.tp1.creatina.model;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToOne;
 
 @Entity
 public class Cliente extends DefaultEntity {
 
-    @Column(length = 60, nullable = false )
-    private String nome;
+    @OneToOne
+    @JoinColumn(name = "id_pessoaFisica", unique = true)
+    private PessoaFisica pessoaFisica;
 
-    private String email;
-
-    private LocalDate dataNascimento;
-
-    @Column(length = 60, nullable = false )
-    private String cpf;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente", orphanRemoval = true)
-    private List<Endereco> enderecos = new ArrayList<>();; // Lista de endereços do cliente
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "lista_desejo", joinColumns = @JoinColumn(name = "id_cliente"), inverseJoinColumns = @JoinColumn(name = "id_creatina"))
+    private List<Creatina> listaDesejos;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente", orphanRemoval = true)
-    private List<TelefoneCliente> telefones = new ArrayList<>();; // Lista de telefones do cliente
-
     // Métodos getters e setters
-
-    public String getNome() {
-        return nome;
+    
+    public PessoaFisica getPessoaFisica() {
+        return pessoaFisica;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setPessoaFisica(PessoaFisica pessoaFisica) {
+        this.pessoaFisica = pessoaFisica;
     }
 
-    public String getEmail() {
-        return email;
+    public List<Creatina> getListaDesejos() {
+        return listaDesejos;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setListaDesejos(List<Creatina> listaDesejos) {
+        this.listaDesejos = listaDesejos;
     }
-
-    public LocalDate getDataNascimento() {
-        return dataNascimento;
-    }
-
-    public void setDataNascimento(LocalDate dataNascimento) {
-        this.dataNascimento = dataNascimento;
-    }
-
-    public String getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
-
-    public List<Endereco> getEnderecos() {
-        return enderecos;
-    }
-
-    public void setEnderecos(List<Endereco> enderecos) {
-        this.enderecos = enderecos;
-    }
-
-    public List<TelefoneCliente> getTelefones() {
-        return telefones;
-    }
-
-    public void setTelefones(List<TelefoneCliente> telefones) {
-        this.telefones = telefones;
-    }
-
+    
 }

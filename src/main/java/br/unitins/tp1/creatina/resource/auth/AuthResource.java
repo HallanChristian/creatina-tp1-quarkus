@@ -1,7 +1,7 @@
 package br.unitins.tp1.creatina.resource.auth;
 
-import br.unitins.tp1.creatina.dto.AuthRequestDTO;
-import br.unitins.tp1.creatina.dto.UsuarioResponseDTO;
+import br.unitins.tp1.creatina.dto.usuario.AuthRequestDTO;
+import br.unitins.tp1.creatina.dto.usuario.UsuarioResponseDTO;
 import br.unitins.tp1.creatina.model.Usuario;
 import br.unitins.tp1.creatina.service.hash.HashService;
 import br.unitins.tp1.creatina.service.jwt.JwtService;

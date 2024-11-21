@@ -6,15 +6,15 @@ import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Endereco extends DefaultEntity{
-    private String cep;
-    private String cidade;
-    private String estado;
-    private String logradouro;
-    private String numero;
 
     @ManyToOne
-    @JoinColumn(name = "cliente_id")
-    private Cliente cliente;
+    @JoinColumn(name = "id_municipio")
+    private Municipio municipio;
+    private String logradouro;
+    private String numero;
+    private String complemento;
+    private String bairro;
+    private String cep;
 
     // Métodos getters e setters
 
@@ -42,27 +42,27 @@ public class Endereco extends DefaultEntity{
         this.numero = numero;
     }
 
-    public Cliente getCliente() {
-        return cliente;
+    public String getComplemento() {
+        return complemento;
     }
 
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
+    public void setComplemento(String complemento) {
+        this.complemento = complemento;
     }
 
-    public String getEstado() {
-        return estado;
+    public String getBairro() {
+        return bairro;
     }
 
-    public void setEstado(String estado) {
-        this.estado = estado;
+    public void setBairro(String bairro) {
+        this.bairro = bairro;
     }
 
-    public String getCidade() {
-        return cidade;
+    public Municipio getMunicipio() {
+        return municipio;
     }
 
-    public void setCidade(String cidade) {
-        this.cidade = cidade;
+    public void setMunicipio(Municipio municipio) {
+        this.municipio = municipio;
     }
 }
