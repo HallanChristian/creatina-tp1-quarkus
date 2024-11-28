@@ -1,6 +1,11 @@
-package br.unitins.tp1.creatina.dto;
+package br.unitins.tp1.creatina.dto.pessoafisica;
+
+import java.time.LocalDate;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 // DTO PessoaFisica
 public record PessoaFisicaRequestDTO(
@@ -12,7 +17,8 @@ public record PessoaFisicaRequestDTO(
     @NotBlank(message = "Informe o CPF da pessoa.")
     String cpf,
 
-    // ID do sexo (opcional)
-    Integer idSexo
+    @NotNull(message = "Informe a data de nascimento da pessoa.")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    LocalDate dataNascimento
 
 ) {}

@@ -8,20 +8,20 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 
 @Entity
-public class Funcionario extends DefaultEntity {
+public class Funcionario extends PessoaFisica {
 
     @OneToOne
-    @JoinColumn(name = "id_pessoaFisica", unique = true)
-    private PessoaFisica pessoaFisica;
+    @JoinColumn(name = "id_usuario", unique = true)
+    private Usuario usuario;
     private String cargo;
     private BigDecimal salario;
     private LocalDate dataContratacao;
 
-    public PessoaFisica getPessoaFisica() {
-        return pessoaFisica;
+    public Usuario getUsuario() {
+        return usuario;
     }
-    public void setPessoaFisica(PessoaFisica pessoaFisica) {
-        this.pessoaFisica = pessoaFisica;
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
     public String getCargo() {
         return cargo;

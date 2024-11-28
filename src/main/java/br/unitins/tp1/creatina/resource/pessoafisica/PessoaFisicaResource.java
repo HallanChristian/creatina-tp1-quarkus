@@ -4,8 +4,8 @@ import java.io.IOException;
 
 import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 
-import br.unitins.tp1.creatina.dto.PessoaFisicaRequestDTO;
-import br.unitins.tp1.creatina.dto.PessoaFisicaResponseDTO;
+import br.unitins.tp1.creatina.dto.pessoafisica.PessoaFisicaRequestDTO;
+import br.unitins.tp1.creatina.dto.pessoafisica.PessoaFisicaResponseDTO;
 import br.unitins.tp1.creatina.form.PessoaFisicaImageForm;
 import br.unitins.tp1.creatina.service.fileservice.FileService;
 import br.unitins.tp1.creatina.service.pessoafisica.PessoaFisicaService;

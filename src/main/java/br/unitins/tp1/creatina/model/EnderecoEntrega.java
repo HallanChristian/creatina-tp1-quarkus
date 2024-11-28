@@ -8,15 +8,15 @@ import jakarta.persistence.OneToOne;
 public class EnderecoEntrega extends DefaultEntity{
 
     @OneToOne
-    @JoinColumn(name = "id_endereco")
-    private Endereco endereco;
+    @JoinColumn(name = "id_endereco", nullable = false)
+    private Endereco enderecoEntrega;
 
-    public Endereco getEndereco() {
-        return endereco;
+    public Endereco getEnderecoEntrega() {
+        return enderecoEntrega;
     }
 
-    public void setEndereco(Endereco endereco) {
-        this.endereco = endereco;
+    public void setEnderecoEntrega(Endereco enderecoEntrega) {
+        this.enderecoEntrega = enderecoEntrega;
     }
     
 }

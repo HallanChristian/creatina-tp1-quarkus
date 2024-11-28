@@ -2,8 +2,8 @@ package br.unitins.tp1.creatina.resource.pedido;
 
 import org.eclipse.microprofile.jwt.JsonWebToken;
 
-import br.unitins.tp1.creatina.dto.PedidoRequestDTO;
-import br.unitins.tp1.creatina.dto.PedidoResponseDTO;
+import br.unitins.tp1.creatina.dto.pedido.PedidoRequestDTO;
+import br.unitins.tp1.creatina.dto.pedido.PedidoResponseDTO;
 import br.unitins.tp1.creatina.service.pedido.PedidoService;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;

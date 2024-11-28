@@ -3,8 +3,8 @@ package br.unitins.tp1.creatina.service.fornecedor;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.unitins.tp1.creatina.dto.FornecedorRequestDTO;
 import br.unitins.tp1.creatina.dto.TelefoneFornecedorRequestDTO;
+import br.unitins.tp1.creatina.dto.fornecedor.FornecedorRequestDTO;
 import br.unitins.tp1.creatina.model.Fornecedor;
 import br.unitins.tp1.creatina.model.TelefoneFornecedor;
 import br.unitins.tp1.creatina.repository.fornecedor.FornecedorRepository;

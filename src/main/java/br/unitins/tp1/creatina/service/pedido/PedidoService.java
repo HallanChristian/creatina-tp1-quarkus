@@ -2,7 +2,7 @@ package br.unitins.tp1.creatina.service.pedido;
 
 import java.util.List;
 
-import br.unitins.tp1.creatina.dto.PedidoRequestDTO;
+import br.unitins.tp1.creatina.dto.pedido.PedidoRequestDTO;
 import br.unitins.tp1.creatina.model.Pedido;
 
 

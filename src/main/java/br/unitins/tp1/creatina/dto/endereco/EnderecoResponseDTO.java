@@ -1,5 +1,6 @@
-package br.unitins.tp1.creatina.dto;
+package br.unitins.tp1.creatina.dto.endereco;
 
+import br.unitins.tp1.creatina.dto.municipio.MunicipioResponseDTO;
 import br.unitins.tp1.creatina.model.Endereco;
 
 public record EnderecoResponseDTO(
@@ -7,8 +8,9 @@ public record EnderecoResponseDTO(
     String cep,
     String logradouro, 
     String numero,
-    String cidade,
-    String estado) {
+    String bairro,
+    String complemento,
+    MunicipioResponseDTO municipio) {
 
     public static EnderecoResponseDTO valueOf(Endereco endereco) {
         return new EnderecoResponseDTO (
@@ -16,8 +18,9 @@ public record EnderecoResponseDTO(
             endereco.getCep(),
             endereco.getLogradouro(),
             endereco.getNumero(),
-            endereco.getCidade(),
-            endereco.getEstado());
+            endereco.getBairro(),
+            endereco.getComplemento(),
+            MunicipioResponseDTO.valueOf(endereco.getMunicipio()));
     }
     
 }

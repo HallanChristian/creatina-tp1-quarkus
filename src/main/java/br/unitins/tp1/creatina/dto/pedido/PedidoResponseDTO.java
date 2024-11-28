@@ -1,8 +1,9 @@
-package br.unitins.tp1.creatina.dto;
+package br.unitins.tp1.creatina.dto.pedido;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+import br.unitins.tp1.creatina.dto.itempedido.ItemPedidoResponseDTO;
 import br.unitins.tp1.creatina.model.Pedido;
 
 public record PedidoResponseDTO(

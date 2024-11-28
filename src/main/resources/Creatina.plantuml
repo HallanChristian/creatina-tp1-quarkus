@@ -60,12 +60,12 @@ class Estado {
 
 class Pedido {
   - data: LocalDateTime
-  - valorTotal: Double
+  - valorTotal: BigDecimal
 }
 
 class ItemPedido {
   - quantidade: Integer
-  - preco: Double
+  - preco: BigDecimal
 }
 
 class EstadoPedido {
@@ -89,7 +89,7 @@ Enum SituacaoPagamento {
 }
 
 abstract class Pagamento {
-  - valor: Double
+  - valor: BigDecimal
   - dataPagamento: LocalDateTime
   - dataVencimento: LocalDateTime
 }

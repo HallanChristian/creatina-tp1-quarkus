@@ -2,7 +2,7 @@ package br.unitins.tp1.creatina.service.lote;
 
 import java.util.List;
 
-import br.unitins.tp1.creatina.dto.LoteRequestDTO;
+import br.unitins.tp1.creatina.dto.lote.LoteRequestDTO;
 import br.unitins.tp1.creatina.model.Lote;
 
 

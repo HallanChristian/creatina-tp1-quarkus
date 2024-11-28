@@ -2,7 +2,7 @@ package br.unitins.tp1.creatina.service.endereco;
 
 import java.util.List;
 
-import br.unitins.tp1.creatina.dto.EnderecoRequestDTO;
+import br.unitins.tp1.creatina.dto.endereco.EnderecoRequestDTO;
 import br.unitins.tp1.creatina.model.Endereco;
 
 public interface EnderecoService {

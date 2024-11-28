@@ -2,7 +2,7 @@ package br.unitins.tp1.creatina.service.pessoafisica;
 
 import java.util.List;
 
-import br.unitins.tp1.creatina.dto.PessoaFisicaRequestDTO;
+import br.unitins.tp1.creatina.dto.pessoafisica.PessoaFisicaRequestDTO;
 import br.unitins.tp1.creatina.model.PessoaFisica;
 
 

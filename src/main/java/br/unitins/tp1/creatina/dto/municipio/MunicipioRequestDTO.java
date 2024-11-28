@@ -1,4 +1,4 @@
-package br.unitins.tp1.creatina.dto;
+package br.unitins.tp1.creatina.dto.municipio;
 
 
 import jakarta.validation.constraints.NotBlank;

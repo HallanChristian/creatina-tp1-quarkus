@@ -1,4 +1,4 @@
-package br.unitins.tp1.creatina.dto;
+package br.unitins.tp1.creatina.dto.estado;
 
 import br.unitins.tp1.creatina.model.Estado;
 

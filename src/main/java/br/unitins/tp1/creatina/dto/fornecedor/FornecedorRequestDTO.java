@@ -1,7 +1,8 @@
-package br.unitins.tp1.creatina.dto;
+package br.unitins.tp1.creatina.dto.fornecedor;
 
 import java.util.List;
 
+import br.unitins.tp1.creatina.dto.telefone.TelefoneRequestDTO;
 import jakarta.validation.constraints.NotBlank;
 
 // DTO Fornecedor
@@ -14,5 +15,5 @@ public record FornecedorRequestDTO(
     @NotBlank(message = "Informe o CNPJ do fornecedor.")
     String cnpj,
     
-    List<TelefoneFornecedorRequestDTO> telefones
+    List<TelefoneRequestDTO> telefones
 ) {}

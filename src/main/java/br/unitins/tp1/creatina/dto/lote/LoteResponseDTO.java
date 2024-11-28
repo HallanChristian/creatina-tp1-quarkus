@@ -1,12 +1,14 @@
-package br.unitins.tp1.creatina.dto;
+package br.unitins.tp1.creatina.dto.lote;
 
 import java.time.LocalDate;
 
+import br.unitins.tp1.creatina.dto.creatina.CreatinaResponseDTO;
 import br.unitins.tp1.creatina.model.Lote;
 
 public record LoteResponseDTO(
     Long id,
-    LocalDate data,
+    LocalDate dataValidade,
+    LocalDate dataFabricacao,
     String codigo,
     Integer estoque,
     CreatinaResponseDTO creatina 
@@ -15,7 +17,8 @@ public record LoteResponseDTO(
     public static LoteResponseDTO valueOf(Lote lote) {
         return new LoteResponseDTO(
             lote.getId(),
-            lote.getData(),
+            lote.getDataValidade(),
+            lote.getDataFabricacao(),
             lote.getCodigo(),
             lote.getEstoque(),
             CreatinaResponseDTO.valueOf(lote.getCreatina())

@@ -4,8 +4,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.unitins.tp1.creatina.dto.ItemPedidoRequestDTO;
-import br.unitins.tp1.creatina.dto.PedidoRequestDTO;
+import br.unitins.tp1.creatina.dto.itempedido.ItemPedidoRequestDTO;
+import br.unitins.tp1.creatina.dto.pedido.PedidoRequestDTO;
 import br.unitins.tp1.creatina.model.ItemPedido;
 import br.unitins.tp1.creatina.model.Lote;
 import br.unitins.tp1.creatina.model.Pedido;

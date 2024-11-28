@@ -1,8 +1,8 @@
 package br.unitins.tp1.creatina.resource.fornecedor;
 
-import br.unitins.tp1.creatina.dto.FornecedorRequestDTO;
-import br.unitins.tp1.creatina.dto.FornecedorResponseDTO;
 import br.unitins.tp1.creatina.dto.TelefoneFornecedorRequestDTO;
+import br.unitins.tp1.creatina.dto.fornecedor.FornecedorRequestDTO;
+import br.unitins.tp1.creatina.dto.fornecedor.FornecedorResponseDTO;
 import br.unitins.tp1.creatina.service.fornecedor.FornecedorService;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;

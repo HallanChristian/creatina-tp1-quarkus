@@ -10,11 +10,11 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToOne;
 
 @Entity
-public class Cliente extends DefaultEntity {
+public class Cliente extends PessoaFisica {
 
     @OneToOne
-    @JoinColumn(name = "id_pessoaFisica", unique = true)
-    private PessoaFisica pessoaFisica;
+    @JoinColumn(name = "id_usuario", unique = true)
+    private Usuario usuario;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "lista_desejo", joinColumns = @JoinColumn(name = "id_cliente"), inverseJoinColumns = @JoinColumn(name = "id_creatina"))
@@ -22,12 +22,12 @@ public class Cliente extends DefaultEntity {
     
     // Métodos getters e setters
     
-    public PessoaFisica getPessoaFisica() {
-        return pessoaFisica;
+    public Usuario getUsuario() {
+        return usuario;
     }
 
-    public void setPessoaFisica(PessoaFisica pessoaFisica) {
-        this.pessoaFisica = pessoaFisica;
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
     public List<Creatina> getListaDesejos() {

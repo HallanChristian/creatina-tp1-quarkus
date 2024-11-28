@@ -2,9 +2,9 @@ package br.unitins.tp1.creatina.service.cliente;
 
 import java.util.List;
 
-import br.unitins.tp1.creatina.dto.EnderecoRequestDTO;
 import br.unitins.tp1.creatina.dto.TelefoneClienteRequestDTO;
 import br.unitins.tp1.creatina.dto.cliente.ClienteRequestDTO;
+import br.unitins.tp1.creatina.dto.endereco.EnderecoRequestDTO;
 import br.unitins.tp1.creatina.model.Cliente;
 
 

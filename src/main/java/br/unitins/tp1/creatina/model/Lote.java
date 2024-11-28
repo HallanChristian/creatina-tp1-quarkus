@@ -2,34 +2,62 @@ package br.unitins.tp1.creatina.model;
 
 import java.time.LocalDate;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 
 @Entity
 public class Lote extends DefaultEntity {
 
     @ManyToOne
-    @JoinColumn(name = "id_creatina")
+    @JoinColumn(name = "id_creatina", nullable = false)
     private Creatina creatina;
-    private LocalDate data;
+    
+    private LocalDate dataValidade;
+    private LocalDate dataFabricacao;
+
+    @Column(nullable = false, unique = true)
     private String codigo;
+    
+    @Column(nullable = false)
     private Integer estoque;
+
+    @OneToOne
+    @JoinColumn(name = "id_endereco")
+    private Endereco localDistribuicao;
+    
+    public Endereco getLocalDistribuicao() {
+        return localDistribuicao;
+    }
+
+    public void setLocalDistribuicao(Endereco localDistribuicao) {
+        this.localDistribuicao = localDistribuicao;
+    }
 
     public Creatina getCreatina() {
         return creatina;
     }
-
+    
     public void setCreatina(Creatina creatina) {
         this.creatina = creatina;
     }
-
-    public LocalDate getData() {
-        return data;
+    
+    public LocalDate getDataValidade() {
+        return dataValidade;
+    }
+    
+    public void setDataValidade(LocalDate datavalidade) {
+        this.dataValidade = datavalidade;
+    }
+    
+    public LocalDate getDataFabricacao() {
+        return dataFabricacao;
     }
 
-    public void setData(LocalDate data) {
-        this.data = data;
+    public void setDataFabricacao(LocalDate dataFabricacao) {
+        this.dataFabricacao = dataFabricacao;
     }
 
     public String getCodigo() {

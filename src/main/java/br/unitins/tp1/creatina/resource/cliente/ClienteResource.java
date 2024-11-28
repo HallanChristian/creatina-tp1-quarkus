@@ -1,9 +1,9 @@
 package br.unitins.tp1.creatina.resource.cliente;
 
-import br.unitins.tp1.creatina.dto.EnderecoRequestDTO;
 import br.unitins.tp1.creatina.dto.TelefoneClienteRequestDTO;
 import br.unitins.tp1.creatina.dto.cliente.ClienteRequestDTO;
 import br.unitins.tp1.creatina.dto.cliente.ClienteResponseDTO;
+import br.unitins.tp1.creatina.dto.endereco.EnderecoRequestDTO;
 import br.unitins.tp1.creatina.service.cliente.ClienteService;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;

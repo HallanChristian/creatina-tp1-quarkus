@@ -1,5 +1,7 @@
 package br.unitins.tp1.creatina.model;
 
+import java.math.BigDecimal;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -8,10 +10,10 @@ import jakarta.persistence.ManyToOne;
 public class ItemPedido extends DefaultEntity {
 
     @ManyToOne
-    @JoinColumn(name = "id_lote")
+    @JoinColumn(name = "id_lote", nullable = false)
     private Lote lote;
     private Integer quantidade;
-    private Double preco;
+    private BigDecimal preco;
 
     public Lote getLote() {
         return lote;
@@ -25,10 +27,10 @@ public class ItemPedido extends DefaultEntity {
     public void setQuantidade(Integer quantidade) {
         this.quantidade = quantidade;
     }
-    public Double getPreco() {
+    public BigDecimal getPreco() {
         return preco;
     }
-    public void setPreco(Double preco) {
+    public void setPreco(BigDecimal preco) {
         this.preco = preco;
     }
 
