@@ -4,7 +4,7 @@ import java.util.List;
 
 import br.unitins.tp1.creatina.dto.lote.LoteRequestDTO;
 import br.unitins.tp1.creatina.model.Lote;
-import br.unitins.tp1.creatina.repository.lote.LoteRepository;
+import br.unitins.tp1.creatina.repository.LoteRepository;
 import br.unitins.tp1.creatina.service.creatina.CreatinaService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;

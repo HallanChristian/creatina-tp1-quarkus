@@ -3,17 +3,17 @@ package br.unitins.tp1.creatina.service.cliente;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import br.unitins.tp1.creatina.dto.TelefoneClienteRequestDTO;
 import br.unitins.tp1.creatina.dto.cliente.ClienteRequestDTO;
 import br.unitins.tp1.creatina.dto.endereco.EnderecoRequestDTO;
+import br.unitins.tp1.creatina.dto.telefone.TelefoneRequestDTO;
 import br.unitins.tp1.creatina.model.Cliente;
 import br.unitins.tp1.creatina.model.Endereco;
-import br.unitins.tp1.creatina.model.TelefoneCliente;
-import br.unitins.tp1.creatina.repository.cliente.ClienteRepository;
-import br.unitins.tp1.creatina.repository.endereco.EnderecoRepository;
-import br.unitins.tp1.creatina.repository.telefone.TelefoneClienteRepository;
+import br.unitins.tp1.creatina.model.Telefone;
+import br.unitins.tp1.creatina.repository.ClienteRepository;
+import br.unitins.tp1.creatina.repository.EnderecoRepository;
+import br.unitins.tp1.creatina.repository.telefone.TelefoneRepository;
 import br.unitins.tp1.creatina.service.endereco.EnderecoServiceImpl;
-import br.unitins.tp1.creatina.service.telefone.TelefoneClienteServiceImpl;
+import br.unitins.tp1.creatina.service.telefone.TelefoneServiceImpl;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityNotFoundException;
@@ -32,10 +32,10 @@ public class ClienteServiceImpl implements ClienteService {
     public EnderecoServiceImpl enderecoServiceImpl;
 
     @Inject
-    public TelefoneClienteRepository  telefoneClienteRepository;
+    public TelefoneRepository  telefoneRepository;
 
     @Inject
-    public TelefoneClienteServiceImpl  telefoneClienteServiceImpl;
+    public TelefoneServiceImpl  telefoneServiceImpl;
 
     @Override
     public Cliente findById(Long id) {
@@ -73,9 +73,9 @@ public class ClienteServiceImpl implements ClienteService {
         cliente.setEnderecos(enderecos);
 
         // Adiciona telefones ao cliente
-        List<TelefoneCliente> telefones = dto.telefones().stream()
+        List<Telefone> telefones = dto.telefones().stream()
             .map(telefoneDTO -> {
-                TelefoneCliente telefone = telefoneClienteServiceImpl.create(cliente.getId(), telefoneDTO);
+                Telefone telefone = telefoneServiceImpl.create(cliente.getId(), telefoneDTO);
                 telefone.setCliente(cliente);  // Associa o telefone ao cliente
                 return telefone;
             }).collect(Collectors.toList());
@@ -113,8 +113,8 @@ public class ClienteServiceImpl implements ClienteService {
 
         // Atualiza telefones
         cliente.getTelefones().clear(); // Limpa os telefones existentes
-        for (TelefoneClienteRequestDTO telefoneDTO : dto.telefones()) {
-            TelefoneCliente telefone = telefoneClienteServiceImpl.create(cliente.getId(), telefoneDTO);
+        for (TelefoneRequestDTO telefoneDTO : dto.telefones()) {
+            Telefone telefone = telefoneServiceImpl.create(cliente.getId(), telefoneDTO);
             telefone.setCliente(cliente);
             cliente.getTelefones().add(telefone); // Adiciona novo telefone
         }
@@ -141,12 +141,12 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     @Transactional
-    public void addTelefone(Long clienteId, TelefoneClienteRequestDTO dto) {
+    public void addTelefone(Long clienteId, TelefoneRequestDTO dto) {
         // Verifica se o cliente existe
         Cliente cliente = findClienteOrThrow(clienteId);
         
         // Cria e associa o telefone ao cliente
-        TelefoneCliente telefone = telefoneClienteServiceImpl.create(clienteId, dto);
+        Telefone telefone = telefoneServiceImpl.create(clienteId, dto);
         cliente.getTelefones().add(telefone); // Adiciona à lista de telefones
     }
 

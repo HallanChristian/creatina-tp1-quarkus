@@ -1,8 +1,6 @@
 package br.unitins.tp1.creatina.resource.municipio;
 
-//import java.util.List;
-
-import br.unitins.tp1.creatina.dto.MunicipioRequestDTO;
+import br.unitins.tp1.creatina.dto.municipio.MunicipioRequestDTO;
 import br.unitins.tp1.creatina.dto.municipio.MunicipioResponseDTO;
 import br.unitins.tp1.creatina.service.municipio.MunicipioService;
 import jakarta.inject.Inject;

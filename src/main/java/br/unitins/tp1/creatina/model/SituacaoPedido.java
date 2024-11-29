@@ -28,7 +28,7 @@ public enum SituacaoPedido{
     }
 
     public static SituacaoPedido valueOf(Integer id) {
-        if (id.equals(null))
+        if (id == null)
             return null;
         for (SituacaoPedido tipo : values()) {
             if (tipo.getId().equals(id))

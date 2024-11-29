@@ -2,9 +2,9 @@ package br.unitins.tp1.creatina.service.estado;
 
 import java.util.List;
 
-import br.unitins.tp1.creatina.dto.EstadoRequestDTO;
+import br.unitins.tp1.creatina.dto.estado.EstadoRequestDTO;
 import br.unitins.tp1.creatina.model.Estado;
-import br.unitins.tp1.creatina.repository.estado.EstadoRepository;
+import br.unitins.tp1.creatina.repository.EstadoRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;

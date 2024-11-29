@@ -1,4 +1,4 @@
-package br.unitins.tp1.creatina.repository.estado;
+package br.unitins.tp1.creatina.repository;
 
 import java.util.List;
 
@@ -10,7 +10,10 @@ import jakarta.enterprise.context.ApplicationScoped;
 public class EstadoRepository implements PanacheRepository<Estado> {
     
     public List<Estado> findByNome(String nome) {
-        return find("SELECT e FROM Estado e WHERE e.nome LIKE ?1", "%" + nome + "%").list();
+        return find("LOWER(nome) LIKE LOWER(?1)", "%" + nome + "%").list();
     }
     
+    public Estado findBySigla(String sigla) {
+        return find("LOWER(sigla) = LOWER(?1)", sigla).firstResult();
+    }
 }

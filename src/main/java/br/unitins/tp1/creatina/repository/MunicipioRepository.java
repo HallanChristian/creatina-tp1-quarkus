@@ -1,4 +1,4 @@
-package br.unitins.tp1.creatina.repository.municipio;
+package br.unitins.tp1.creatina.repository;
 
 import java.util.List;
 
@@ -11,12 +11,11 @@ import jakarta.enterprise.context.ApplicationScoped;
 public class MunicipioRepository implements PanacheRepository<Municipio> {
     
     public List<Municipio> findByNome(String nome) {
-        // return find("SELECT m FROM Municipio m WHERE m.nome LIKE ?1", "%" + nome + "%").list();
         return find("nome LIKE ?1", "%" + nome + "%").list();
     }
 
     public List<Municipio> findByEstado(Estado estado) {
-         return find("SELECT m FROM Municipio m WHERE m.estado.id = ?1", estado.getId()).list();
+        return find("estado.id = ?1", estado.getId()).list(); 
     }
     
 }

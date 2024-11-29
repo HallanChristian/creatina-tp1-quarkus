@@ -9,7 +9,7 @@ import br.unitins.tp1.creatina.dto.pedido.PedidoRequestDTO;
 import br.unitins.tp1.creatina.model.ItemPedido;
 import br.unitins.tp1.creatina.model.Lote;
 import br.unitins.tp1.creatina.model.Pedido;
-import br.unitins.tp1.creatina.repository.pedido.PedidoRepository;
+import br.unitins.tp1.creatina.repository.PedidoRepository;
 import br.unitins.tp1.creatina.service.lote.LoteService;
 import br.unitins.tp1.creatina.service.usuario.UsuarioService;
 import jakarta.enterprise.context.ApplicationScoped;

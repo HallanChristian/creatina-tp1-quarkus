@@ -29,7 +29,7 @@ public enum Estrelas {
     }
 
     public static Estrelas valueOf(Integer id) {
-        if (id.equals(null))
+        if (id == null)
             return null;
         for (Estrelas tipo : values()) {
             if (tipo.getId().equals(id))

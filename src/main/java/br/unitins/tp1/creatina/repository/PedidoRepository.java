@@ -1,4 +1,4 @@
-package br.unitins.tp1.creatina.repository.pedido;
+package br.unitins.tp1.creatina.repository;
 
 import java.util.List;
 
@@ -9,8 +9,8 @@ import jakarta.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class PedidoRepository implements PanacheRepository<Pedido> {
 
-    public List<Pedido> findByIdUsuario(Long  idUsuario) {
-        return find("SELECT p FROM Pedido p WHERE p.usuario.id = ?1", idUsuario).list();
+    public List<Pedido> findByCliente(Long idCliente) {
+        return find("cliente.id = ?1", idCliente).list();
     }
 
 }

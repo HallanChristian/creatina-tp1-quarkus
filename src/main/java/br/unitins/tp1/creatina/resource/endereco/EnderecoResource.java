@@ -1,7 +1,7 @@
 package br.unitins.tp1.creatina.resource.endereco;
 
-import br.unitins.tp1.creatina.dto.EnderecoResponseDTO;
 import br.unitins.tp1.creatina.dto.endereco.EnderecoRequestDTO;
+import br.unitins.tp1.creatina.dto.endereco.EnderecoResponseDTO;
 import br.unitins.tp1.creatina.service.endereco.EnderecoService;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;

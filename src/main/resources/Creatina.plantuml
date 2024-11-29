@@ -76,6 +76,7 @@ Enum SituacaoPedido {
   + ENVIADO
   + ENTREGUE
   + DEVOLVIDO
+  + PAGAMENTO_EM_ESPERA
 }
 
 class EnderecoEntrega {

@@ -1,7 +1,7 @@
 package br.unitins.tp1.creatina.resource.creatina;
 
-import br.unitins.tp1.creatina.dto.CreatinaRequestDTO;
-import br.unitins.tp1.creatina.dto.CreatinaResponseDTO;
+import br.unitins.tp1.creatina.dto.creatina.CreatinaRequestDTO;
+import br.unitins.tp1.creatina.dto.creatina.CreatinaResponseDTO;
 import br.unitins.tp1.creatina.service.creatina.CreatinaService;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;

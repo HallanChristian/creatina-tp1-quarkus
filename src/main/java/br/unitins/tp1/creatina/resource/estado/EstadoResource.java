@@ -2,7 +2,10 @@ package br.unitins.tp1.creatina.resource.estado;
 
 import java.util.List;
 
-import br.unitins.tp1.creatina.dto.EstadoRequestDTO;
+import org.jboss.logging.Logger;
+
+import br.unitins.tp1.creatina.dto.estado.EstadoRequestDTO;
+import br.unitins.tp1.creatina.dto.estado.EstadoResponseDTO;
 import br.unitins.tp1.creatina.model.Estado;
 import br.unitins.tp1.creatina.service.estado.EstadoService;
 import jakarta.inject.Inject;
@@ -21,12 +24,15 @@ import jakarta.ws.rs.core.MediaType;
 @Consumes(MediaType.APPLICATION_JSON)
 public class EstadoResource {
 
+    private static final Logger LOG = Logger.getLogger(EstadoResource.class);
+
     @Inject
     public EstadoService estadoService;
 
     @GET
     @Path("/{id}")
     public Estado findById(@PathParam("id") Long id) {
+        LOG.info("Execução do metodo findById. Id: " + id);
         return estadoService.findById(id);
     }
 
@@ -42,7 +48,7 @@ public class EstadoResource {
     }
 
     @POST
-    public Estado create(EstadoRequestDTO estado) {
+    public Estado create(EstadoResponseDTO estado) {
 
         return estadoService.create(estado);
     }

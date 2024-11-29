@@ -1,9 +1,9 @@
 package br.unitins.tp1.creatina.resource.cliente;
 
-import br.unitins.tp1.creatina.dto.TelefoneClienteRequestDTO;
 import br.unitins.tp1.creatina.dto.cliente.ClienteRequestDTO;
 import br.unitins.tp1.creatina.dto.cliente.ClienteResponseDTO;
 import br.unitins.tp1.creatina.dto.endereco.EnderecoRequestDTO;
+import br.unitins.tp1.creatina.dto.telefone.TelefoneRequestDTO;
 import br.unitins.tp1.creatina.service.cliente.ClienteService;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
@@ -75,7 +75,7 @@ public class ClienteResource {
     }
     @POST
     @Path("/{id}/telefones")
-    public Response addTelefone(@PathParam("id") Long clienteId, @Valid TelefoneClienteRequestDTO telefoneDTO) {
+    public Response addTelefone(@PathParam("id") Long clienteId, @Valid TelefoneRequestDTO telefoneDTO) {
         clienteService.addTelefone(clienteId, telefoneDTO);
         return Response.status(Status.CREATED).build();
     }

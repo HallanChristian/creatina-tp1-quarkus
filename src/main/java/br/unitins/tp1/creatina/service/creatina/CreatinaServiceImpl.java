@@ -2,9 +2,9 @@ package br.unitins.tp1.creatina.service.creatina;
 
 import java.util.List;
 
-import br.unitins.tp1.creatina.dto.CreatinaRequestDTO;
+import br.unitins.tp1.creatina.dto.creatina.CreatinaRequestDTO;
 import br.unitins.tp1.creatina.model.Creatina;
-import br.unitins.tp1.creatina.repository.creatina.CreatinaRepository;
+import br.unitins.tp1.creatina.repository.CreatinaRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityNotFoundException;

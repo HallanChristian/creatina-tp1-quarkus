@@ -1,5 +1,6 @@
 package br.unitins.tp1.creatina.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class Pedido extends DefaultEntity {
     @JoinColumn(name = "id_pedido")
     private List<ItemPedido> listaItemPedido;
 
-    private Double valorTotal;
+    private BigDecimal valorTotal;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "id_pedido")
@@ -31,6 +32,10 @@ public class Pedido extends DefaultEntity {
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "id_enderecoEntrega")
     private EnderecoEntrega enderecoEntrega;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_pagamento")
+    private Pagamento pagamento;
 
     public Cliente getCliente() {
         return cliente;
@@ -72,12 +77,20 @@ public class Pedido extends DefaultEntity {
         this.listaItemPedido = listaItemPedido;
     }
 
-    public Double getValorTotal() {
+    public BigDecimal getValorTotal() {
         return valorTotal;
     }
 
-    public void setValorTotal(Double valorTotal) {
+    public void setValorTotal(BigDecimal valorTotal) {
         this.valorTotal = valorTotal;
+    }
+
+    public Pagamento getPagamento() {
+        return pagamento;
+    }
+
+    public void setPagamento(Pagamento pagamento) {
+        this.pagamento = pagamento;
     }
 
 }

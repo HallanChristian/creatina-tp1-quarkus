@@ -7,7 +7,7 @@ import br.unitins.tp1.creatina.dto.TelefoneFornecedorRequestDTO;
 import br.unitins.tp1.creatina.dto.fornecedor.FornecedorRequestDTO;
 import br.unitins.tp1.creatina.model.Fornecedor;
 import br.unitins.tp1.creatina.model.TelefoneFornecedor;
-import br.unitins.tp1.creatina.repository.fornecedor.FornecedorRepository;
+import br.unitins.tp1.creatina.repository.FornecedorRepository;
 import br.unitins.tp1.creatina.repository.telefone.TelefoneFornecedorRepository;
 import br.unitins.tp1.creatina.service.telefone.TelefoneFornecedorServiceImpl;
 import jakarta.enterprise.context.ApplicationScoped;

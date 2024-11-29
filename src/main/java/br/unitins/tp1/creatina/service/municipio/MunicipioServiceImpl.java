@@ -2,9 +2,9 @@ package br.unitins.tp1.creatina.service.municipio;
 
 import java.util.List;
 
-import br.unitins.tp1.creatina.dto.MunicipioRequestDTO;
+import br.unitins.tp1.creatina.dto.municipio.MunicipioRequestDTO;
 import br.unitins.tp1.creatina.model.Municipio;
-import br.unitins.tp1.creatina.repository.municipio.MunicipioRepository;
+import br.unitins.tp1.creatina.repository.MunicipioRepository;
 import br.unitins.tp1.creatina.service.estado.EstadoService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;

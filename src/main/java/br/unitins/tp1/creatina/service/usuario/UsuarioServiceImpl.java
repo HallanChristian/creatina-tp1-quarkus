@@ -3,7 +3,7 @@ package br.unitins.tp1.creatina.service.usuario;
 import java.util.List;
 
 import br.unitins.tp1.creatina.model.Usuario;
-import br.unitins.tp1.creatina.repository.usuario.UsuarioRepository;
+import br.unitins.tp1.creatina.repository.UsuarioRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;

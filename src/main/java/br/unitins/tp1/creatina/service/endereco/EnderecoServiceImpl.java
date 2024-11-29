@@ -4,7 +4,7 @@ import java.util.List;
 
 import br.unitins.tp1.creatina.dto.endereco.EnderecoRequestDTO;
 import br.unitins.tp1.creatina.model.Endereco;
-import br.unitins.tp1.creatina.repository.endereco.EnderecoRepository;
+import br.unitins.tp1.creatina.repository.EnderecoRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
