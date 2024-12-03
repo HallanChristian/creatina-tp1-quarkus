@@ -130,12 +130,7 @@ public class FornecedorServiceImpl implements FornecedorService {
         telefone.setNumero(dto.numero());
         telefoneRepository.persist(telefone); // Atualiza o telefone no banco de dados
     }
-    
-    @Override
-    @Transactional
-    public void deleteTelefone(Long idFornecedor, Long idTelefone) {
-        telefoneRepository.deleteTelefoneByFornecedor(idFornecedor, idTelefone);
-    }
+
     
     @Override
     @Transactional

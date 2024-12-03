@@ -48,26 +48,9 @@ public class LoteServiceImpl implements LoteService {
     @Override
     @Transactional
     public Lote create(LoteRequestDTO dto) {
-        Creatina creatina = creatinaService.findById(dto.idCreatina());
-        if (creatina == null) {
-            throw new IllegalArgumentException("Creatina não encontrada para o ID fornecido.");
-        }
-
-        Endereco localDistribuicao = enderecoRepository.findById(dto.idEndereco());
-        if (localDistribuicao == null) {
-            throw new IllegalArgumentException("Endereço não encontrado para o ID fornecido.");
-        }
-
         Lote lote = new Lote();
-        lote.setCreatina(creatina);
-        lote.setCodigo(dto.codigo());
-        lote.setDataFabricacao(dto.dataFabricacao());
-        lote.setDataValidade(dto.dataValidade());
-        lote.setEstoque(dto.estoque());
-        lote.setLocalDistribuicao(localDistribuicao);
-
+        configureLote(lote, dto);
         loteRepository.persist(lote);
-
         return lote;
     }
 
@@ -78,31 +61,39 @@ public class LoteServiceImpl implements LoteService {
         if (lote == null) {
             throw new IllegalArgumentException("Lote não encontrado para o ID fornecido.");
         }
+        configureLote(lote, dto);
+        return lote;
+    }
 
+
+    private void configureLote(Lote lote, LoteRequestDTO dto) {
         Creatina creatina = creatinaService.findById(dto.idCreatina());
         if (creatina == null) {
             throw new IllegalArgumentException("Creatina não encontrada para o ID fornecido.");
         }
-
+    
         Endereco localDistribuicao = enderecoRepository.findById(dto.idEndereco());
         if (localDistribuicao == null) {
             throw new IllegalArgumentException("Endereço não encontrado para o ID fornecido.");
         }
-
+    
         lote.setCreatina(creatina);
         lote.setCodigo(dto.codigo());
         lote.setDataFabricacao(dto.dataFabricacao());
         lote.setDataValidade(dto.dataValidade());
         lote.setEstoque(dto.estoque());
         lote.setLocalDistribuicao(localDistribuicao);
-
-        return lote;
-    }
+    }    
 
     @Override
     @Transactional
     public void delete(Long id) {
         loteRepository.deleteById(id);
+    }
+
+    @Override
+    public Integer findEstoqueTotalPorCreatina(Long idCreatina) {
+        return loteRepository.findEstoqueTotalPorCreatina(idCreatina);
     }
     
 }

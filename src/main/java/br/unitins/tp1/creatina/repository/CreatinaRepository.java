@@ -10,23 +10,23 @@ import jakarta.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class CreatinaRepository implements PanacheRepository<Creatina> {
     
-    public List<Creatina> findCreatinaByNome(String nome) {
+    public List<Creatina> findByNome(String nome) {
         return find("LOWER(nome) LIKE LOWER(?1)", "%" + nome + "%").list();
     }
 
-    public List<Creatina> findCreatinaByMarca(String marca) {
+    public List<Creatina> findByMarca(String marca) {
         return find("LOWER(marca) LIKE LOWER(?1)", "%" + marca + "%").list();
     }
 
-    public List<Creatina> findCreatinaByTipo(String tipo) {
+    public List<Creatina> findByTipo(String tipo) {
         return find("LOWER(tipo) LIKE LOWER(?1)", "%" + tipo + "%").list();
     }
 
-    public List<Creatina> findCreatinaByPreco(BigDecimal precoMin, BigDecimal precoMax) {
+    public List<Creatina> findByPreco(BigDecimal precoMin, BigDecimal precoMax) {
         return find("preco BETWEEN ?1 AND ?2", precoMin, precoMax).list();
     }
 
-    public List<Creatina> findCreatinaByFilters(String nome, String marca, String tipo, BigDecimal precoMin, BigDecimal precoMax) {
+    public List<Creatina> findByFilters(String nome, String marca, String tipo, BigDecimal precoMin, BigDecimal precoMax) {
         String query = "1=1";
         if (nome != null && !nome.isBlank()) {
             query += " AND LOWER(nome) LIKE LOWER('%" + nome + "%')";

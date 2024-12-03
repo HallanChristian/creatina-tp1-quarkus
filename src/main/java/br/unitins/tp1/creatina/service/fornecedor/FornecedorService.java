@@ -24,8 +24,6 @@ public interface FornecedorService {
 
     void updateTelefone(Long id, Long idTelefone, TelefoneRequestDTO dto);
 
-    void deleteTelefone(Long idFornecedor, Long idTelefone);
-
     void addEndereco(Long fornecedorId, EnderecoRequestDTO dto);
 
     void updateEndereco(Long id, Long idEndereco, EnderecoRequestDTO dto);

@@ -1,5 +1,6 @@
 package br.unitins.tp1.creatina.service.creatina;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import br.unitins.tp1.creatina.dto.creatina.CreatinaRequestDTO;
@@ -23,7 +24,27 @@ public class CreatinaServiceImpl implements CreatinaService {
 
     @Override
     public List<Creatina> findByNome(String nome) {
-        return creatinaRepository.findCreatinaByNome(nome);
+        return creatinaRepository.findByNome(nome);
+    }
+
+    @Override
+    public List<Creatina> findByMarca(String marca) {
+        return creatinaRepository.findByMarca(marca);
+    }
+
+    @Override
+    public List<Creatina> findByTipo(String tipo) {
+        return creatinaRepository.findByTipo(tipo);
+    }
+
+    @Override
+    public List<Creatina> findByPreco(BigDecimal precoMin, BigDecimal precoMax) {
+        return creatinaRepository.findByPreco(precoMin, precoMax);
+    }
+
+    @Override
+    public List<Creatina> findByFilters(String nome, String marca, String tipo, BigDecimal precoMin,BigDecimal precoMax) {
+        return creatinaRepository.findByFilters(nome, marca, tipo, precoMin, precoMax);
     }
 
     @Override
@@ -68,5 +89,6 @@ public class CreatinaServiceImpl implements CreatinaService {
     public void delete(Long id) {
         creatinaRepository.deleteById(id);
     }
+
     
 }

@@ -11,9 +11,7 @@ import br.unitins.tp1.creatina.model.Endereco;
 import br.unitins.tp1.creatina.model.Telefone;
 import br.unitins.tp1.creatina.model.Usuario;
 import br.unitins.tp1.creatina.repository.ClienteRepository;
-import br.unitins.tp1.creatina.repository.EnderecoRepository;
 import br.unitins.tp1.creatina.repository.TelefoneRepository;
-import br.unitins.tp1.creatina.service.endereco.EnderecoServiceImpl;
 import br.unitins.tp1.creatina.service.telefone.TelefoneServiceImpl;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -25,12 +23,6 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Inject
     public ClienteRepository clienteRepository;
-
-    @Inject
-    public EnderecoRepository enderecoRepository;
-
-    @Inject
-    public EnderecoServiceImpl enderecoServiceImpl;
 
     @Inject
     public TelefoneRepository  telefoneRepository;
@@ -176,12 +168,6 @@ public class ClienteServiceImpl implements ClienteService {
         telefone.setDdd(dto.ddd());
         telefone.setNumero(dto.numero());
         clienteRepository.persist(cliente);
-    }
-
-    @Override
-    @Transactional
-    public void deleteTelefone(Long idCliente, Long idTelefone) {
-        telefoneRepository.deleteTelefoneByCliente(idCliente, idTelefone);
     }
 
     @Override

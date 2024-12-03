@@ -18,6 +18,8 @@ public interface LoteService {
 
     Lote create(LoteRequestDTO dto);
 
+    Integer findEstoqueTotalPorCreatina(Long idCreatina);
+
     Lote update(Long id, LoteRequestDTO dto);
 
     void delete(Long id); 

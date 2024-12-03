@@ -11,6 +11,13 @@ public class EstadoPedido extends DefaultEntity{
 
     private SituacaoPedido situacaoPedido;
 
+    public EstadoPedido() {}
+
+    public EstadoPedido(SituacaoPedido situacaoPedido, LocalDateTime dataSituacao) {
+        this.situacaoPedido = situacaoPedido;
+        this.dataSituacao = dataSituacao;
+    }
+
     public LocalDateTime getDataSituacao() {
         return dataSituacao;
     }

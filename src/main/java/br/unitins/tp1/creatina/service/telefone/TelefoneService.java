@@ -16,24 +16,14 @@ public interface TelefoneService {
 
     List<Telefone> findByFornecedor(Long id);
 
-    List<Telefone> findAll();
+    List<Telefone> findByNumero(String numero);
 
-    Telefone create(Long idCliente, TelefoneRequestDTO dto);
+    List<Telefone> findByDdd(String ddd);
+
+    List<Telefone> findAll();
 
     Telefone update(Long id, TelefoneRequestDTO dto);
 
     void delete(Long id); 
-
-    void deleteTelefoneByCliente(Long idCliente, Long idTelefone);
-
-    void deleteTelefoneByFornecedor(Long idFornecedor, Long idTelefone);
-
-    void deleteTelefoneByFuncionario(Long idFuncionario, Long idTelefone);
-
-    void deleteAllByClienteId(Long idCliente);
-
-    void deleteAllByFuncionarioId(Long idFuncionario);
-
-    void deleteAllByFornecedorId(Long idFornecedor);
     
 }

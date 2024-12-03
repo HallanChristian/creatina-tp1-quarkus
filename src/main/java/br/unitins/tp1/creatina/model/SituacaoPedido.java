@@ -9,7 +9,8 @@ public enum SituacaoPedido{
     ENVIADO(1, "Pedido enviado"),
     ENTREGUE(2, "Pedido entregue"),
     DEVOLVIDO(3, "Devolução do pedido"),
-    PAGAMENTO_EM_ESPERA(4, "Aguardando o pagamento do pedido");
+    PAGAMENTO_EM_ESPERA(4, "Aguardando o pagamento do pedido"),
+    CANCELADO (5, "Pedido cancelado");
 
     private final Integer id;
     private final String label;

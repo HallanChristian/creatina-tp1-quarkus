@@ -21,28 +21,11 @@ public class TelefoneRepository implements PanacheRepository<Telefone> {
         return find("fornecedor.id = ?1", idFornecedor).list();
     }
 
-    public void deleteTelefoneByCliente(Long idCliente, Long idTelefone) {
-        delete("id = ?1 AND cliente.id = ?2", idTelefone, idCliente);
+    public List<Telefone> findByNumero(String numero) {
+        return find("numero = ?1", numero).list();
     }
 
-    public void deleteTelefoneByFuncionario(Long idFuncionario, Long idTelefone) {
-        delete("id = ?1 AND funcionario.id = ?2", idTelefone, idFuncionario);
-    }
-
-    public void deleteTelefoneByFornecedor(Long idFornecedor, Long idTelefone) {
-        delete("id = ?1 AND fornecedor.id = ?2", idTelefone, idFornecedor);
-    }
-
-    public void deleteByCliente(Long idCliente) {
-        delete("cliente.id = ?1", idCliente);
-    }
-
-
-    public void deleteByFuncionario(Long idFuncionario) {
-        delete("funcionario.id", idFuncionario);
-    }
-
-    public void deleteByFornecedor(Long idFornecedor) {
-        delete("fornecedor.id", idFornecedor);
+    public List<Telefone> findByDdd(String ddd) {
+        return find("ddd = ?1", ddd).list();
     }
 }

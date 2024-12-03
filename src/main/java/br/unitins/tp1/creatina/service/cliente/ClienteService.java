@@ -38,8 +38,6 @@ public interface ClienteService {
     Telefone addTelefone(String username, TelefoneRequestDTO dto);
 
     void updateTelefone(String username, Long idTelefone, TelefoneRequestDTO dto);
-    
-    void deleteTelefone(Long idCliente, Long idTelefone);
 
     void adicionarListaDesejo(String username, Long idProduto);
 

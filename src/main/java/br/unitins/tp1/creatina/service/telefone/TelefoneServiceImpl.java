@@ -3,7 +3,6 @@ package br.unitins.tp1.creatina.service.telefone;
 import java.util.List;
 
 import br.unitins.tp1.creatina.dto.telefone.TelefoneRequestDTO;
-import br.unitins.tp1.creatina.model.PessoaFisica;
 import br.unitins.tp1.creatina.model.Telefone;
 import br.unitins.tp1.creatina.repository.TelefoneRepository;
 import br.unitins.tp1.creatina.service.cliente.ClienteService;
@@ -44,21 +43,18 @@ public class TelefoneServiceImpl implements TelefoneService {
     public List<Telefone> findAll() {
         return telefoneRepository.findAll().list();
     }
-
+    
+    
     @Override
-    @Transactional
-    public Telefone create(Long idCliente, TelefoneRequestDTO dto) {
-        Telefone telefone = TelefoneRequestDTO.convert(dto);
-        PessoaFisica cliente = clienteService.findById(idCliente); 
-
-        List<Telefone> telefones = cliente.getTelefones(); 
-        telefones.add(telefone);
-
-        telefoneRepository.persist(telefone);
-
-        return telefone;
+    public List<Telefone> findByNumero(String numero) {
+        return telefoneRepository.findByNumero(numero);
     }
 
+    @Override
+    public List<Telefone> findByDdd(String ddd) {
+        return telefoneRepository.findByDdd(ddd);
+    }
+    
     @Override
     @Transactional
     public Telefone update(Long id, TelefoneRequestDTO dto) {
@@ -79,42 +75,6 @@ public class TelefoneServiceImpl implements TelefoneService {
     @Transactional
     public void delete(Long id) {
         telefoneRepository.deleteById(id);
-    }
-
-    @Override
-    @Transactional
-    public void deleteTelefoneByCliente(Long idCliente, Long idTelefone) {
-        telefoneRepository.deleteTelefoneByCliente(idCliente, idTelefone);
-    }
-
-    @Override
-    @Transactional
-    public void deleteTelefoneByFuncionario(Long idFuncionario, Long idTelefone) {
-        telefoneRepository.deleteTelefoneByFuncionario(idFuncionario, idTelefone);
-    }
-
-    @Override
-    @Transactional
-    public void deleteTelefoneByFornecedor(Long idFornecedor, Long idTelefone) {
-        telefoneRepository.deleteTelefoneByFornecedor(idFornecedor, idTelefone);
-    }
-
-    @Override
-    @Transactional
-    public void deleteAllByClienteId(Long idCliente) {
-        telefoneRepository.deleteByCliente(idCliente);
-    }
-
-    @Override
-    @Transactional
-    public void deleteAllByFuncionarioId(Long idFuncionario) {
-        telefoneRepository.deleteByFuncionario(idFuncionario);
-    }
-
-    @Override
-    @Transactional
-    public void deleteAllByFornecedorId(Long idFornecedor) {
-        telefoneRepository.deleteByFornecedor(idFornecedor);
     }
 
 }

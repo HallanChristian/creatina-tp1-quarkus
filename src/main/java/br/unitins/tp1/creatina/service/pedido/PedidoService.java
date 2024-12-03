@@ -14,7 +14,15 @@ public interface PedidoService {
 
     Pedido create(PedidoRequestDTO dto, String username);
 
-    // implementar os patch's
+    Pedido detalhesPedido(Long id, String username);
+
+    // Implementar os patch's
+
+    void updateEstadoPedido(Long id, Integer novaSituacaoId);
+
+    void cancelarPedido(String username, Long id);
+
+    void retornarPedido(String username, Long id);
 
     // pensar no cancelar 
 
