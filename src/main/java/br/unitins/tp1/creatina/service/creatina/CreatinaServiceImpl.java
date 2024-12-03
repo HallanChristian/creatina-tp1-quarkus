@@ -23,7 +23,7 @@ public class CreatinaServiceImpl implements CreatinaService {
 
     @Override
     public List<Creatina> findByNome(String nome) {
-        return creatinaRepository.findByNome(nome);
+        return creatinaRepository.findCreatinaByNome(nome);
     }
 
     @Override

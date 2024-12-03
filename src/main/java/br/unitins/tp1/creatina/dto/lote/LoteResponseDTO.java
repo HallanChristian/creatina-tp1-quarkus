@@ -3,6 +3,7 @@ package br.unitins.tp1.creatina.dto.lote;
 import java.time.LocalDate;
 
 import br.unitins.tp1.creatina.dto.creatina.CreatinaResponseDTO;
+import br.unitins.tp1.creatina.dto.endereco.EnderecoResponseDTO;
 import br.unitins.tp1.creatina.model.Lote;
 
 public record LoteResponseDTO(
@@ -11,7 +12,8 @@ public record LoteResponseDTO(
     LocalDate dataFabricacao,
     String codigo,
     Integer estoque,
-    CreatinaResponseDTO creatina 
+    CreatinaResponseDTO creatina,
+    EnderecoResponseDTO localDistribuicao 
 ) {
 
     public static LoteResponseDTO valueOf(Lote lote) {
@@ -21,7 +23,8 @@ public record LoteResponseDTO(
             lote.getDataFabricacao(),
             lote.getCodigo(),
             lote.getEstoque(),
-            CreatinaResponseDTO.valueOf(lote.getCreatina())
+            CreatinaResponseDTO.valueOf(lote.getCreatina()),
+            EnderecoResponseDTO.valueOf(lote.getLocalDistribuicao())
         );
     }
     

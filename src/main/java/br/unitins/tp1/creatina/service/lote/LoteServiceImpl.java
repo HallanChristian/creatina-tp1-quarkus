@@ -3,7 +3,10 @@ package br.unitins.tp1.creatina.service.lote;
 import java.util.List;
 
 import br.unitins.tp1.creatina.dto.lote.LoteRequestDTO;
+import br.unitins.tp1.creatina.model.Creatina;
+import br.unitins.tp1.creatina.model.Endereco;
 import br.unitins.tp1.creatina.model.Lote;
+import br.unitins.tp1.creatina.repository.EnderecoRepository;
 import br.unitins.tp1.creatina.repository.LoteRepository;
 import br.unitins.tp1.creatina.service.creatina.CreatinaService;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -18,6 +21,9 @@ public class LoteServiceImpl implements LoteService {
 
     @Inject
     public CreatinaService creatinaService;
+
+    @Inject
+    public EnderecoRepository enderecoRepository;
 
     @Override
     public Lote findById(Long id) {
@@ -42,16 +48,26 @@ public class LoteServiceImpl implements LoteService {
     @Override
     @Transactional
     public Lote create(LoteRequestDTO dto) {
-        // buscando o estado a partir de um id do lote
-        Lote lote = new Lote();
-        lote.setCreatina(creatinaService.findById(dto.idCreatina()));
-        lote.setCodigo(dto.codigo());
-        lote.setData(dto.data());
-        lote.setEstoque(dto.estoque());
+        Creatina creatina = creatinaService.findById(dto.idCreatina());
+        if (creatina == null) {
+            throw new IllegalArgumentException("Creatina não encontrada para o ID fornecido.");
+        }
 
-        //salvando o lote
+        Endereco localDistribuicao = enderecoRepository.findById(dto.idEndereco());
+        if (localDistribuicao == null) {
+            throw new IllegalArgumentException("Endereço não encontrado para o ID fornecido.");
+        }
+
+        Lote lote = new Lote();
+        lote.setCreatina(creatina);
+        lote.setCodigo(dto.codigo());
+        lote.setDataFabricacao(dto.dataFabricacao());
+        lote.setDataValidade(dto.dataValidade());
+        lote.setEstoque(dto.estoque());
+        lote.setLocalDistribuicao(localDistribuicao);
+
         loteRepository.persist(lote);
-        
+
         return lote;
     }
 
@@ -59,11 +75,26 @@ public class LoteServiceImpl implements LoteService {
     @Transactional
     public Lote update(Long id, LoteRequestDTO dto) {
         Lote lote = loteRepository.findById(id);
+        if (lote == null) {
+            throw new IllegalArgumentException("Lote não encontrado para o ID fornecido.");
+        }
 
-        lote.setCreatina(creatinaService.findById(dto.idCreatina()));
+        Creatina creatina = creatinaService.findById(dto.idCreatina());
+        if (creatina == null) {
+            throw new IllegalArgumentException("Creatina não encontrada para o ID fornecido.");
+        }
+
+        Endereco localDistribuicao = enderecoRepository.findById(dto.idEndereco());
+        if (localDistribuicao == null) {
+            throw new IllegalArgumentException("Endereço não encontrado para o ID fornecido.");
+        }
+
+        lote.setCreatina(creatina);
         lote.setCodigo(dto.codigo());
-        lote.setData(dto.data());
+        lote.setDataFabricacao(dto.dataFabricacao());
+        lote.setDataValidade(dto.dataValidade());
         lote.setEstoque(dto.estoque());
+        lote.setLocalDistribuicao(localDistribuicao);
 
         return lote;
     }

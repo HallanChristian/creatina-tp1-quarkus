@@ -12,6 +12,8 @@ public interface EstadoService {
 
     List<Estado> findByNome(String nome);
 
+    Estado findBySigla(String sigla);
+
     List<Estado> findAll();
 
     Estado create(EstadoRequestDTO dto);

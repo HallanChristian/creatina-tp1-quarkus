@@ -1,23 +1,24 @@
 package br.unitins.tp1.creatina.service.cliente;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import br.unitins.tp1.creatina.dto.cliente.ClienteRequestDTO;
 import br.unitins.tp1.creatina.dto.endereco.EnderecoRequestDTO;
 import br.unitins.tp1.creatina.dto.telefone.TelefoneRequestDTO;
 import br.unitins.tp1.creatina.model.Cliente;
+import br.unitins.tp1.creatina.model.Creatina;
 import br.unitins.tp1.creatina.model.Endereco;
 import br.unitins.tp1.creatina.model.Telefone;
+import br.unitins.tp1.creatina.model.Usuario;
 import br.unitins.tp1.creatina.repository.ClienteRepository;
 import br.unitins.tp1.creatina.repository.EnderecoRepository;
-import br.unitins.tp1.creatina.repository.telefone.TelefoneRepository;
+import br.unitins.tp1.creatina.repository.TelefoneRepository;
 import br.unitins.tp1.creatina.service.endereco.EnderecoServiceImpl;
 import br.unitins.tp1.creatina.service.telefone.TelefoneServiceImpl;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.NotFoundException;
 
 @ApplicationScoped
 public class ClienteServiceImpl implements ClienteService {
@@ -39,7 +40,8 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     public Cliente findById(Long id) {
-        return clienteRepository.findById(id);
+        return clienteRepository.findByIdOptional(id)
+                .orElseThrow(() -> new NotFoundException("Cliente não encontrado com o ID: " + id));
     }
 
     @Override
@@ -48,113 +50,161 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
-    public List<Cliente> findByCpf(String cpf) {
-        return clienteRepository.findByCpf(cpf);
+    public Cliente findByCpf(String cpf) {
+        Cliente cliente = clienteRepository.findByCpf(cpf);
+        if (cliente == null) {
+            throw new NotFoundException("Cliente não encontrado com o CPF: " + cpf);
+        }
+        return cliente;
+    }
+
+    @Override
+    public Cliente findByEmail(String email) {
+        Cliente cliente = clienteRepository.findByEmail(email);
+        if (cliente == null) {
+            throw new NotFoundException("Cliente não encontrado com o Email: " + email);
+        }
+        return cliente;
+    }
+
+    @Override
+    public Cliente findByUsername(String username) {
+        Cliente cliente = clienteRepository.findByUsername(username);
+        if (cliente == null) {
+            throw new NotFoundException("Cliente não encontrado com o Username: " + username);
+        }
+        return cliente;
     }
 
     @Override
     public List<Cliente> findAll() {
-        return clienteRepository.findAll().list();
+        return clienteRepository.listAll();
     }
 
     @Override
     @Transactional
-    public Cliente create(ClienteRequestDTO dto) {
+    public Cliente create(String username, ClienteRequestDTO dto) {
+        // if (clienteRepository.existsByUsername(username)) {
+        //     throw new IllegalArgumentException("Username já existe: " + username);
+        // }
+
         Cliente cliente = new Cliente();
-        populateCliente(cliente, dto);
-
-        // Adiciona endereços ao cliente
-        List<Endereco> enderecos = dto.enderecos().stream()
-            .map(enderecoDTO -> {
-                Endereco endereco = enderecoServiceImpl.create(enderecoDTO);
-                endereco.setCliente(cliente);  // Associa o endereço ao cliente
-                return endereco;
-            }).collect(Collectors.toList());
-        cliente.setEnderecos(enderecos);
-
-        // Adiciona telefones ao cliente
-        List<Telefone> telefones = dto.telefones().stream()
-            .map(telefoneDTO -> {
-                Telefone telefone = telefoneServiceImpl.create(cliente.getId(), telefoneDTO);
-                telefone.setCliente(cliente);  // Associa o telefone ao cliente
-                return telefone;
-            }).collect(Collectors.toList());
-        cliente.setTelefones(telefones);
-
-        clienteRepository.persist(cliente); // Persiste o cliente com endereços e telefones
-
-        return cliente;
-    }
-
-   private void populateCliente(Cliente cliente, ClienteRequestDTO dto) {
+        Usuario usuario = new Usuario();
+        usuario.setUsername(username);
         cliente.setNome(dto.nome());
         cliente.setCpf(dto.cpf());
         cliente.setDataNascimento(dto.dataNascimento());
         cliente.setEmail(dto.email());
+        clienteRepository.persist(cliente);
+
+        return cliente;
     }
 
     @Override
     @Transactional
     public Cliente update(Long id, ClienteRequestDTO dto) {
-        Cliente cliente = clienteRepository.findById(id);
-        if (cliente == null) {
-            throw new EntityNotFoundException("Cliente não encontrado");
-        }
+        Cliente cliente = findById(id);
+        cliente.setNome(dto.nome());
+        cliente.setCpf(dto.cpf());
+        cliente.setDataNascimento(dto.dataNascimento());
+        cliente.setEmail(dto.email());
+        clienteRepository.persist(cliente);
 
-        populateCliente(cliente, dto);
-
-        // Atualiza endereços
-        cliente.getEnderecos().clear(); // Limpa os endereços existentes
-        for (EnderecoRequestDTO enderecoDTO : dto.enderecos()) {
-            Endereco endereco = enderecoServiceImpl.create(enderecoDTO);
-            endereco.setCliente(cliente);
-            cliente.getEnderecos().add(endereco); // Adiciona novo endereço
-        }
-
-        // Atualiza telefones
-        cliente.getTelefones().clear(); // Limpa os telefones existentes
-        for (TelefoneRequestDTO telefoneDTO : dto.telefones()) {
-            Telefone telefone = telefoneServiceImpl.create(cliente.getId(), telefoneDTO);
-            telefone.setCliente(cliente);
-            cliente.getTelefones().add(telefone); // Adiciona novo telefone
-        }
-
-        clienteRepository.persist(cliente); // Persistir as alterações
         return cliente;
     }
 
     @Override
     @Transactional
     public void delete(Long id) {
-        clienteRepository.deleteById(id);
+        Cliente cliente = findById(id);
+        clienteRepository.delete(cliente);
     }
 
     @Override
     @Transactional
-    public void addEndereco(Long clienteId, EnderecoRequestDTO dto) {
-        Cliente cliente = findClienteOrThrow(clienteId);
-        Endereco endereco = enderecoServiceImpl.create(dto);
-        endereco.setCliente(cliente);
-        enderecoRepository.persist(endereco);
+    public Endereco addEndereco(String username, EnderecoRequestDTO dto) {
+        Cliente cliente = findByUsername(username);
+        Endereco endereco = new Endereco();
+        endereco.setLogradouro(dto.logradouro());
+        endereco.setNumero(dto.numero());
+        endereco.setBairro(dto.bairro());
+        endereco.setCep(dto.cep());
+        endereco.setComplemento(dto.complemento());
         cliente.getEnderecos().add(endereco);
+        clienteRepository.persist(cliente);
+
+        return endereco;
     }
 
     @Override
     @Transactional
-    public void addTelefone(Long clienteId, TelefoneRequestDTO dto) {
-        // Verifica se o cliente existe
-        Cliente cliente = findClienteOrThrow(clienteId);
-        
-        // Cria e associa o telefone ao cliente
-        Telefone telefone = telefoneServiceImpl.create(clienteId, dto);
-        cliente.getTelefones().add(telefone); // Adiciona à lista de telefones
+    public void updateEndereco(String username, Long idEndereco, EnderecoRequestDTO dto) {
+        Cliente cliente = findByUsername(username);
+        Endereco endereco = cliente.getEnderecos().stream()
+                .filter(e -> e.getId().equals(idEndereco))
+                .findFirst()
+                .orElseThrow(() -> new NotFoundException("Endereço não encontrado com o ID: " + idEndereco));
+        endereco.setLogradouro(dto.logradouro());
+        endereco.setNumero(dto.numero());
+        endereco.setBairro(dto.bairro());
+        endereco.setCep(dto.cep());
+        endereco.setComplemento(dto.complemento());
+        clienteRepository.persist(cliente);
     }
 
-    private Cliente findClienteOrThrow(Long clienteId) {
-        Cliente cliente = clienteRepository.findById(clienteId);
-        if (cliente == null) {
-            throw new IllegalArgumentException("Cliente_ID " + clienteId + " não encontrado.");
-        }
-        return cliente;
+    @Override
+    @Transactional
+    public Telefone addTelefone(String username, TelefoneRequestDTO dto) {
+        Cliente cliente = findByUsername(username);
+        Telefone telefone = new Telefone();
+        telefone.setDdd(dto.ddd());
+        telefone.setNumero(dto.numero());
+        cliente.getTelefones().add(telefone);
+        clienteRepository.persist(cliente);
+
+        return telefone;
+    }
+
+    @Override
+    @Transactional
+    public void updateTelefone(String username, Long idTelefone, TelefoneRequestDTO dto) {
+        Cliente cliente = findByUsername(username);
+        Telefone telefone = cliente.getTelefones().stream()
+                .filter(t -> t.getId().equals(idTelefone))
+                .findFirst()
+                .orElseThrow(() -> new NotFoundException("Telefone não encontrado com o ID: " + idTelefone));
+        telefone.setDdd(dto.ddd());
+        telefone.setNumero(dto.numero());
+        clienteRepository.persist(cliente);
+    }
+
+    @Override
+    @Transactional
+    public void deleteTelefone(Long idCliente, Long idTelefone) {
+        telefoneRepository.deleteTelefoneByCliente(idCliente, idTelefone);
+    }
+
+    @Override
+    @Transactional
+    public void adicionarListaDesejo(String username, Long idProduto) {
+        Cliente cliente = findByUsername(username);
+        Creatina produto = new Creatina();
+        produto.setId(idProduto);
+        cliente.getListaDesejos().add(produto);
+        clienteRepository.persist(cliente);
+    }
+
+    @Override
+    @Transactional
+    public void removerListaDesejo(String username, Long idProduto) {
+        Cliente cliente = findByUsername(username);
+        cliente.getListaDesejos().removeIf(produto -> produto.getId().equals(idProduto));
+        clienteRepository.persist(cliente);
+    }
+
+    @Override
+    public List<Creatina> getListaDesejos(String username) {
+        Cliente cliente = findByUsername(username);
+        return cliente.getListaDesejos();
     }
 }

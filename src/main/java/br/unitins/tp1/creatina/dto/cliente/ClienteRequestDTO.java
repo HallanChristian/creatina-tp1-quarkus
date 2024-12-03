@@ -1,5 +1,6 @@
 package br.unitins.tp1.creatina.dto.cliente;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.hibernate.validator.constraints.br.CPF;
@@ -10,6 +11,7 @@ import br.unitins.tp1.creatina.dto.usuario.UsuarioRequestDTO;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
 
 // DTO Cliente
@@ -28,6 +30,11 @@ public record ClienteRequestDTO(
     @NotBlank(message = "Informe o e-mail do cliente.")
     @Email(message = "Formato de e-mail inválido.")
     String email,
+    
+    // Data de nascimento (obrigatória)
+    @NotNull(message = "Informe a data de nascimento do cliente.")
+    @Past(message = "A data de nascimento deve ser no passado.")
+    LocalDate dataNascimento,
 
     // Lista de telefones (pode ser vazio, mas não nulo)
     @NotNull(message = "A lista de telefones não pode ser nula.")

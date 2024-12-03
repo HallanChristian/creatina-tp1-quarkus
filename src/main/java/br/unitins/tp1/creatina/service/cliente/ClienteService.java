@@ -6,6 +6,9 @@ import br.unitins.tp1.creatina.dto.cliente.ClienteRequestDTO;
 import br.unitins.tp1.creatina.dto.endereco.EnderecoRequestDTO;
 import br.unitins.tp1.creatina.dto.telefone.TelefoneRequestDTO;
 import br.unitins.tp1.creatina.model.Cliente;
+import br.unitins.tp1.creatina.model.Creatina;
+import br.unitins.tp1.creatina.model.Endereco;
+import br.unitins.tp1.creatina.model.Telefone;
 
 
 public interface ClienteService {
@@ -14,18 +17,34 @@ public interface ClienteService {
 
     List<Cliente> findByNome(String nome);
 
-    List<Cliente> findByCpf(String cpf);
+    Cliente findByCpf(String cpf);
+
+    Cliente findByEmail(String email);
+
+    Cliente findByUsername(String username);
 
     List<Cliente> findAll();
 
-    Cliente create(ClienteRequestDTO dto);
-
-    void addEndereco(Long clienteId, EnderecoRequestDTO dto);
-    
-    void addTelefone(Long clienteId, TelefoneRequestDTO dto);
+    Cliente create(String username, ClienteRequestDTO dto);
 
     Cliente update(Long id, ClienteRequestDTO dto);
 
-    void delete(Long id); 
+    void delete(Long id);
+
+    Endereco addEndereco(String username, EnderecoRequestDTO dto);
+
+    void updateEndereco(String username, Long idEndereco, EnderecoRequestDTO dto);
+
+    Telefone addTelefone(String username, TelefoneRequestDTO dto);
+
+    void updateTelefone(String username, Long idTelefone, TelefoneRequestDTO dto);
     
+    void deleteTelefone(Long idCliente, Long idTelefone);
+
+    void adicionarListaDesejo(String username, Long idProduto);
+
+    void removerListaDesejo(String username, Long idProduto);
+
+    List<Creatina> getListaDesejos(String username);
+
 }

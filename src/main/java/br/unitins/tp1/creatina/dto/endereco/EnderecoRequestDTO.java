@@ -8,9 +8,9 @@ public record EnderecoRequestDTO(
     @NotBlank(message = "Informe o estado.") 
     String estado,
     
-    // Cidade (obrigatório)
-    @NotBlank(message = "Informe a cidade.") 
-    String cidade,
+    // Municipio (obrigatório)
+    @NotBlank(message = "Informe a municipio.") 
+    Long idMunicipio,
 
     // CEP (obrigatório)
     @NotBlank(message = "Informe o CEP.") 
@@ -22,5 +22,12 @@ public record EnderecoRequestDTO(
 
     // Número (obrigatório)
     @NotBlank(message = "Informe o número.") 
-    String numero
+    String numero,
+
+    // Bairro (obrigatório)
+    @NotBlank(message = "Informe o bairro.") 
+    String bairro,
+
+    // Complemento 
+    String complemento
 ) {}

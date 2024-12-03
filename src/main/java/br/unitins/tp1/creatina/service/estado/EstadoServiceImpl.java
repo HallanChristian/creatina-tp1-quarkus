@@ -26,6 +26,11 @@ public class EstadoServiceImpl implements EstadoService {
     }
 
     @Override
+    public Estado findBySigla(String sigla) {
+        return estadoRepository.findBySigla(sigla);
+    }
+
+    @Override
     public List<Estado> findAll() {
         return estadoRepository.findAll().list();
     }

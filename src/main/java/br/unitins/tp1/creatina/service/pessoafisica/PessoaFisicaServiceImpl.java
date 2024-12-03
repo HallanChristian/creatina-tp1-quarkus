@@ -5,7 +5,6 @@ import java.util.List;
 import br.unitins.tp1.creatina.dto.pessoafisica.PessoaFisicaRequestDTO;
 import br.unitins.tp1.creatina.model.PessoaFisica;
 import br.unitins.tp1.creatina.model.Sexo;
-import br.unitins.tp1.creatina.repository.pessoafisica.PessoaFisicaRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;

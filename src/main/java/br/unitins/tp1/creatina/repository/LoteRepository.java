@@ -24,17 +24,17 @@ public class LoteRepository implements PanacheRepository<Lote> {
         return find(jpql.toString(), idCreatina).firstResult();
     }
   
-    // public Lote findByCodigo(String codigo) {
-    //     StringBuffer jpql = new StringBuffer();
-    //     jpql.append("SELECT ");
-    //     jpql.append("  l ");
-    //     jpql.append("FROM ");
-    //     jpql.append("  Lote l ");
-    //     jpql.append("WHERE ");
-    //     jpql.append("  l.codigo = ?1 ");
+    public Lote findByCodigo(String codigo) {
+        StringBuffer jpql = new StringBuffer();
+        jpql.append("SELECT ");
+        jpql.append("  l ");
+        jpql.append("FROM ");
+        jpql.append("  Lote l ");
+        jpql.append("WHERE ");
+        jpql.append("  l.codigo = ?1 ");
 
-    //     return find(jpql.toString(), codigo).firstResult();
-    // }
+        return find(jpql.toString(), codigo).firstResult();
+    }
 
     /**
      * Retorna a quantidade total de estoque disponível para uma creatina específica.
