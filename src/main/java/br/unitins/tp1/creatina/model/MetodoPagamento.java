@@ -4,15 +4,14 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 
 @JsonFormat(shape = Shape.OBJECT)
-public enum TipoCartao {
+public enum MetodoPagamento {
 
-    DEBITO(1, "Débito"), 
-    CREDITO(2, "Crédito");
+    PIX(1, "Pix"), CARTAO(2, "Cartão"), BOLETO(3, "Boleto"), NAO_EFETUADO(4, "Não efetuado");
 
     private final Integer id;
     private final String label;
 
-    private TipoCartao(Integer id, String label) {
+    private MetodoPagamento(Integer id, String label) {
         this.id = id;
         this.label = label;
     }
@@ -25,15 +24,16 @@ public enum TipoCartao {
         return label;
     }
 
-    public static TipoCartao valueOf(Integer id) {
+    public static MetodoPagamento valueOf(Integer id) {
         if (id == null)
             return null;
-        for (TipoCartao tipo : values()) {
+        for (MetodoPagamento tipo : values()) {
             if (tipo.getId().equals(id))
                 return tipo;
         }
 
-        throw new IllegalArgumentException("Tipo de cartão não reconhecido!");
-    }
+        throw new IllegalArgumentException("Metodo de pagameto não encontrado!");
+    }   
 
+    
 }

@@ -114,8 +114,8 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     @Transactional
-    public Endereco addEndereco(String username, EnderecoRequestDTO dto) {
-        Cliente cliente = findByUsername(username);
+    public Endereco addEndereco(Long clienteId, EnderecoRequestDTO dto) {
+        Cliente cliente = findById(clienteId);
         Endereco endereco = new Endereco();
         endereco.setLogradouro(dto.logradouro());
         endereco.setNumero(dto.numero());
@@ -146,8 +146,8 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     @Transactional
-    public Telefone addTelefone(String username, TelefoneRequestDTO dto) {
-        Cliente cliente = findByUsername(username);
+    public Telefone addTelefone(Long clienteId, TelefoneRequestDTO dto) {
+        Cliente cliente = findById(clienteId);
         Telefone telefone = new Telefone();
         telefone.setDdd(dto.ddd());
         telefone.setNumero(dto.numero());

@@ -1,13 +1,24 @@
 package br.unitins.tp1.creatina.model;
 
+import java.util.List;
+
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
 
 @Entity
 public class Usuario extends DefaultEntity {
     
+    @Column(unique = true)
     private String username;
     private String senha;
-    private Perfil perfil;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "perfil_usuario", joinColumns = @JoinColumn(name = "id_usuario"))
+    private List<Perfil> Perfil;
 
     public String getUsername() {
         return username;
@@ -21,11 +32,14 @@ public class Usuario extends DefaultEntity {
     public void setSenha(String senha) {
         this.senha = senha;
     }
-    public Perfil getPerfil() {
-        return perfil;
+
+    public List<Perfil> getPerfil() {
+        return Perfil;
     }
-    public void setPerfil(Perfil perfil) {
-        this.perfil = perfil;
+
+    public void setPerfil(List<Perfil> Perfil) {
+        this.Perfil = Perfil;
     }
+    
 
 }

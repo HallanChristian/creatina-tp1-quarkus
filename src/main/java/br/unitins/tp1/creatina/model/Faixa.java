@@ -1,5 +1,7 @@
 package br.unitins.tp1.creatina.model;
 
+import java.math.BigDecimal;
+
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,7 +17,7 @@ public class Faixa extends PanacheEntityBase {
 
     private String nome;
 
-    private Double preco;
+    private BigDecimal preco;
 
     public Long getId() {
         return id;
@@ -33,11 +35,11 @@ public class Faixa extends PanacheEntityBase {
         this.nome = nome;
     }
 
-    public Double getPreco() {
+    public BigDecimal getPreco() {
         return preco;
     }
 
-    public void setPreco(Double preco) {
+    public void setPreco(BigDecimal preco) {
         this.preco = preco;
     }
 

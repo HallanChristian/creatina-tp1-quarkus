@@ -1,12 +1,20 @@
 package br.unitins.tp1.creatina.resource.cliente;
 
+import java.util.List;
+
+import org.eclipse.microprofile.jwt.JsonWebToken;
+import org.jboss.logging.Logger;
+
 import br.unitins.tp1.creatina.dto.cliente.ClienteRequestDTO;
-import br.unitins.tp1.creatina.dto.cliente.ClienteResponseDTO;
 import br.unitins.tp1.creatina.dto.endereco.EnderecoRequestDTO;
 import br.unitins.tp1.creatina.dto.telefone.TelefoneRequestDTO;
+import br.unitins.tp1.creatina.model.Cliente;
+import br.unitins.tp1.creatina.model.Creatina;
+import br.unitins.tp1.creatina.model.Endereco;
+import br.unitins.tp1.creatina.model.Telefone;
 import br.unitins.tp1.creatina.service.cliente.ClienteService;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
-import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
@@ -15,9 +23,9 @@ import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.Response.Status;
 
 @Path("/clientes")
 @Produces(MediaType.APPLICATION_JSON)
@@ -25,72 +33,142 @@ import jakarta.ws.rs.core.Response.Status;
 public class ClienteResource {
 
     @Inject
-    public ClienteService clienteService;
+    ClienteService clienteService;
+
+    @Inject
+    public JsonWebToken jsonWebToken;
+
+    private static final Logger LOG = Logger.getLogger(ClienteResource.class);
 
     @GET
     @Path("/{id}")
-    public Response findById(@PathParam("id") Long id) {
-        return Response.ok(ClienteResponseDTO.valueOf(clienteService.findById(id))).build();
+    @RolesAllowed({ "Adm" })
+    public Cliente findById(@PathParam("id") Long id) {
+        return clienteService.findById(id);
     }
 
     @GET
-    @Path("/search/{nome}")
-    public Response findByNome(@PathParam("nome") String nome) {
-        return Response.ok(clienteService.findByNome(nome).
-                    stream().
-                    map(o -> ClienteResponseDTO.valueOf(o)).
-                    toList()).build();
+    @Path("/nome/{nome}")
+    @RolesAllowed({ "Adm" })
+    public List<Cliente> findByNome(@PathParam("nome") String nome) {
+        LOG.infof("Buscando cliente pelo nome %s", nome);
+        return clienteService.findByNome(nome);
     }
 
     @GET
-    @Path("/search/cpf/{cpf}")
-    public Response findByCpf(@PathParam("cpf") String cpf) {
-        return Response.ok(clienteService.findByCpf(cpf)
-            .stream()
-            .map(ClienteResponseDTO::valueOf)
-            .toList()).build();
+    @Path("/cpf/{cpf}")
+    @RolesAllowed({ "Adm" })
+    public Cliente findByCpf(@PathParam("cpf") String cpf) {
+        LOG.infof("Buscando cliente com o cpf %s", cpf);
+        return clienteService.findByCpf(cpf);
     }
 
     @GET
-    public Response findAll() {
-        return Response.ok(clienteService.findAll().
-                    stream().
-                    map(o -> ClienteResponseDTO.valueOf(o)).
-                    toList()).build();
+    @Path("/email/{email}")
+    @RolesAllowed({ "Adm" })
+    public Cliente findByEmail(@PathParam("email") String email) {
+        LOG.infof("Buscando cliente com o email %s", email);
+        return clienteService.findByEmail(email);
+    }
+
+    @GET
+    @Path("/username/{username}")
+    @RolesAllowed({ "Adm" })
+    public Cliente findByUsername(@PathParam("username") String username) {
+        LOG.infof("Buscando cliente com o username %s", username);
+        return clienteService.findByUsername(username);
+    }
+
+    @GET
+    @RolesAllowed({ "Adm" })
+    public List<Cliente> findAll() {
+        LOG.infof("Buscando todos os clientes");
+        return clienteService.findAll();
     }
 
     @POST
-    public Response create(@Valid ClienteRequestDTO dto) {
-        return Response.status(Status.CREATED).entity(
-            ClienteResponseDTO.valueOf(clienteService.create(dto))
-        ).build();
-    
-    }
-
-    @POST
-    @Path("/{id}/enderecos")
-    public Response addEndereco(@PathParam("id") Long clienteId, @Valid EnderecoRequestDTO enderecoDTO) {
-        clienteService.addEndereco(clienteId, enderecoDTO);
-        return Response.status(Status.CREATED).build();
-    }
-    @POST
-    @Path("/{id}/telefones")
-    public Response addTelefone(@PathParam("id") Long clienteId, @Valid TelefoneRequestDTO telefoneDTO) {
-        clienteService.addTelefone(clienteId, telefoneDTO);
-        return Response.status(Status.CREATED).build();
+    @RolesAllowed({"Adm", "User"})
+    public Cliente create(ClienteRequestDTO dto) {
+        LOG.infov("Criando cliente");
+        String username = jsonWebToken.getSubject();
+        return clienteService.create(username, dto);
     }
 
     @PUT
     @Path("/{id}")
-    public Response update(@PathParam("id") Long id, @Valid ClienteRequestDTO dto) {
-        return Response.ok(ClienteResponseDTO.valueOf(clienteService.update(id, dto))).build();
+    @RolesAllowed({"Adm", "User"})
+    public Cliente update(@PathParam("id") Long id, ClienteRequestDTO dto) {
+        LOG.infof("Atualizando cliente com id %d", id);
+        return clienteService.update(id, dto);
     }
 
     @DELETE
     @Path("/{id}")
+    @RolesAllowed({"Adm", "User"})   
     public Response delete(@PathParam("id") Long id) {
+        LOG.infof("Deletetando cliente com id %d", id);
         clienteService.delete(id);
         return Response.noContent().build();
     }
-    
+
+    @POST
+    @Path("/{clienteId}/enderecos")
+    @RolesAllowed({ "User" })
+    public Endereco addEndereco(@PathParam("clienteId") Long clienteId, EnderecoRequestDTO dto) {
+        return clienteService.addEndereco(clienteId, dto);
+    }
+
+    @PUT
+    @Path("/enderecos/{idEndereco}")
+    @RolesAllowed({ "User" })
+    public Response updateEndereco(@QueryParam("username") String username, @PathParam("idEndereco") Long idEndereco,
+            EnderecoRequestDTO dto) {
+        clienteService.updateEndereco(username, idEndereco, dto);
+        return Response.noContent().build();
+    }
+
+    @POST
+    @Path("/{clienteId}/telefones")
+    @RolesAllowed({ "User" })
+    public Telefone addTelefone(@PathParam("clienteId") Long clienteId, TelefoneRequestDTO dto) {
+        return clienteService.addTelefone(clienteId, dto);
+    }
+
+    @PUT
+    @Path("/telefones/{idTelefone}")
+    @RolesAllowed({ "User" })
+    public Response updateTelefone(@QueryParam("username") String username, @PathParam("idTelefone") Long idTelefone,
+            TelefoneRequestDTO dto) {
+        clienteService.updateTelefone(username, idTelefone, dto);
+        return Response.noContent().build();
+    }
+
+    @POST
+    @Path("/lista-desejo/{idProduto}")
+    @RolesAllowed({ "User" })
+    public Response adicionarListaDesejo(@PathParam("idProduto") Long idProduto) {
+        String username = jsonWebToken.getSubject();
+        LOG.info("Execução do método adicionarListaDesejo para o usuário: " + username);
+        clienteService.adicionarListaDesejo(username, idProduto);
+        return Response.noContent().build();
+    }
+
+    @DELETE
+    @Path("/lista-desejo/{idProduto}")
+    @RolesAllowed({ "user" })
+    public Response removerListaDesejo(@PathParam("idProduto") Long idProduto) {
+        String username = jsonWebToken.getSubject();
+        LOG.info("Execucao do metodo removerProdutoListaDesejo");
+        clienteService.removerListaDesejo(username, idProduto);
+        return Response.noContent().build();
+    }
+
+    @GET
+    @Path("/lista-desejo")
+    @RolesAllowed({ "user" })
+    public List<Creatina> getListaDesejos() {
+        String username = jsonWebToken.getSubject();
+        LOG.info("Execucao do metodo getListaDesejos");
+        return clienteService.getListaDesejos(username);
+    }
 }

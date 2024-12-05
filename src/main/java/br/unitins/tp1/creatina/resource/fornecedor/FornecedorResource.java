@@ -1,9 +1,15 @@
 package br.unitins.tp1.creatina.resource.fornecedor;
 
-import br.unitins.tp1.creatina.dto.TelefoneFornecedorRequestDTO;
+import java.util.List;
+
+import org.jboss.logging.Logger;
+
+import br.unitins.tp1.creatina.dto.endereco.EnderecoRequestDTO;
 import br.unitins.tp1.creatina.dto.fornecedor.FornecedorRequestDTO;
-import br.unitins.tp1.creatina.dto.fornecedor.FornecedorResponseDTO;
+import br.unitins.tp1.creatina.dto.telefone.TelefoneRequestDTO;
+import br.unitins.tp1.creatina.model.Fornecedor;
 import br.unitins.tp1.creatina.service.fornecedor.FornecedorService;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
@@ -26,63 +32,107 @@ public class FornecedorResource {
     @Inject
     public FornecedorService fornecedorService;
 
+    private static final Logger LOG = Logger.getLogger(FornecedorResource.class);
+
     @GET
     @Path("/{id}")
+    @RolesAllowed({"Adm"})
     public Response findById(@PathParam("id") Long id) {
-        return Response.ok(FornecedorResponseDTO.valueOf(fornecedorService.findById(id))).build();
+        LOG.infof("Buscando fornecedor com id %d", id);
+        Fornecedor fornecedor = fornecedorService.findById(id);
+        return Response.ok(fornecedor).build();
     }
 
     @GET
     @Path("/search/{nome}")
+    @RolesAllowed({"Adm"})
     public Response findByNome(@PathParam("nome") String nome) {
-        return Response.ok(fornecedorService.findByNome(nome).
-                    stream().
-                    map(o -> FornecedorResponseDTO.valueOf(o)).
-                    toList()).build();
+        LOG.infof("Buscando fornecedor pelo nome %s", nome);
+        List<Fornecedor> fornecedores = fornecedorService.findByNome(nome);
+        return Response.ok(fornecedores).build();
     }
 
     @GET
-    @Path("/search/cnpj/{cnpj}")
+    @Path("/search/{cnpj}")
+    @RolesAllowed({"Adm"})
     public Response findByCnpj(@PathParam("cnpj") String cnpj) {
-        return Response.ok(fornecedorService.findByCnpj(cnpj)
-            .stream()
-            .map(FornecedorResponseDTO::valueOf)
-            .toList()).build();
+        LOG.infof("Buscando fornecedor com o CNPJ %s", cnpj);
+        Fornecedor fornecedor = fornecedorService.findByCnpj(cnpj);
+        return Response.ok(fornecedor).build();
     }
 
     @GET
+    @RolesAllowed({"Adm"})
     public Response findAll() {
-        return Response.ok(fornecedorService.findAll().
-                    stream().
-                    map(o -> FornecedorResponseDTO.valueOf(o)).
-                    toList()).build();
+        LOG.info("Buscando todos os fornecedores");
+        List<Fornecedor> fornecedores = fornecedorService.findAll();
+        return Response.ok(fornecedores).build();
     }
 
     @POST
+    @RolesAllowed({"Adm"})
     public Response create(@Valid FornecedorRequestDTO dto) {
-        return Response.status(Status.CREATED).entity(
-            FornecedorResponseDTO.valueOf(fornecedorService.create(dto))
-        ).build();
-    
+        LOG.info("Criando novo fornecedor");
+        Fornecedor fornecedor = fornecedorService.create(dto);
+        return Response.status(Status.CREATED).entity(fornecedor).build();
     }
 
     @POST
     @Path("/{id}/telefones")
-    public Response addEndereco(@PathParam("id") Long fornecedorId, @Valid TelefoneFornecedorRequestDTO telefoneDTO) {
+    @RolesAllowed({"Adm"})
+    public Response addTelefone(@PathParam("id") Long fornecedorId, @Valid TelefoneRequestDTO telefoneDTO) {
+        LOG.infof("Adicionando telefone para fornecedor com id %d", fornecedorId);
         fornecedorService.addTelefone(fornecedorId, telefoneDTO);
         return Response.status(Status.CREATED).build();
     }
 
     @PUT
-    @Path("/{id}")
-    public Response update(@PathParam("id") Long id, @Valid FornecedorRequestDTO dto) {
-        fornecedorService.update(id, dto);
+    @Path("/{id}/telefones/{idTelefone}")
+    @RolesAllowed({"Adm"})
+    public Response updateTelefone(
+            @PathParam("id") Long fornecedorId,
+            @PathParam("idTelefone") Long telefoneId,
+            @Valid TelefoneRequestDTO telefoneDTO) {
+        LOG.infof("Atualizando telefone com id %d para fornecedor com id %d", telefoneId, fornecedorId);
+        fornecedorService.updateTelefone(fornecedorId, telefoneId, telefoneDTO);
         return Response.noContent().build();
+    }
+
+    @POST
+    @Path("/{id}/enderecos")
+    @RolesAllowed({"Adm"})
+    public Response addEndereco(@PathParam("id") Long fornecedorId, @Valid EnderecoRequestDTO enderecoDTO) {
+        LOG.infof("Adicionando endereço para fornecedor com id %d", fornecedorId);
+        fornecedorService.addEndereco(fornecedorId, enderecoDTO);
+        return Response.status(Status.CREATED).build();
+    }
+
+    @PUT
+    @Path("/{id}/enderecos/{idEndereco}")
+    @RolesAllowed({"Adm"})
+    public Response updateEndereco(
+            @PathParam("id") Long fornecedorId,
+            @PathParam("idEndereco") Long enderecoId,
+            @Valid EnderecoRequestDTO enderecoDTO) {
+        LOG.infof("Atualizando endereço com id %d para fornecedor com id %d", enderecoId, fornecedorId);
+        fornecedorService.updateEndereco(fornecedorId, enderecoId, enderecoDTO);
+        return Response.noContent().build();
+    }
+
+    @PUT
+    @Path("/{id}")
+    @RolesAllowed({"Adm"})
+    public Response update(@PathParam("id") Long id, @Valid FornecedorRequestDTO dto) {
+        LOG.infof("Atualizando fornecedor com id %d", id);
+        Fornecedor fornecedor = fornecedorService.update(id, dto);
+        return Response.ok(fornecedor).build();
     }
 
     @DELETE
     @Path("/{id}")
+    @RolesAllowed({"Adm"})
     public Response delete(@PathParam("id") Long id) {
+        LOG.infof("Deletando fornecedor com id %d", id);
         fornecedorService.delete(id);
         return Response.noContent().build();
     }

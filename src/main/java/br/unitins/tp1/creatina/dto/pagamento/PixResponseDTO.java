@@ -1,17 +1,21 @@
 package br.unitins.tp1.creatina.dto.pagamento;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import br.unitins.tp1.creatina.model.MetodoPagamento;
 import br.unitins.tp1.creatina.model.Pix;
 import br.unitins.tp1.creatina.model.SituacaoPagamento;
 
 public record PixResponseDTO(
     Long id,
-    Double valor,
+    BigDecimal valor,
     LocalDateTime dataPagamento,
     LocalDateTime dataVencimento,
     SituacaoPagamento situacaoPagamento,
-    String chave
+    MetodoPagamento metodoPagamento,
+    String chave,
+    String Aprovado
 ) {
 
     public static PixResponseDTO valueOf(Pix pix) {
@@ -21,7 +25,9 @@ public record PixResponseDTO(
             pix.getDataPagamento(),
             pix.getDataVencimento(),
             pix.getSituacaoPagamento(),
-            pix.getChave()
+            pix.getMetodoPagamento(),
+            pix.getChave(),
+            pix.getAprovado() == true ? "Sim" : "Não"
         );
     }
 }

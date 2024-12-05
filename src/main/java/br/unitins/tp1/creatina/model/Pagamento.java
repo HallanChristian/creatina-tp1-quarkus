@@ -1,5 +1,6 @@
 package br.unitins.tp1.creatina.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Entity;
@@ -10,16 +11,18 @@ import jakarta.persistence.InheritanceType;
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Pagamento extends DefaultEntity {
 
-    private Double valor;
+    private BigDecimal valor;
     private LocalDateTime dataPagamento;
     private LocalDateTime dataVencimento;
     private SituacaoPagamento situacaoPagamento;
+    private MetodoPagamento metodoPagamento;
+    private Boolean aprovado;
     
-    public Double getValor() {
+    public BigDecimal getValor() {
         return valor;
     }
 
-    public void setValor(Double valor) {
+    public void setValor(BigDecimal valor) {
         this.valor = valor;
     }
 
@@ -45,6 +48,22 @@ public abstract class Pagamento extends DefaultEntity {
     
     public void setSituacaoPagamento(SituacaoPagamento situacaoPagamento) {
         this.situacaoPagamento = situacaoPagamento;
+    }
+
+    public MetodoPagamento getMetodoPagamento() {
+        return metodoPagamento;
+    }
+
+    public void setMetodoPagamento(MetodoPagamento metodoPagamento) {
+        this.metodoPagamento = metodoPagamento;
+    }
+
+    public Boolean getAprovado() {
+        return aprovado;
+    }
+
+    public void setAprovado(Boolean aprovado) {
+        this.aprovado = aprovado;
     }
     
 }

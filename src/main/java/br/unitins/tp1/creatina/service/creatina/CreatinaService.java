@@ -27,6 +27,8 @@ public interface CreatinaService {
 
     Creatina update(Long id, CreatinaRequestDTO dto);
 
-    void delete(Long id); 
+    void delete(Long id);
+
+    Creatina updateNomeImagem(Long id, String nomeImagem); 
     
 }

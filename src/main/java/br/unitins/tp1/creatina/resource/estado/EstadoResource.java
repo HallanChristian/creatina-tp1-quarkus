@@ -8,6 +8,7 @@ import br.unitins.tp1.creatina.dto.estado.EstadoRequestDTO;
 import br.unitins.tp1.creatina.dto.estado.EstadoResponseDTO;
 import br.unitins.tp1.creatina.model.Estado;
 import br.unitins.tp1.creatina.service.estado.EstadoService;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
@@ -31,6 +32,7 @@ public class EstadoResource {
 
     @GET
     @Path("/{id}")
+    @RolesAllowed("Adm")
     public Estado findById(@PathParam("id") Long id) {
         LOG.info("Execução do metodo findById. Id: " + id);
         return estadoService.findById(id);
@@ -38,6 +40,7 @@ public class EstadoResource {
 
     @GET
     @Path("/search/{nome}")
+    @RolesAllowed("{Adm, User}")
     public List<Estado> findByNome(@PathParam("nome") String nome) {
         return estadoService.findByNome(nome);
     }
@@ -48,9 +51,8 @@ public class EstadoResource {
     }
 
     @POST
-    public Estado create(EstadoResponseDTO estado) {
-
-        return estadoService.create(estado);
+    public EstadoResponseDTO create(EstadoRequestDTO dto) {
+        return EstadoResponseDTO.valueOf(estadoService.create(dto));
     }
 
     @PUT

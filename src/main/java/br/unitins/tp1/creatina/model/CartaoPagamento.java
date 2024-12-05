@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import jakarta.persistence.Entity;
 
 @Entity
-public class Cartao extends Pagamento {
+public class CartaoPagamento extends Pagamento {
 
     private String numero;
     private String nomeTitular;

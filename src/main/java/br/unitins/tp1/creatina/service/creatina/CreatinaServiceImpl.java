@@ -1,11 +1,13 @@
 package br.unitins.tp1.creatina.service.creatina;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import br.unitins.tp1.creatina.dto.creatina.CreatinaRequestDTO;
 import br.unitins.tp1.creatina.model.Creatina;
 import br.unitins.tp1.creatina.repository.CreatinaRepository;
+import br.unitins.tp1.creatina.validation.ValidationException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityNotFoundException;
@@ -88,6 +90,21 @@ public class CreatinaServiceImpl implements CreatinaService {
     @Transactional
     public void delete(Long id) {
         creatinaRepository.deleteById(id);
+    }
+
+    @Override
+    public Creatina updateNomeImagem(Long id, String nomeImagem) {
+       Creatina creatina = creatinaRepository.findById(id);
+        if (creatina == null) {
+            throw new ValidationException("idCreatina", "Creatina não encontrado");
+        }
+
+        if (creatina.getImagens() == null) {
+            creatina.setImagens(new ArrayList<>());
+        }
+
+        creatina.getImagens().add(nomeImagem);
+        return creatina;
     }
 
     

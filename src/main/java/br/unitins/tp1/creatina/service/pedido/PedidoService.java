@@ -24,6 +24,4 @@ public interface PedidoService {
 
     void retornarPedido(String username, Long id);
 
-    // pensar no cancelar 
-
 }
