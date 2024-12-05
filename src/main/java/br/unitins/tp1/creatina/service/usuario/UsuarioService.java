@@ -17,7 +17,9 @@ public interface UsuarioService {
 
     List<Usuario> findAll();
 
-    Usuario create(UsuarioRequestDTO dto);
+    Usuario createAdm(UsuarioRequestDTO dto);
+
+    Usuario createUser(UsuarioRequestDTO dto);
 
     void updateSenha(Long id, SenhaPatchDTO dto);
 

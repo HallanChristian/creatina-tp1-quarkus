@@ -155,7 +155,7 @@ public class ClienteResource {
 
     @DELETE
     @Path("/lista-desejo/{idProduto}")
-    @RolesAllowed({ "user" })
+    @RolesAllowed({ "User" })
     public Response removerListaDesejo(@PathParam("idProduto") Long idProduto) {
         String username = jsonWebToken.getSubject();
         LOG.info("Execucao do metodo removerProdutoListaDesejo");
@@ -165,7 +165,7 @@ public class ClienteResource {
 
     @GET
     @Path("/lista-desejo")
-    @RolesAllowed({ "user" })
+    @RolesAllowed({ "Adm", "User" })
     public List<Creatina> getListaDesejos() {
         String username = jsonWebToken.getSubject();
         LOG.info("Execucao do metodo getListaDesejos");

@@ -51,13 +51,28 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     @Transactional
-    public Usuario create(UsuarioRequestDTO dto) {
+    public Usuario createAdm(UsuarioRequestDTO dto) {
         if (existeUsername(dto.username())) {
             throw new ValidationException("username", "O username é invalido");
         }
         Usuario usuario = new Usuario();
         usuario.setUsername(dto.username());
         usuario.setPerfil(List.of(Perfil.ADM));
+        usuario.setSenha(hashService.getHashSenha(dto.senha()));
+        usuarioRepository.persist(usuario);
+
+        return usuario;
+    }
+
+    @Override
+    @Transactional
+    public Usuario createUser(UsuarioRequestDTO dto) {
+        if (existeUsername(dto.username())) {
+            throw new ValidationException("username", "O username é invalido");
+        }
+        Usuario usuario = new Usuario();
+        usuario.setUsername(dto.username());
+        usuario.setPerfil(List.of(Perfil.USER));
         usuario.setSenha(hashService.getHashSenha(dto.senha()));
         usuarioRepository.persist(usuario);
 

@@ -19,6 +19,5 @@ public class Telefone extends DefaultEntity {
     }
     public void setNumero(String numero) {
         this.numero = numero;
-    }
-    
+    }   
 }
