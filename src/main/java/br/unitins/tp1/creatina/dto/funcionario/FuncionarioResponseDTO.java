@@ -12,7 +12,6 @@ import br.unitins.tp1.creatina.model.Funcionario;
 public record FuncionarioResponseDTO (
     Long id,
     String nome,
-    String email,
     String cpf,
     LocalDate dataNascimento,
     String cargo,
@@ -25,16 +24,15 @@ public record FuncionarioResponseDTO (
 
     public static FuncionarioResponseDTO valueOf(Funcionario funcionario) {
         return new FuncionarioResponseDTO(
-            funcionario.getId(),
-            funcionario.getNome(),
-            funcionario.getEmail(),
-            funcionario.getCpf(),
-            funcionario.getDataNascimento(),
+            funcionario.getPessoaFisica().getId(),
+            funcionario.getPessoaFisica().getNome(),
+            funcionario.getPessoaFisica().getCpf(),
+            funcionario.getPessoaFisica().getDataNascimento(),
             funcionario.getCargo(),
             funcionario.getSalario(),
             funcionario.getDataContratacao(),
-            funcionario.getTelefones().stream().map(TelefoneResponseDTO::valueOf).toList(),
-            funcionario.getEnderecos().stream().map(EnderecoResponseDTO::valueOf).toList(),
+            funcionario.getPessoaFisica().getTelefones().stream().map(TelefoneResponseDTO::valueOf).toList(),
+            funcionario.getPessoaFisica().getEnderecos().stream().map(EnderecoResponseDTO::valueOf).toList(),
             UsuarioResponseDTO.valueOf(funcionario.getUsuario())
         );
     }

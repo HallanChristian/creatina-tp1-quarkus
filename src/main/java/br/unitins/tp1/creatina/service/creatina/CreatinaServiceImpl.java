@@ -7,6 +7,8 @@ import java.util.List;
 import br.unitins.tp1.creatina.dto.creatina.CreatinaRequestDTO;
 import br.unitins.tp1.creatina.model.Creatina;
 import br.unitins.tp1.creatina.repository.CreatinaRepository;
+import br.unitins.tp1.creatina.service.categoria.CategoriaService;
+import br.unitins.tp1.creatina.service.fornecedor.FornecedorService;
 import br.unitins.tp1.creatina.validation.ValidationException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -18,6 +20,12 @@ public class CreatinaServiceImpl implements CreatinaService {
 
     @Inject
     public CreatinaRepository creatinaRepository;
+
+    @Inject
+    public FornecedorService fornecedorService;
+
+    @Inject
+    public CategoriaService categoriaService;
 
     @Override
     public Creatina findById(Long id) {
@@ -64,6 +72,8 @@ public class CreatinaServiceImpl implements CreatinaService {
         creatina.setQuantidadeEmGramas(dto.quantidadeEmGramas());
         creatina.setTipo(dto.tipo());
         creatina.setPreco(dto.preco());
+        creatina.setFornecedor(fornecedorService.findById(dto.fornecedorId()));
+        creatina.setCategoria(categoriaService.findById(dto.categoriaId()));
 
         creatinaRepository.persist(creatina);
         return creatina;
@@ -71,7 +81,7 @@ public class CreatinaServiceImpl implements CreatinaService {
 
     @Override
     @Transactional
-    public Creatina update(Long id, CreatinaRequestDTO dto) {
+    public void update(Long id, CreatinaRequestDTO dto) {
         Creatina creatina = creatinaRepository.findById(id);
         if (creatina == null) {
             throw new EntityNotFoundException("Creatina não encontrada");
@@ -82,8 +92,8 @@ public class CreatinaServiceImpl implements CreatinaService {
         creatina.setQuantidadeEmGramas(dto.quantidadeEmGramas());
         creatina.setTipo(dto.tipo());
         creatina.setPreco(dto.preco());
-
-        return creatina;
+        creatina.setFornecedor(fornecedorService.findById(dto.fornecedorId()));
+        creatina.setCategoria(categoriaService.findById(dto.categoriaId()));
     }
 
     @Override

@@ -32,7 +32,7 @@ public class EstadoResource {
 
     @GET
     @Path("/{id}")
-    @RolesAllowed("Adm")
+    @RolesAllowed({ "Funcionario", "Adm" })
     public Estado findById(@PathParam("id") Long id) {
         LOG.info("Execução do metodo findById. Id: " + id);
         return estadoService.findById(id);
@@ -40,29 +40,33 @@ public class EstadoResource {
 
     @GET
     @Path("/search/{nome}")
-    @RolesAllowed("{Adm, User}")
+    @RolesAllowed({ "Funcionario", "Adm" })
     public List<Estado> findByNome(@PathParam("nome") String nome) {
         return estadoService.findByNome(nome);
     }
 
     @GET
+    @RolesAllowed({ "Funcionario", "Adm" })
     public List<Estado> findAll() {
         return estadoService.findAll();
     }
 
     @POST
+    @RolesAllowed({ "Funcionario", "Adm" })
     public EstadoResponseDTO create(EstadoRequestDTO dto) {
         return EstadoResponseDTO.valueOf(estadoService.create(dto));
     }
 
     @PUT
     @Path("/{id}")
+    @RolesAllowed({ "Funcionario", "Adm" })
     public void update(@PathParam("id") Long id, EstadoRequestDTO estado) {
         estadoService.update(id, estado);
     }
 
     @DELETE
     @Path("/{id}")
+    @RolesAllowed({ "Funcionario", "Adm" })
     public void delete(@PathParam("id") Long id) {
         estadoService.delete(id);
     }

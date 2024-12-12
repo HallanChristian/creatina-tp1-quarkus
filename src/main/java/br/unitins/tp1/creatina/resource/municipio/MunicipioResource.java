@@ -3,6 +3,7 @@ package br.unitins.tp1.creatina.resource.municipio;
 import br.unitins.tp1.creatina.dto.municipio.MunicipioRequestDTO;
 import br.unitins.tp1.creatina.dto.municipio.MunicipioResponseDTO;
 import br.unitins.tp1.creatina.service.municipio.MunicipioService;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
@@ -27,12 +28,14 @@ public class MunicipioResource {
 
     @GET
     @Path("/{id}")
+    @RolesAllowed({ "Funcionario", "Adm" })
     public Response findById(@PathParam("id") Long id) {
         return Response.ok(MunicipioResponseDTO.valueOf(municipioService.findById(id))).build();
     }
 
     @GET
     @Path("/search/{nome}")
+    @RolesAllowed({ "Funcionario", "Adm" })
     public Response findByNome(@PathParam("nome") String nome) {
         return Response.ok(municipioService.findByNome(nome).
                     stream().
@@ -41,6 +44,7 @@ public class MunicipioResource {
     }
 
     @GET
+    @RolesAllowed({ "Funcionario", "Adm" })
     public Response findAll() {
         return Response.ok(municipioService.findAll().
                     stream().
@@ -49,6 +53,7 @@ public class MunicipioResource {
     }
 
     @POST
+    @RolesAllowed({ "Funcionario", "Adm" })
     public Response create(@Valid MunicipioRequestDTO dto) {
         return Response.status(Status.CREATED).entity(
             MunicipioResponseDTO.valueOf(municipioService.create(dto))
@@ -58,6 +63,7 @@ public class MunicipioResource {
 
     @PUT
     @Path("/{id}")
+    @RolesAllowed({ "Funcionario", "Adm" })
     public Response update(@PathParam("id") Long id, @Valid MunicipioRequestDTO dto) {
         municipioService.update(id, dto);
         return Response.noContent().build();
@@ -65,6 +71,7 @@ public class MunicipioResource {
 
     @DELETE
     @Path("/{id}")
+    @RolesAllowed({ "Funcionario", "Adm" })
     public Response delete(@PathParam("id") Long id) {
         municipioService.delete(id);
         return Response.noContent().build();

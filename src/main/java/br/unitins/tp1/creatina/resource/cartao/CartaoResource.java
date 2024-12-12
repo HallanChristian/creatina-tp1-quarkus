@@ -44,8 +44,9 @@ public class CartaoResource {
 
     @GET
     @Path("/user/{username}")
-    @RolesAllowed({"Adm", "User"})
-    public Response findByUser(@PathParam("username") String username) {
+    @RolesAllowed({"Adm"})
+    public Response findByUser() {
+        String username = jsonWebToken.getSubject();
         LOG.infof("Buscando cartões para o user %s", username);
         return Response.ok(
             cartaoService.findByCliente(username).stream().map(CartaoResponseDTO::valueOf).toList()

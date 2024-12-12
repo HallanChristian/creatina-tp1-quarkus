@@ -36,7 +36,7 @@ public class FornecedorResource {
 
     @GET
     @Path("/{id}")
-    @RolesAllowed({"Adm"})
+    @RolesAllowed({"Adm", "Funcionario"})
     public Response findById(@PathParam("id") Long id) {
         LOG.infof("Buscando fornecedor com id %d", id);
         Fornecedor fornecedor = fornecedorService.findById(id);
@@ -45,7 +45,7 @@ public class FornecedorResource {
 
     @GET
     @Path("/search/{nome}")
-    @RolesAllowed({"Adm"})
+    @RolesAllowed({"Adm", "Funcionario"})
     public Response findByNome(@PathParam("nome") String nome) {
         LOG.infof("Buscando fornecedor pelo nome %s", nome);
         List<Fornecedor> fornecedores = fornecedorService.findByNome(nome);
@@ -54,7 +54,7 @@ public class FornecedorResource {
 
     @GET
     @Path("/search/{cnpj}")
-    @RolesAllowed({"Adm"})
+    @RolesAllowed({"Adm", "Funcionario"})
     public Response findByCnpj(@PathParam("cnpj") String cnpj) {
         LOG.infof("Buscando fornecedor com o CNPJ %s", cnpj);
         Fornecedor fornecedor = fornecedorService.findByCnpj(cnpj);
@@ -62,7 +62,7 @@ public class FornecedorResource {
     }
 
     @GET
-    @RolesAllowed({"Adm"})
+    @RolesAllowed({"Adm", "Funcionario"})
     public Response findAll() {
         LOG.info("Buscando todos os fornecedores");
         List<Fornecedor> fornecedores = fornecedorService.findAll();
@@ -70,7 +70,7 @@ public class FornecedorResource {
     }
 
     @POST
-    @RolesAllowed({"Adm"})
+    @RolesAllowed({"Adm", "Funcionario"})
     public Response create(@Valid FornecedorRequestDTO dto) {
         LOG.info("Criando novo fornecedor");
         Fornecedor fornecedor = fornecedorService.create(dto);
@@ -79,7 +79,7 @@ public class FornecedorResource {
 
     @POST
     @Path("/{id}/telefones")
-    @RolesAllowed({"Adm"})
+    @RolesAllowed({"Adm", "Funcionario"})
     public Response addTelefone(@PathParam("id") Long fornecedorId, @Valid TelefoneRequestDTO telefoneDTO) {
         LOG.infof("Adicionando telefone para fornecedor com id %d", fornecedorId);
         fornecedorService.addTelefone(fornecedorId, telefoneDTO);
@@ -88,7 +88,7 @@ public class FornecedorResource {
 
     @PUT
     @Path("/{id}/telefones/{idTelefone}")
-    @RolesAllowed({"Adm"})
+    @RolesAllowed({"Adm", "Funcionario"})
     public Response updateTelefone(
             @PathParam("id") Long fornecedorId,
             @PathParam("idTelefone") Long telefoneId,
@@ -100,7 +100,7 @@ public class FornecedorResource {
 
     @POST
     @Path("/{id}/enderecos")
-    @RolesAllowed({"Adm"})
+    @RolesAllowed({"Adm", "Funcionario"})
     public Response addEndereco(@PathParam("id") Long fornecedorId, @Valid EnderecoRequestDTO enderecoDTO) {
         LOG.infof("Adicionando endereço para fornecedor com id %d", fornecedorId);
         fornecedorService.addEndereco(fornecedorId, enderecoDTO);
@@ -109,7 +109,7 @@ public class FornecedorResource {
 
     @PUT
     @Path("/{id}/enderecos/{idEndereco}")
-    @RolesAllowed({"Adm"})
+    @RolesAllowed({"Adm", "Funcionario"})
     public Response updateEndereco(
             @PathParam("id") Long fornecedorId,
             @PathParam("idEndereco") Long enderecoId,
@@ -121,7 +121,7 @@ public class FornecedorResource {
 
     @PUT
     @Path("/{id}")
-    @RolesAllowed({"Adm"})
+    @RolesAllowed({"Adm", "Funcionario"})
     public Response update(@PathParam("id") Long id, @Valid FornecedorRequestDTO dto) {
         LOG.infof("Atualizando fornecedor com id %d", id);
         Fornecedor fornecedor = fornecedorService.update(id, dto);

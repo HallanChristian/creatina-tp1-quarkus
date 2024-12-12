@@ -2,8 +2,11 @@ package br.unitins.tp1.creatina.resource.pedido;
 
 import java.util.List;
 
+import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.jboss.logging.Logger;
 
+import br.unitins.tp1.creatina.dto.pedido.PedidoBasicoResponseDTO;
+import br.unitins.tp1.creatina.dto.pedido.PedidoDetalhadoResponseDTO;
 import br.unitins.tp1.creatina.dto.pedido.PedidoRequestDTO;
 import br.unitins.tp1.creatina.model.Pedido;
 import br.unitins.tp1.creatina.service.pedido.PedidoService;
@@ -31,6 +34,9 @@ public class PedidoResource {
     @Inject
     public PedidoService pedidoService;
 
+    @Inject
+    public JsonWebToken jsonWebToken;
+
     private static final Logger LOG = Logger.getLogger(PedidoResource.class);
 
     @GET
@@ -44,35 +50,38 @@ public class PedidoResource {
 
     @GET
     @Path("/search/username/{username}")
-    @RolesAllowed({"Adm"})
-    public Response findByUsername(@PathParam("username") String username) {
-        LOG.infof("Buscando pedidos para o usuário com username %s", username);
+    @RolesAllowed({"User", "Adm"})
+    public Response findByUsername() {
+        String username = jsonWebToken.getSubject();
+        LOG.infof("Execução do método findByUsername. Usuário: %s", username);
         List<Pedido> pedidos = pedidoService.findByUsername(username);
-        return Response.ok(pedidos).build();
+        return Response.ok(pedidos.stream().map(PedidoBasicoResponseDTO::valueOf)).build();
+    }
+
+    @GET
+    @Path("/{id}/detalhes")
+    @RolesAllowed({ "User", "Adm" })
+    public Response findDetalhesPedido(@PathParam("id") Long id) {
+        String username = jsonWebToken.getSubject();
+        LOG.infof("Execução do método findDetalhesByPedido. Usuário: %s. ID do pedido: %d", username, id);
+        return Response.ok(PedidoDetalhadoResponseDTO.valueOf(pedidoService.detalhesPedido(id, username))).build();
     }
 
     @POST
     @RolesAllowed({"User", "Adm"})
-    public Response create(@Valid PedidoRequestDTO dto, @HeaderParam("username") String username) {
-        LOG.info("Criando novo pedido");
+    public Response create(@Valid PedidoRequestDTO dto) {
+        String username = jsonWebToken.getSubject();
+        LOG.infof("Execução do método create. Usuário: %s. Dados do pedido: %s", username, dto);
         Pedido pedido = pedidoService.create(dto, username);
-        return Response.status(Status.CREATED).entity(pedido).build();
-    }
-
-    @PUT
-    @Path("/{id}/estado/{novaSituacaoId}")
-    @RolesAllowed({"Adm"})
-    public Response updateEstadoPedido(@PathParam("id") Long id, @PathParam("novaSituacaoId") Integer novaSituacaoId) {
-        LOG.infof("Atualizando estado do pedido com id %d", id);
-        pedidoService.updateEstadoPedido(id, novaSituacaoId);
-        return Response.noContent().build();
+        return Response.status(Status.CREATED).entity(PedidoBasicoResponseDTO.valueOf(pedido)).build();
     }
 
     @DELETE
     @Path("/{id}")
     @RolesAllowed({"User", "Adm"})
-    public Response cancelarPedido(@HeaderParam("username") String username, @PathParam("id") Long id) {
-        LOG.infof("Cancelando pedido com id %d para o usuário %s", id, username);
+    public Response cancelarPedido(@PathParam("id") Long id) {
+        String username = jsonWebToken.getSubject();
+        LOG.infof("Execução do método cancel. Usuário: %s. ID do pedido para cancelamento: %d", username, id);
         pedidoService.cancelarPedido(username, id);
         return Response.noContent().build();
     }
@@ -80,8 +89,9 @@ public class PedidoResource {
     @PUT
     @Path("/{id}/retorno")
     @RolesAllowed({"User", "Adm"})
-    public Response retornarPedido(@HeaderParam("username") String username, @PathParam("id") Long id) {
-        LOG.infof("Retornando pedido com id %d para o usuário %s", id, username);
+    public Response retornarPedido(@PathParam("id") Long id) {
+        String username = jsonWebToken.getSubject();
+        LOG.infof("Execução do método returnPedido. Usuário: %s. ID do pedido para devolução: %d", username, id);
         pedidoService.retornarPedido(username, id);
         return Response.noContent().build();
     }

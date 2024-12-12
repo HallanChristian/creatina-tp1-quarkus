@@ -24,7 +24,8 @@ public class CreatinaFileServiceImpl implements FileService {
 
     private final String PATH_CLIENTE = "C:\\Users\\halla\\Downloads\\images";
 
-    private static final List<String> SUPPORTED_MIME_TYPES = Arrays.asList("image/jpeg", "image/jpg", "image/png", "image/gif");
+    private static final List<String> SUPPORTED_MIME_TYPES = Arrays.asList("image/jpeg", "image/jpg", "image/png",
+            "image/gif");
 
     private static final int MAX_FILE_SIZE = 1024 * 1024 * 10; // 10 MB
 
@@ -37,7 +38,7 @@ public class CreatinaFileServiceImpl implements FileService {
         Path diretorio = Paths.get(PATH_CLIENTE);
         if (!Files.exists(diretorio)) {
             LOG.info("Diretório não encontrado. Criando diretório: " + diretorio.toString());
-            Files.createDirectories(diretorio); // Cria todos os diretórios necessários
+            Files.createDirectory(diretorio);
         }
 
         String mimeType = Files.probeContentType(Paths.get(nomeArquivo));
@@ -50,6 +51,7 @@ public class CreatinaFileServiceImpl implements FileService {
         String extensao = mimeType.substring(mimeType.lastIndexOf("/") + 1);
         String novoNomeArquivo = UUID.randomUUID() + "." + extensao;
 
+        // Evitar duplicação de nome de arquivo
         Path filePath = diretorio.resolve(novoNomeArquivo);
         while (filePath.toFile().exists()) {
             LOG.warn("Conflito de nome detectado. Gerando novo nome.");
@@ -71,13 +73,13 @@ public class CreatinaFileServiceImpl implements FileService {
     private void verificarTipoArquivo(String nomeArquivo) throws IOException {
         String mimeType = Files.probeContentType(Paths.get(nomeArquivo));
         if (!SUPPORTED_MIME_TYPES.contains(mimeType)) {
-            throw new IOException("Formato de arquivo não suportado pelo sistema.");
+            throw new IOException("Formato de arquivo nao suportado pelo sistema.");
         }
     }
 
     private void verificarTamanhoArquivo(byte[] arquivo) throws IOException {
         if (arquivo.length > MAX_FILE_SIZE) {
-            throw new IOException("O arquivo excede o limite máximo de 10 MB.");
+            throw new IOException("O arquivo excede o limite maximo de 10 MB.");
         }
     }
 
@@ -92,4 +94,3 @@ public class CreatinaFileServiceImpl implements FileService {
         return arquivo;
     }
 }
-

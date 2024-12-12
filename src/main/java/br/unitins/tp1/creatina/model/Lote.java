@@ -6,7 +6,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 
 @Entity
 public class Lote extends DefaultEntity {
@@ -23,18 +22,6 @@ public class Lote extends DefaultEntity {
     
     @Column(nullable = false)
     private Integer estoque;
-
-    @OneToOne
-    @JoinColumn(name = "id_endereco")
-    private Endereco localDistribuicao;
-    
-    public Endereco getLocalDistribuicao() {
-        return localDistribuicao;
-    }
-
-    public void setLocalDistribuicao(Endereco localDistribuicao) {
-        this.localDistribuicao = localDistribuicao;
-    }
 
     public Creatina getCreatina() {
         return creatina;

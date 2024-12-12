@@ -15,10 +15,12 @@ public class Usuario extends DefaultEntity {
     @Column(unique = true)
     private String username;
     private String senha;
+    @Column(unique = true)
+    private String email;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "perfil_usuario", joinColumns = @JoinColumn(name = "id_usuario"))
-    private List<Perfil> Perfil;
+    private List<Perfil> perfil;
 
     public String getUsername() {
         return username;
@@ -33,12 +35,20 @@ public class Usuario extends DefaultEntity {
         this.senha = senha;
     }
 
-    public List<Perfil> getPerfil() {
-        return Perfil;
+    public String getEmail() {
+        return email;
     }
 
-    public void setPerfil(List<Perfil> Perfil) {
-        this.Perfil = Perfil;
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public List<Perfil> getPerfil() {
+        return perfil;
+    }
+
+    public void setPerfil(List<Perfil> perfil) {
+        this.perfil = perfil;
     }
     
 

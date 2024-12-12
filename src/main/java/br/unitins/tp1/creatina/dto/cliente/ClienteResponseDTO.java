@@ -13,20 +13,18 @@ public record ClienteResponseDTO(
     String nome,
     String cpf,
     LocalDate dataNascimento,
-    String email, 
     List<TelefoneResponseDTO> telefones,
     List<EnderecoResponseDTO> enderecos,
     UsuarioResponseDTO usuario) {
 
     public static ClienteResponseDTO valueOf(Cliente cliente) {
         return new ClienteResponseDTO (
-            cliente.getId(),
-            cliente.getNome(), 
-            cliente.getCpf(),
-            cliente.getDataNascimento(),
-            cliente.getEmail(),
-            cliente.getTelefones().stream().map(TelefoneResponseDTO::valueOf).toList(),
-            cliente.getEnderecos().stream().map(EnderecoResponseDTO::valueOf).toList(),
+            cliente.getPessoaFisica().getId(),
+            cliente.getPessoaFisica().getNome(), 
+            cliente.getPessoaFisica().getCpf(),
+            cliente.getPessoaFisica().getDataNascimento(),
+            cliente.getPessoaFisica().getTelefones().stream().map(TelefoneResponseDTO::valueOf).toList(),
+            cliente.getPessoaFisica().getEnderecos().stream().map(EnderecoResponseDTO::valueOf).toList(),
             UsuarioResponseDTO.valueOf(cliente.getUsuario())
             );
     }

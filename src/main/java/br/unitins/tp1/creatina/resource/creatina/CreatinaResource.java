@@ -39,83 +39,85 @@ public class CreatinaResource {
     public CreatinaService creatinaService;
 
     @Inject
-    public CreatinaFileServiceImpl creatinaFileServiceImpl;
+    public CreatinaFileServiceImpl creatinaFileService;
 
     private static final Logger LOG = Logger.getLogger(CreatinaResource.class);
 
     @GET
     @Path("/{id}")
-    @RolesAllowed({ "Adm" })
-    public Creatina getById(@PathParam("id") Long id) {
+    @RolesAllowed({ "Adm", "Funcionario" })
+    public Creatina findById(@PathParam("id") Long id) {
         return creatinaService.findById(id);
     }
 
     @GET
     @Path("/nome/{nome}")
-    @RolesAllowed({ "Adm" })
-    public List<Creatina> getByNome(@PathParam("nome") String nome) {
+    public List<Creatina> findByNome(@PathParam("nome") String nome) {
+        LOG.infof("Buscando por nome");
         return creatinaService.findByNome(nome);
     }
 
     @GET
     @Path("/marca/{marca}")
-    @RolesAllowed({ "Adm" })
-    public List<Creatina> getByMarca(@PathParam("marca") String marca) {
+    public List<Creatina> findByMarca(@PathParam("marca") String marca) {
+        LOG.infof("Buscando por marca");
         return creatinaService.findByMarca(marca);
     }
 
     @GET
     @Path("/tipo/{tipo}")
-    @RolesAllowed({ "Adm" })
-    public List<Creatina> getByTipo(@PathParam("tipo") String tipo) {
+    public List<Creatina> findByTipo(@PathParam("tipo") String tipo) {
+        LOG.infof("Buscando por tipo");
         return creatinaService.findByTipo(tipo);
     }
 
     @GET
     @Path("/preco")
-    @RolesAllowed({ "Adm" })
-    public List<Creatina> getByPreco(@QueryParam("precoMin") BigDecimal precoMin, @QueryParam("precoMax") BigDecimal precoMax) {
+    public List<Creatina> findByPreco(@QueryParam("precoMin") BigDecimal precoMin, @QueryParam("precoMax") BigDecimal precoMax) {
+        LOG.infof("Buscando por preco");
         return creatinaService.findByPreco(precoMin, precoMax);
     }
 
     @GET
     @Path("/filtros")
-    @RolesAllowed({ "Adm" })
-    public List<Creatina> getByFilters(@QueryParam("nome") String nome, @QueryParam("marca") String marca, 
+    public List<Creatina> findByFilters(@QueryParam("nome") String nome, @QueryParam("marca") String marca, 
                                        @QueryParam("tipo") String tipo, @QueryParam("precoMin") BigDecimal precoMin, 
                                        @QueryParam("precoMax") BigDecimal precoMax) {
-        return creatinaService.findByFilters(nome, marca, tipo, precoMin, precoMax);
+                                        LOG.infof("Buscando por filtro");
+                                        return creatinaService.findByFilters(nome, marca, tipo, precoMin, precoMax);
     }
 
     @GET
-    @RolesAllowed({ "Adm" })
-    public List<Creatina> getAll() {
+    public List<Creatina> findAll() {
+        LOG.infof("Buscando todos as creatinas");
         return creatinaService.findAll();
     }
 
     @POST
-    @RolesAllowed({ "Adm" })
+    @RolesAllowed({ "Adm", "Funcionario" })
     public Creatina create(CreatinaRequestDTO dto) {
         return creatinaService.create(dto);
     }
 
     @PUT
     @Path("/{id}")
-    @RolesAllowed({ "Adm" })
-    public Creatina update(@PathParam("id") Long id, CreatinaRequestDTO dto) {
-        return creatinaService.update(id, dto);
+    @RolesAllowed({ "Adm", "Funcionario" })
+    public Response update(@PathParam("id") Long id, CreatinaRequestDTO dto) {
+        LOG.infof("Atualizando creatina com ID: %d", id);
+        creatinaService.update(id, dto);
+        return Response.noContent().build();
     }
 
     @DELETE
     @Path("/{id}")
-    @RolesAllowed({ "Adm" })
+    @RolesAllowed({ "Adm", "Funcionario" })
     public Response delete(@PathParam("id") Long id) {
         creatinaService.delete(id);
         return Response.noContent().build();
     }
 
     @PATCH
-    @RolesAllowed({ "Adm" })
+    @RolesAllowed({ "Adm", "Funcionario" })
     @Path("/{idCreatina}/upload/imagem")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response uploadImage(@PathParam("idCreatina") Long id, @MultipartForm ImageForm form) {
@@ -123,7 +125,7 @@ public class CreatinaResource {
         LOG.info("Nome do arquivo recebido para upload: " + form.getNomeImagem());
 
         try {
-            String nomeImagem = creatinaFileServiceImpl.save(form.getNomeImagem(), form.getImagem());
+            String nomeImagem = creatinaFileService.save(form.getNomeImagem(), form.getImagem());
             LOG.info("Arquivo salvo com sucesso. Novo nome: " + nomeImagem);
             creatinaService.updateNomeImagem(id, nomeImagem);
             LOG.info("Nome da imagem atualizado no banco de dados.");
@@ -136,7 +138,7 @@ public class CreatinaResource {
     }
 
     @GET
-    @RolesAllowed({ "Adm" })
+    @RolesAllowed({ "Adm", "Funcionario" })
     @Path("/download/imagem/{nomeImagem}")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     public Response downloadImage(@PathParam("nomeImagem") String nomeImagem) {
@@ -145,7 +147,7 @@ public class CreatinaResource {
 
         try {
             // Busca o arquivo pelo nome
-            File arquivo = creatinaFileServiceImpl.find(nomeImagem);
+            File arquivo = creatinaFileService.find(nomeImagem);
             LOG.info("Arquivo localizado com sucesso: " + arquivo.getAbsolutePath());
 
             // Retorna o arquivo como resposta
@@ -160,4 +162,5 @@ public class CreatinaResource {
             return Response.status(500).entity("Erro interno no servidor.").build();
         }
     }
+
 }

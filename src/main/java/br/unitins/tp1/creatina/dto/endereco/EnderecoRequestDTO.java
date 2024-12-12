@@ -1,6 +1,7 @@
 package br.unitins.tp1.creatina.dto.endereco;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 // DTO Endereço
 public record EnderecoRequestDTO(
@@ -9,7 +10,7 @@ public record EnderecoRequestDTO(
     String estado,
     
     // Municipio (obrigatório)
-    @NotBlank(message = "Informe a municipio.") 
+    @NotNull(message = "Informe a municipio.") 
     Long idMunicipio,
 
     // CEP (obrigatório)

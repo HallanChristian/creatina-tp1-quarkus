@@ -31,11 +31,11 @@ public interface ClienteService {
 
     void delete(Long id);
 
-    Endereco addEndereco(Long clienteId, EnderecoRequestDTO dto);
+    Endereco addEndereco(String username, EnderecoRequestDTO dto);
 
     void updateEndereco(String username, Long idEndereco, EnderecoRequestDTO dto);
 
-    Telefone addTelefone(Long clienteId, TelefoneRequestDTO dto);
+    Telefone addTelefone(String username, TelefoneRequestDTO dto);
 
     void updateTelefone(String username, Long idTelefone, TelefoneRequestDTO dto);
 

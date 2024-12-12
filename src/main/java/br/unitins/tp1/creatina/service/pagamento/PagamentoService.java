@@ -10,11 +10,11 @@ public interface PagamentoService {
 
     Pagamento findById(Long id);
 
-    Pix criarPix(Long idPedido, Long idCliente);
+    Pix criarPix(Long idPedido, String username);
     
-    Boleto criarBoleto(Long idPedido, Long idCliente);
+    Boleto criarBoleto(Long idPedido, String username);
 
-    void pagar(Long idPedido, Long idCliente, String identificador, MetodoPagamento metodoPagamento);
+    void pagar(Long idPedido, String username, String identificador, MetodoPagamento metodoPagamento);
 
-    void pagarCartao(Long idPedido, Long idCliente, Long idCartao);
+    void pagarCartao(Long idPedido, String username, Long idCartao);
 }

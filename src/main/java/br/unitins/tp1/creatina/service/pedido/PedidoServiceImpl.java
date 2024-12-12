@@ -104,11 +104,20 @@ public class PedidoServiceImpl implements PedidoService {
                     "Calculado: " + totalCalculado + ", Informado: " + dto.valorTotal());
         }
         pedido.setValorTotal(totalCalculado.setScale(2, RoundingMode.HALF_UP));
+        getEstadoPedido(pedido);
 
         // Persiste o pedido no repositório
         pedidoRepository.persist(pedido);
 
         return pedido;
+    }
+
+    private void getEstadoPedido(Pedido pedido) {
+        pedido.setEstadoPedidos(new ArrayList<>());
+        EstadoPedido estadoPedido = new EstadoPedido();
+        estadoPedido.setSituacaoPedido(SituacaoPedido.PAGAMENTO_EM_ESPERA);
+        estadoPedido.setDataSituacao(LocalDateTime.now());
+        pedido.getEstadoPedidos().add(estadoPedido);
     }
 
     @Override

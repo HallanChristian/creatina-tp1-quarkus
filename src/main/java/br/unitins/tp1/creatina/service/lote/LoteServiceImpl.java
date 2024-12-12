@@ -4,7 +4,6 @@ import java.util.List;
 
 import br.unitins.tp1.creatina.dto.lote.LoteRequestDTO;
 import br.unitins.tp1.creatina.model.Creatina;
-import br.unitins.tp1.creatina.model.Endereco;
 import br.unitins.tp1.creatina.model.Lote;
 import br.unitins.tp1.creatina.repository.EnderecoRepository;
 import br.unitins.tp1.creatina.repository.LoteRepository;
@@ -72,17 +71,11 @@ public class LoteServiceImpl implements LoteService {
             throw new IllegalArgumentException("Creatina não encontrada para o ID fornecido.");
         }
     
-        Endereco localDistribuicao = enderecoRepository.findById(dto.idEndereco());
-        if (localDistribuicao == null) {
-            throw new IllegalArgumentException("Endereço não encontrado para o ID fornecido.");
-        }
-    
         lote.setCreatina(creatina);
         lote.setCodigo(dto.codigo());
         lote.setDataFabricacao(dto.dataFabricacao());
         lote.setDataValidade(dto.dataValidade());
         lote.setEstoque(dto.estoque());
-        lote.setLocalDistribuicao(localDistribuicao);
     }    
 
     @Override

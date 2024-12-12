@@ -8,10 +8,10 @@ import jakarta.enterprise.context.ApplicationScoped;
 public class PagamentoRepository implements PanacheRepository<Pagamento> {
 
     public Pagamento findByChavePix(String chave) {
-        return find("SELECT p FROM Pagamento p WHERE p.pix.chave = ?1", chave).firstResult();
+        return find("FROM Pix p WHERE p.chave = ?1", chave).firstResult();
     }
 
     public Pagamento findByCodigoBoleto(String codigo) {
-        return find("SELECT p FROM Pagamento p WHERE p.boleto.codigoBarras = ?1", codigo).firstResult();
+        return find("FROM Boleto b WHERE b.codigoBarras = ?1", codigo).firstResult();
     }
 }

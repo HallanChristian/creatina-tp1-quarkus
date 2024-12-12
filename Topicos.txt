@@ -1,0 +1,28 @@
+{
+  "username": "ADM",
+  "senha": "senhaadm"
+}
+
+{
+  "username": "ADM",
+  "senha": "senhaadm",
+  "perfil": "ADM"
+}
+
+{
+  "valorTotal": 149.9,
+  "listaItemPedido": [
+    {
+      "idProduto": 1,
+      "quantidade": 1,
+      "preco": 149.9
+    }
+  ],
+  "idEnderecoEntrega": 1
+}
+
+{
+  "username": "clara",
+  "senha": "1234",
+  "email": "clara@gmail.com"
+}

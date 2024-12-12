@@ -26,7 +26,7 @@ public class LoteResource {
 
     @GET
     @Path("/{id}")
-    @RolesAllowed({"Adm"})
+    @RolesAllowed({"Adm", "Funcionario"})
     public Response findById(@PathParam("id") Long id) {
         LOG.infof("Buscando lote com id %d", id);
         Lote lote = loteService.findById(id);
@@ -35,7 +35,7 @@ public class LoteResource {
 
     @GET
     @Path("/search/codigo/{codigo}")
-    @RolesAllowed({"Adm"})
+    @RolesAllowed({"Adm", "Funcionario"})
     public Response findByCodigo(@PathParam("codigo") String codigo) {
         LOG.infof("Buscando lote com o código %s", codigo);
         Lote lote = loteService.findByCodigo(codigo);
@@ -44,7 +44,7 @@ public class LoteResource {
 
     @GET
     @Path("/search/creatina/{idCreatina}")
-    @RolesAllowed({"Adm"})
+    @RolesAllowed({"Adm", "Funcionario"})
     public Response findByIdCreatina(@PathParam("idCreatina") Long idCreatina) {
         LOG.infof("Buscando lote pelo id da creatina %d", idCreatina);
         Lote lote = loteService.findByIdCreatina(idCreatina);
@@ -52,7 +52,7 @@ public class LoteResource {
     }
 
     @GET
-    @RolesAllowed({"Adm"})
+    @RolesAllowed({"Adm", "Funcionario"})
     public Response findAll() {
         LOG.info("Buscando todos os lotes");
         List<Lote> lotes = loteService.findAll();
@@ -60,7 +60,7 @@ public class LoteResource {
     }
 
     @POST
-    @RolesAllowed({"Adm"})
+    @RolesAllowed({"Adm", "Funcionario"})
     public Response create(@Valid LoteRequestDTO dto) {
         LOG.info("Criando novo lote");
         Lote lote = loteService.create(dto);
@@ -69,7 +69,7 @@ public class LoteResource {
 
     @GET
     @Path("/estoque/creatina/{idCreatina}")
-    @RolesAllowed({"Adm"})
+    @RolesAllowed({"Adm", "Funcionario"})
     public Response findEstoqueTotalPorCreatina(@PathParam("idCreatina") Long idCreatina) {
         LOG.infof("Buscando estoque total para a creatina com id %d", idCreatina);
         Integer estoqueTotal = loteService.findEstoqueTotalPorCreatina(idCreatina);
@@ -78,7 +78,7 @@ public class LoteResource {
 
     @PUT
     @Path("/{id}")
-    @RolesAllowed({"Adm"})
+    @RolesAllowed({"Adm", "Funcionario"})
     public Response update(@PathParam("id") Long id, @Valid LoteRequestDTO dto) {
         LOG.infof("Atualizando lote com id %d", id);
         Lote lote = loteService.update(id, dto);
@@ -87,7 +87,7 @@ public class LoteResource {
 
     @DELETE
     @Path("/{id}")
-    @RolesAllowed({"Adm"})
+    @RolesAllowed({"Adm", "Funcionario"})
     public Response delete(@PathParam("id") Long id) {
         LOG.infof("Deletando lote com id %d", id);
         loteService.delete(id);

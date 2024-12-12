@@ -15,11 +15,12 @@ import br.unitins.tp1.creatina.repository.PagamentoRepository;
 import br.unitins.tp1.creatina.service.cartao.CartaoService;
 import br.unitins.tp1.creatina.service.cliente.ClienteService;
 import br.unitins.tp1.creatina.service.pedido.PedidoService;
+import br.unitins.tp1.creatina.validation.ValidationException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
-import jakarta.validation.ValidationException;
+
 
 @ApplicationScoped
 public class PagamentoServiceImpl implements PagamentoService {
@@ -43,18 +44,18 @@ public class PagamentoServiceImpl implements PagamentoService {
 
     @Override
     @Transactional
-    public Pix criarPix(Long idPedido, Long idCliente) {
+    public Pix criarPix(Long idPedido, String username) {
         Pedido pedido = pedidoService.findById(idPedido);
-        Cliente cliente = clienteService.findById(idCliente);
-
+        Cliente cliente = pedido.getCliente();
+        validarCliente(username, cliente);
         validarPedidoCliente(pedido, cliente);
 
         if (pedido.getPagamento() != null) {
-            throw new ValidationException("O pedido já possui um método de pagamento.");
+            throw new ValidationException("idPedido","O pedido já possui um método de pagamento.");
         }
 
         Pix pix = new Pix();
-        pix.setChave(gerarUUIDPedidoCliente(idPedido, idCliente));
+        pix.setChave(gerarUUIDPedidoCliente(idPedido, cliente.getId()));
         pix.setDataVencimento(LocalDateTime.now().plusHours(3));
         pix.setValor(pedido.getValorTotal());
         pix.setAprovado(false);
@@ -68,18 +69,18 @@ public class PagamentoServiceImpl implements PagamentoService {
 
     @Override
     @Transactional
-    public Boleto criarBoleto(Long idPedido, Long idCliente) {
+    public Boleto criarBoleto(Long idPedido, String username) {
         Pedido pedido = pedidoService.findById(idPedido);
-        Cliente cliente = clienteService.findById(idCliente);
-
+        Cliente cliente = pedido.getCliente();
+        validarCliente(username, cliente);
         validarPedidoCliente(pedido, cliente);
 
         if (pedido.getPagamento() != null) {
-            throw new ValidationException("O pedido já possui um método de pagamento.");
+            throw new ValidationException("idPedido","O pedido já possui um método de pagamento.");
         }
 
         Boleto boleto = new Boleto();
-        boleto.setCodigoBarras(gerarUUIDPedidoCliente(idPedido, idCliente));
+        boleto.setCodigoBarras(gerarUUIDPedidoCliente(idPedido, cliente.getId()));
         boleto.setValor(pedido.getValorTotal());
         boleto.setDataVencimento(LocalDateTime.now().plusDays(3));
         boleto.setAprovado(false);
@@ -93,9 +94,9 @@ public class PagamentoServiceImpl implements PagamentoService {
 
     @Override
     @Transactional
-    public void pagar(Long idPedido, Long idCliente, String identificador, MetodoPagamento metodoPagamento) {
+    public void pagar(Long idPedido, String username, String identificador, MetodoPagamento metodoPagamento) {
         Pedido pedido = pedidoService.findById(idPedido);
-        Cliente cliente = clienteService.findById(idCliente);
+        Cliente cliente = pedido.getCliente();
 
         validarPedidoCliente(pedido, cliente);
 
@@ -121,14 +122,14 @@ public class PagamentoServiceImpl implements PagamentoService {
 
     @Override
     @Transactional
-    public void pagarCartao(Long idPedido, Long idCliente, Long idCartao) {
+    public void pagarCartao(Long idPedido, String username, Long idCartao) {
         Pedido pedido = pedidoService.findById(idPedido);
-        Cliente cliente = clienteService.findById(idCliente);
+        Cliente cliente = pedido.getCliente();
 
         validarPedidoCliente(pedido, cliente);
 
         if (pedido.getPagamento() != null && pedido.getPagamento().getAprovado()) {
-            throw new ValidationException("O pedido já foi aprovado.");
+            throw new ValidationException("idPedido", "O pedido já foi aprovado.");
         }
 
         Cartao cartao = cartaoService.findById(idCartao);
@@ -154,25 +155,31 @@ public class PagamentoServiceImpl implements PagamentoService {
 
     private void validarPedidoCliente(Pedido pedido, Cliente cliente) {
         if (!pedido.getCliente().equals(cliente)) {
-            throw new ValidationException("O cliente não corresponde ao pedido.");
+            throw new ValidationException("Cliente","O cliente não corresponde ao pedido.");
         }
     }
 
     private void validarPagamentoPedido(Pedido pedido, Pagamento pagamento) {
         if (pagamento == null) {
-            throw new ValidationException("Pagamento não encontrado.");
+            throw new ValidationException("idPedido","Pagamento não encontrado.");
         }
 
         if (!pagamento.equals(pedido.getPagamento())) {
-            throw new ValidationException("Pagamento não corresponde ao pedido.");
+            throw new ValidationException("idPedido","Pagamento não corresponde ao pedido.");
         }
 
         if (pagamento.getAprovado()) {
-            throw new ValidationException("Pagamento já foi realizado.");
+            throw new ValidationException("identificador", "Pagamento já foi realizado.");
         }
 
         if (LocalDateTime.now().isAfter(pagamento.getDataVencimento())) {
-            throw new ValidationException("O pagamento expirou.");
+            throw new ValidationException("idPedido", "O pagamento expirou.");
+        }
+    }
+
+    private void validarCliente(String username, Cliente cliente) {
+        if (!(cliente.equals(clienteService.findByUsername(username)))) {
+            throw new ValidationException("idPedido", "Cliente não possui um pedido com esse código");
         }
     }
 

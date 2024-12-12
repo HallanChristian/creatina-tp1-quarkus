@@ -1,17 +1,20 @@
 package br.unitins.tp1.faixas;
 
+import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+
+import java.math.BigDecimal;
+
 import org.junit.jupiter.api.Test;
 
-import br.unitins.tp1.creatina.dto.CreatinaRequestDTO;
+import br.unitins.tp1.creatina.dto.creatina.CreatinaRequestDTO;
 import br.unitins.tp1.creatina.model.Creatina;
 import br.unitins.tp1.creatina.service.creatina.CreatinaService;
 import io.quarkus.test.junit.QuarkusTest;
-import static io.restassured.RestAssured.given;
 import io.restassured.http.ContentType;
 import jakarta.inject.Inject;
 
@@ -50,9 +53,11 @@ public class CreatinaResourceTest {
         CreatinaRequestDTO dto = new CreatinaRequestDTO(
             "Creatina X",
             "Marca Y",
-            300.0f,
+            300,
             "Pura",
-            149.99f
+            new BigDecimal("149.99"),
+            1L, // Categoria ID
+            2L  // Fornecedor ID
         );
 
         Integer id = given() 
@@ -71,6 +76,12 @@ public class CreatinaResourceTest {
         
         Creatina creatinaCriada = creatinaService.findById(longId);
         assertEquals("Creatina X", creatinaCriada.getNome());
+        assertEquals("Marca Y", creatinaCriada.getMarca());
+        assertEquals(300, creatinaCriada.getQuantidadeEmGramas());
+        assertEquals("Pura", creatinaCriada.getTipo());
+        assertEquals(new BigDecimal("149.99"), creatinaCriada.getPreco());
+        assertEquals(1L, creatinaCriada.getCategoria());
+        assertEquals(2L, creatinaCriada.getFornecedor());
         
         creatinaService.delete(longId);
     }
@@ -80,9 +91,11 @@ public class CreatinaResourceTest {
         CreatinaRequestDTO dto = new CreatinaRequestDTO(
             "Creatina X",
             "Marca Y",
-            300.0f,
+            300,
             "Pura",
-            149.99f
+            new BigDecimal("149.99"),
+            1L, // Categoria ID
+            2L  // Fornecedor ID
         );
 
         long id = creatinaService.create(dto).getId();
@@ -90,9 +103,11 @@ public class CreatinaResourceTest {
         CreatinaRequestDTO novoDto = new CreatinaRequestDTO(
             "Creatina Z",
             "Marca W",
-            500.0f,
+            500,
             "Micronizada",
-            199.99f
+            new BigDecimal("199.99"),
+            3L, // Nova Categoria ID
+            4L  // Novo Fornecedor ID
         );
 
         given()
@@ -106,6 +121,11 @@ public class CreatinaResourceTest {
         Creatina creatinaAtualizada = creatinaService.findById(id);
         assertEquals("Creatina Z", creatinaAtualizada.getNome());
         assertEquals("Marca W", creatinaAtualizada.getMarca());
+        assertEquals(500, creatinaAtualizada.getQuantidadeEmGramas());
+        assertEquals("Micronizada", creatinaAtualizada.getTipo());
+        assertEquals(new BigDecimal("199.99"), creatinaAtualizada.getPreco());
+        assertEquals(3L, creatinaAtualizada.getCategoria());
+        assertEquals(4L, creatinaAtualizada.getFornecedor());
 
         creatinaService.delete(id);
     }
@@ -115,9 +135,11 @@ public class CreatinaResourceTest {
         CreatinaRequestDTO dto = new CreatinaRequestDTO(
             "Creatina X",
             "Marca Y",
-            300.0f,
+            300,
             "Pura",
-            149.99f
+            new BigDecimal("149.99"),
+            1L, // Categoria ID
+            2L  // Fornecedor ID
         );
 
         Long id = Long.valueOf(creatinaService.create(dto).getId());

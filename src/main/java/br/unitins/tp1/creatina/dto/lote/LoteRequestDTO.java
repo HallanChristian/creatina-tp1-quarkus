@@ -19,8 +19,5 @@ public record LoteRequestDTO(
     String codigo,                
     
     @NotNull(message = "Informe o estoque.") 
-    Integer estoque, 
-    
-    @NotNull(message = "Informe o ID do endereço.") 
-    Long idEndereco
+    Integer estoque
 ) {}

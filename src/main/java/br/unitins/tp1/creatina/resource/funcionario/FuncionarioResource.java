@@ -7,6 +7,7 @@ import org.jboss.logging.Logger;
 
 import br.unitins.tp1.creatina.dto.endereco.EnderecoRequestDTO;
 import br.unitins.tp1.creatina.dto.funcionario.FuncionarioRequestDTO;
+import br.unitins.tp1.creatina.dto.funcionario.FuncionarioResponseDTO;
 import br.unitins.tp1.creatina.dto.telefone.TelefoneRequestDTO;
 import br.unitins.tp1.creatina.model.Funcionario;
 import br.unitins.tp1.creatina.service.funcionario.FuncionarioService;
@@ -40,7 +41,7 @@ public class FuncionarioResource {
 
     @GET
     @Path("/{id}")
-    @RolesAllowed({"Adm"})
+    @RolesAllowed({"Adm", "Funcionario"})
     public Response findById(@PathParam("id") Long id) {
         LOG.infof("Buscando funcionário com id %d", id);
         Funcionario funcionario = funcionarioService.findById(id);
@@ -49,7 +50,7 @@ public class FuncionarioResource {
 
     @GET
     @Path("/search/{nome}")
-    @RolesAllowed({"Adm"})
+    @RolesAllowed({"Adm", "Funcionario"})
     public Response findByNome(@PathParam("nome") String nome) {
         LOG.infof("Buscando funcionário pelo nome %s", nome);
         List<Funcionario> funcionarios = funcionarioService.findByNome(nome);
@@ -58,7 +59,7 @@ public class FuncionarioResource {
 
     @GET
     @Path("/search/username/{username}")
-    @RolesAllowed({"Adm"})
+    @RolesAllowed({"Adm", "Funcionario"})
     public Response findByUsername(@PathParam("username") String username) {
         LOG.infof("Buscando funcionário com o username %s", username);
         Funcionario funcionario = funcionarioService.findByUsername(username);
@@ -67,7 +68,7 @@ public class FuncionarioResource {
 
     @GET
     @Path("/search/cpf/{cpf}")
-    @RolesAllowed({"Adm"})
+    @RolesAllowed({"Adm", "Funcionario"})
     public Response findByCpf(@PathParam("cpf") String cpf) {
         LOG.infof("Buscando funcionário com o CPF %s", cpf);
         Funcionario funcionario = funcionarioService.findByCpf(cpf);
@@ -76,7 +77,7 @@ public class FuncionarioResource {
 
     @GET
     @Path("/search/email/{email}")
-    @RolesAllowed({"Adm"})
+    @RolesAllowed({"Adm", "Funcionario"})
     public Response findByEmail(@PathParam("email") String email) {
         LOG.infof("Buscando funcionário com o email %s", email);
         Funcionario funcionario = funcionarioService.findByEmail(email);
@@ -84,7 +85,7 @@ public class FuncionarioResource {
     }
 
     @GET
-    @RolesAllowed({"Adm"})
+    @RolesAllowed({"Adm", "Funcionario"})
     public Response findAll() {
         LOG.info("Buscando todos os funcionários");
         List<Funcionario> funcionarios = funcionarioService.findAll();
@@ -92,17 +93,18 @@ public class FuncionarioResource {
     }
 
     @POST
-    @RolesAllowed({"Adm"})
+    @RolesAllowed({"Adm", "Funcionario"})
     public Response create(@Valid FuncionarioRequestDTO dto) {
-        LOG.info("Criando novo funcionário");
         String username = jsonWebToken.getSubject();
-        Funcionario funcionario = funcionarioService.create(dto);
-        return Response.status(Status.CREATED).entity(funcionario).build();
+        LOG.info("Criando funcionário pelo usuário: " + username);
+        return Response.status(Status.CREATED)
+                .entity(FuncionarioResponseDTO.valueOf(funcionarioService.create(dto)))
+                .build();
     }
 
     @POST
     @Path("/{id}/telefones")
-    @RolesAllowed({"Adm"})
+    @RolesAllowed({"Adm", "Funcionario"})
     public Response addTelefone(@PathParam("id") Long funcionarioId, @Valid TelefoneRequestDTO telefoneDTO) {
         LOG.infof("Adicionando telefone para funcionário com id %d", funcionarioId);
         funcionarioService.addTelefone(funcionarioId, telefoneDTO);
@@ -111,7 +113,7 @@ public class FuncionarioResource {
 
     @PUT
     @Path("/{id}/telefones/{idTelefone}")
-    @RolesAllowed({"Adm"})
+    @RolesAllowed({"Adm", "Funcionario"})
     public Response updateTelefone(
             @PathParam("id") Long funcionarioId,
             @PathParam("idTelefone") Long telefoneId,
@@ -123,7 +125,7 @@ public class FuncionarioResource {
 
     @POST
     @Path("/{id}/enderecos")
-    @RolesAllowed({"Adm"})
+    @RolesAllowed({"Adm", "Funcionario"})
     public Response addEndereco(@PathParam("id") Long funcionarioId, @Valid EnderecoRequestDTO enderecoDTO) {
         LOG.infof("Adicionando endereço para funcionário com id %d", funcionarioId);
         funcionarioService.addEndereco(funcionarioId, enderecoDTO);
@@ -132,7 +134,7 @@ public class FuncionarioResource {
 
     @PUT
     @Path("/{id}/enderecos/{idEndereco}")
-    @RolesAllowed({"Adm"})
+    @RolesAllowed({"Adm", "Funcionario"})
     public Response updateEndereco(
             @PathParam("id") Long funcionarioId,
             @PathParam("idEndereco") Long enderecoId,

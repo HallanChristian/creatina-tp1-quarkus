@@ -13,9 +13,8 @@ import jakarta.persistence.OneToMany;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Pessoa extends DefaultEntity{
-    
+
     private String nome;
-    private String email;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "id_pessoa")
@@ -49,11 +48,4 @@ public abstract class Pessoa extends DefaultEntity{
         this.nome = nome;
     }
 
-    public String getEmail() {
-        return email;
-    }
-    
-    public void setEmail(String email) {
-        this.email = email;
-    }
 }

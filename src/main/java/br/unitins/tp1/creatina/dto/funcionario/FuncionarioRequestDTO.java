@@ -20,10 +20,6 @@ public record FuncionarioRequestDTO(
     @NotBlank(message = "Informe o CPF do funcionário.")
     String cpf,
 
-    // E-mail do funcionário (obrigatório)
-    @NotBlank(message = "Informe o e-mail do funcionário.")
-    String email,
-
     // Cargo do funcionário (obrigatório)
     @NotBlank(message = "Informe o cargo do funcionário.")
     String cargo,

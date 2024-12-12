@@ -13,6 +13,7 @@ import jakarta.persistence.OneToOne;
 
 @Entity
 public class Pedido extends DefaultEntity {
+    
     private LocalDateTime data;
 
     @ManyToOne

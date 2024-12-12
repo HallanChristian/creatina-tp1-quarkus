@@ -9,6 +9,7 @@ import br.unitins.tp1.creatina.dto.telefone.TelefoneRequestDTO;
 import br.unitins.tp1.creatina.model.Endereco;
 import br.unitins.tp1.creatina.model.Funcionario;
 import br.unitins.tp1.creatina.model.Municipio;
+import br.unitins.tp1.creatina.model.PessoaFisica;
 import br.unitins.tp1.creatina.model.Telefone;
 import br.unitins.tp1.creatina.repository.FuncionarioRepository;
 import br.unitins.tp1.creatina.repository.MunicipioRepository;
@@ -68,15 +69,15 @@ public class FuncionarioServiceImpl implements FuncionarioService {
     @Transactional
     public Funcionario create(FuncionarioRequestDTO dto) {
         Funcionario funcionario = new Funcionario();
-        funcionario.setNome(dto.nome());
+        PessoaFisica pf = new PessoaFisica();
+        pf.setNome(dto.nome());
         funcionario.setCargo(dto.cargo());
-        funcionario.setCpf(dto.cpf());
+        pf.setCpf(dto.cpf());
         funcionario.setDataContratacao(dto.dataContratacao());
         funcionario.setSalario(dto.salario());
-        funcionario.setDataNascimento(dto.dataNascimento());
-        funcionario.setEmail(dto.email());
+        pf.setDataNascimento(dto.dataNascimento());
     
-        funcionario.setTelefones(new ArrayList<>());
+        pf.setTelefones(new ArrayList<>());
         
         funcionarioRepository.persist(funcionario);
 
@@ -87,7 +88,7 @@ public class FuncionarioServiceImpl implements FuncionarioService {
 
             telefoneRepository.persist(telefone);
 
-            funcionario.getTelefones().add(telefone);
+            pf.getTelefones().add(telefone);
         }
 
         return funcionario;
@@ -100,16 +101,17 @@ public class FuncionarioServiceImpl implements FuncionarioService {
         if (funcionario == null) {
             throw new EntityNotFoundException("Funcionario não encontrado");
         }
+
+        PessoaFisica pf = new PessoaFisica();
         
-        funcionario.setNome(dto.nome());
+        pf.setNome(dto.nome());
         funcionario.setCargo(dto.cargo());
-        funcionario.setCpf(dto.cpf());
+        pf.setCpf(dto.cpf());
         funcionario.setDataContratacao(dto.dataContratacao());
         funcionario.setSalario(dto.salario());
-        funcionario.setDataNascimento(dto.dataNascimento());
-        funcionario.setEmail(dto.email());
+        pf.setDataNascimento(dto.dataNascimento());
         
-        funcionario.getTelefones().clear();
+        pf.getTelefones().clear();
         
         funcionarioRepository.persist(funcionario);
         return funcionario;
@@ -122,12 +124,13 @@ public class FuncionarioServiceImpl implements FuncionarioService {
         if (funcionario == null) {
             throw new IllegalArgumentException("Funcionario com ID " + funcionarioId + " não encontrado.");
         }
+        PessoaFisica pf = new PessoaFisica();
         
         Telefone telefone = new Telefone();
         telefone.setDdd(dto.ddd());
         telefone.setNumero(dto.numero());
             
-        funcionario.getTelefones().add(telefone);
+        pf.getTelefones().add(telefone);
         
         telefoneRepository.persist(telefone);
         funcionarioRepository.persist(funcionario);
@@ -140,9 +143,11 @@ public class FuncionarioServiceImpl implements FuncionarioService {
         if (funcionario == null) {
             throw new IllegalArgumentException("Funcionario com ID " + id + " não encontrado.");
         }
+
+        PessoaFisica pf = new PessoaFisica();
         
         Telefone telefone = telefoneRepository.findById(idTelefone);
-        if (telefone == null || !funcionario.getTelefones().contains(telefone)) {
+        if (telefone == null || !pf.getTelefones().contains(telefone)) {
             throw new IllegalArgumentException("Telefone com ID " + idTelefone + " não encontrado para o funcionario.");
         }
         
@@ -164,6 +169,8 @@ public class FuncionarioServiceImpl implements FuncionarioService {
             throw new IllegalArgumentException("Município com ID " + dto.idMunicipio() + " não encontrado.");
         }
 
+        PessoaFisica pf = new PessoaFisica();
+
         Endereco endereco = new Endereco();
         endereco.setLogradouro(dto.logradouro());
         endereco.setNumero(dto.numero());
@@ -171,7 +178,7 @@ public class FuncionarioServiceImpl implements FuncionarioService {
         endereco.setMunicipio(municipio);
         endereco.setCep(dto.cep());
 
-        funcionario.getEnderecos().add(endereco);
+        pf.getEnderecos().add(endereco);
         funcionarioRepository.persist(funcionario);
     }
 
@@ -183,8 +190,10 @@ public class FuncionarioServiceImpl implements FuncionarioService {
         if (funcionario == null) {
             throw new IllegalArgumentException("Funcionario com ID " + id + " não encontrado.");
         }
+
+        PessoaFisica pf = new PessoaFisica();
     
-        Endereco endereco = funcionario.getEnderecos().stream()
+        Endereco endereco = pf.getEnderecos().stream()
             .filter(e -> e.getId().equals(idEndereco))
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException("Endereço com ID " + idEndereco + " não encontrado para o funcionario."));

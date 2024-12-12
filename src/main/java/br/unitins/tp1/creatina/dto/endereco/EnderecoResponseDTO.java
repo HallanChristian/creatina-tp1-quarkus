@@ -20,7 +20,7 @@ public record EnderecoResponseDTO(
             endereco.getNumero(),
             endereco.getBairro(),
             endereco.getComplemento(),
-            MunicipioResponseDTO.valueOf(endereco.getMunicipio()));
+            endereco.getMunicipio() != null ? MunicipioResponseDTO.valueOf(endereco.getMunicipio()) : null);
     }
     
 }

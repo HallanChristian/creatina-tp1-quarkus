@@ -5,6 +5,7 @@ import java.util.List;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.jboss.logging.Logger;
 
+import br.unitins.tp1.creatina.dto.usuario.EmailPatchDTO;
 import br.unitins.tp1.creatina.dto.usuario.SenhaPatchDTO;
 import br.unitins.tp1.creatina.dto.usuario.UsuarioRequestDTO;
 import br.unitins.tp1.creatina.dto.usuario.UsuarioResponseDTO;
@@ -78,11 +79,19 @@ public class UsuarioResource {
 
     @PATCH
     @Path("/{id}/senha")
-    @RolesAllowed({"Adm", "User"})
     public Response updateSenha(@PathParam("id") Long id, @Valid SenhaPatchDTO dto) {
-        LOG.infof("Atualizando senha do usuário com id %d", id);
         String username = jsonWebToken.getSubject();
+        LOG.infof("Usuário %s atualizando senha do usuário com id %d", username, id);
+
+        // Validar que o usuário autenticado é o mesmo que está atualizando a senha
         usuarioService.updateSenha(id, dto);
+        return Response.noContent().build();
+    }
+
+    @PATCH
+    @Path("/{id}/email")
+    public Response updateEmail(@PathParam("id") Long id, @Valid EmailPatchDTO dto) {
+        usuarioService.updateEmail(id, dto);
         return Response.noContent().build();
     }
 

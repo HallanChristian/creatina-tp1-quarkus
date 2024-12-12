@@ -54,6 +54,17 @@ public class TelefoneServiceImpl implements TelefoneService {
     public List<Telefone> findByDdd(String ddd) {
         return telefoneRepository.findByDdd(ddd);
     }
+
+    @Override
+    @Transactional
+    public Telefone create(TelefoneRequestDTO dto){
+
+        Telefone telefone = new Telefone();
+        telefone.setDdd(dto.ddd());
+        telefone.setNumero(dto.numero());
+        telefoneRepository.persist(telefone);
+        return telefone;
+    }
     
     @Override
     @Transactional

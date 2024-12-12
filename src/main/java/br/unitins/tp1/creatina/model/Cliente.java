@@ -12,11 +12,15 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 
 @Entity
-public class Cliente extends PessoaFisica {
+public class Cliente extends DefaultEntity {
 
     @OneToOne
     @JoinColumn(name = "id_usuario", unique = true)
     private Usuario usuario;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_pessoaFisica", unique = true)
+    private PessoaFisica pessoaFisica;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "lista_desejo", joinColumns = @JoinColumn(name = "id_cliente"), inverseJoinColumns = @JoinColumn(name = "id_creatina"))
@@ -50,6 +54,14 @@ public class Cliente extends PessoaFisica {
 
     public void setCartoes(List<Cartao> cartoes) {
         this.cartoes = cartoes;
+    }
+
+    public PessoaFisica getPessoaFisica() {
+        return pessoaFisica;
+    }
+
+    public void setPessoaFisica(PessoaFisica pessoaFisica) {
+        this.pessoaFisica = pessoaFisica;
     }
     
 }

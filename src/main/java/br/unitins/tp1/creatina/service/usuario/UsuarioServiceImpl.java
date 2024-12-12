@@ -2,6 +2,7 @@ package br.unitins.tp1.creatina.service.usuario;
 
 import java.util.List;
 
+import br.unitins.tp1.creatina.dto.usuario.EmailPatchDTO;
 import br.unitins.tp1.creatina.dto.usuario.SenhaPatchDTO;
 import br.unitins.tp1.creatina.dto.usuario.UsuarioRequestDTO;
 import br.unitins.tp1.creatina.model.Perfil;
@@ -59,6 +60,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         usuario.setUsername(dto.username());
         usuario.setPerfil(List.of(Perfil.ADM));
         usuario.setSenha(hashService.getHashSenha(dto.senha()));
+        usuario.setEmail(dto.email());
         usuarioRepository.persist(usuario);
 
         return usuario;
@@ -68,24 +70,22 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Transactional
     public Usuario createUser(UsuarioRequestDTO dto) {
         if (existeUsername(dto.username())) {
-            throw new ValidationException("username", "O username é invalido");
+            throw new ValidationException("username", "O username informado já está em uso.");
         }
+
         Usuario usuario = new Usuario();
         usuario.setUsername(dto.username());
         usuario.setPerfil(List.of(Perfil.USER));
         usuario.setSenha(hashService.getHashSenha(dto.senha()));
+        usuario.setEmail(dto.email());
         usuarioRepository.persist(usuario);
 
         return usuario;
     }
 
+    // Método para verificar se o username já existe
     private boolean existeUsername(String username) {
-        Usuario usuario = findByUsername(username);
-        if (usuario != null) {
-            return true;
-        }
-
-        return false;
+        return usuarioRepository.findByUsername(username) != null;
     }
 
 
@@ -94,6 +94,23 @@ public class UsuarioServiceImpl implements UsuarioService {
     public void updateSenha(Long id, SenhaPatchDTO dto) {
         Usuario usuario = findById(id);
         usuario.setSenha(hashService.getHashSenha(dto.senha()));
+    }
+
+    private boolean existeEmail(String email) {
+        return usuarioRepository.findByEmail(email) != null;
+    }
+
+    @Override
+    @Transactional
+    public void updateEmail(Long id, EmailPatchDTO dto) {
+        Usuario usuario = findById(id);
+
+        if (existeEmail(dto.email())) {
+            throw new ValidationException("email", "O email é invalido");
+        }
+
+        usuario.setEmail(dto.email());
+
     }
     
 }

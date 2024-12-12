@@ -2,7 +2,6 @@
 
 abstract class Pessoa {
   - nome: String
-  - email: String
 }
 
 class PessoaFisica {
@@ -17,6 +16,7 @@ class PessoaJuridica {
 class Usuario {
   - login: String
   - senha: String
+  - email: String
 }
 
 class Cliente {
@@ -32,8 +32,8 @@ Pessoa <|-- PessoaFisica
 Pessoa <|-- PessoaJuridica
 Usuario <-- Cliente
 Usuario <-- Funcionario
-Funcionario --|> PessoaFisica
-Cliente --|> PessoaFisica
+Funcionario --> PessoaFisica
+Cliente --> PessoaFisica
 Fornecedor --|> PessoaJuridica
 
 class Telefone {

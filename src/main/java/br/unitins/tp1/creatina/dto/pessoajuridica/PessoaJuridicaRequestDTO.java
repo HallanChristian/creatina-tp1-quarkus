@@ -10,8 +10,6 @@ public record PessoaJuridicaRequestDTO(
 
     // CNPJ da pessoa (obrigatório)
     @NotBlank(message = "Informe o CNPJ da pessoa.")
-    String cnpj,
-
-    String email
+    String cnpj
 
 ) {}

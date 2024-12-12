@@ -25,7 +25,7 @@ public interface CreatinaService {
 
     Creatina create(CreatinaRequestDTO dto);
 
-    Creatina update(Long id, CreatinaRequestDTO dto);
+    void update(Long id, CreatinaRequestDTO dto);
 
     void delete(Long id);
 

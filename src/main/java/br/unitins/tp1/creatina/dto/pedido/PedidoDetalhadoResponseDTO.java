@@ -5,25 +5,27 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import br.unitins.tp1.creatina.dto.itempedido.ItemPedidoResponseDTO;
+import br.unitins.tp1.creatina.dto.pagamento.PagamentoResponseDTO;
+import br.unitins.tp1.creatina.model.EstadoPedido;
 import br.unitins.tp1.creatina.model.Pedido;
-import br.unitins.tp1.creatina.model.SituacaoPedido;
 
-public record PedidoResponseDTO(
+public record PedidoDetalhadoResponseDTO(
     Long id,
     LocalDateTime data,
     BigDecimal valorTotal,
     List<ItemPedidoResponseDTO> listaItemPedido,
-    SituacaoPedido situacaoPedido
+    List<EstadoPedido> estadoPedidos,
+    Object pagamento
 ) {
 
-    public static PedidoResponseDTO valueOf(Pedido pedido) {
-        return new PedidoResponseDTO(
+    public static PedidoDetalhadoResponseDTO valueOf(Pedido pedido) {
+        return new PedidoDetalhadoResponseDTO(
             pedido.getId(),
             pedido.getData(),
             pedido.getValorTotal(),
             pedido.getListaItemPedido().stream().map(i -> ItemPedidoResponseDTO.valueOf(i)).toList(),
-            pedido.getEstadoPedidos().getLast().getSituacaoPedido() 
-        );
+            pedido.getEstadoPedidos(),
+            PagamentoResponseDTO.valueOf(pedido.getPagamento()));
 
     }
 

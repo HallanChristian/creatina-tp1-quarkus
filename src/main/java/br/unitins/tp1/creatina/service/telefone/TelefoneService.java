@@ -22,6 +22,8 @@ public interface TelefoneService {
 
     List<Telefone> findAll();
 
+    Telefone create(TelefoneRequestDTO dto);
+
     Telefone update(Long id, TelefoneRequestDTO dto);
 
     void delete(Long id); 

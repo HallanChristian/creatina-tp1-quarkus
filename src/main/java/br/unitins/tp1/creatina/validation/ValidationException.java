@@ -1,14 +1,14 @@
 package br.unitins.tp1.creatina.validation;
 
 public class ValidationException extends RuntimeException {
-    private String fildName;
+    private String fieldName;
 
-    public ValidationException(String filedName, String message) {
+    public ValidationException(String fieldName, String message) {
         super(message);
-        this.fildName = filedName;
+        this.fieldName = fieldName;
     }
 
-    public String getFildName() {
-        return fildName;
+    public String getFieldName() {
+        return fieldName;
     }
 }

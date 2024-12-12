@@ -1,8 +1,11 @@
 package br.unitins.tp1.creatina.resource.auth;
 
+import org.jboss.logging.Logger;
+
 import br.unitins.tp1.creatina.dto.usuario.AuthRequestDTO;
 import br.unitins.tp1.creatina.dto.usuario.UsuarioResponseDTO;
 import br.unitins.tp1.creatina.model.Usuario;
+import br.unitins.tp1.creatina.resource.cliente.ClienteResource;
 import br.unitins.tp1.creatina.service.hash.HashService;
 import br.unitins.tp1.creatina.service.jwt.JwtService;
 import br.unitins.tp1.creatina.service.usuario.UsuarioService;
@@ -29,9 +32,12 @@ public class AuthResource {
     @Inject
     JwtService jwtService;
 
+    private static final Logger LOG = Logger.getLogger(ClienteResource.class);
+
     @POST
     @Produces(MediaType.TEXT_PLAIN)
     public Response login(AuthRequestDTO authDTO) {
+        LOG.info("Executando autorizacao do usuario");
         String hash = hashService.getHashSenha(authDTO.senha());
 
         Usuario usuario = usuarioService.findByUsernameAndSenha(authDTO.username(), hash);
